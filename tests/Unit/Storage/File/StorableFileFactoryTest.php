@@ -1,6 +1,7 @@
 <?php
 namespace Czim\FileHandling\Test\Unit\Storage\File;
 
+use Czim\FileHandling\Contracts\Support\ContentInterpreterInterface;
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
 use Czim\FileHandling\Contracts\Support\UrlDownloaderInterface;
 use Czim\FileHandling\Storage\File\RawStorableFile;
@@ -27,7 +28,7 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_instance_from_spl_file_info()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockDownloader());
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
         $path = realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
         $info = new SplFileInfo($path);
@@ -45,7 +46,7 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_instance_with_custom_name_and_mimetype()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockDownloader());
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
         $path = realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
         $info = new SplFileInfo($path);
@@ -62,7 +63,7 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_instance_from_local_path()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockDownloader());
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
         $path = realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
 
@@ -87,7 +88,7 @@ class StorableFileFactoryTest extends TestCase
             ->with('http://test.com/test.xml?page=23')
             ->andReturn($path);
 
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $downloader);
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $downloader);
 
         $file = $factory->makeFromUrl('http://test.com/test.xml?page=23');
 
@@ -109,7 +110,7 @@ class StorableFileFactoryTest extends TestCase
             ->with('http://test.com/test.xml')
             ->andThrow(\ErrorException::class, 'testing');
 
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $downloader);
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $downloader);
 
         $factory->makeFromUrl('http://test.com/test.xml');
     }
@@ -119,7 +120,24 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_from_a_datauri()
     {
-        // todo
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+
+        $rawData = $this->getExampleDataUri();
+
+        $file = $factory->makeFromRawData($rawData, 'helpful.gif');
+
+        static::assertInstanceOf(RawStorableFile::class, $file);
+        static::assertEquals('helpful.gif', $file->name());
+        static::assertEquals(74, $file->size());
+        static::assertEquals('application/xml', $file->mimeType());
+
+        // And from a raw content instance
+        $file = $factory->makeFromRawData(new RawContent($rawData), 'helpful.gif');
+
+        static::assertInstanceOf(RawStorableFile::class, $file);
+        static::assertEquals('helpful.gif', $file->name());
+        static::assertEquals(74, $file->size());
+        static::assertEquals('application/xml', $file->mimeType());
     }
 
     /**
@@ -127,7 +145,7 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_instance_from_raw_data()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockDownloader());
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
         $rawData = file_get_contents(realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE));
 
@@ -152,7 +170,7 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_marks_a_file_uploaded_with_fluent_syntax()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockDownloader());
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
         $path = realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
         $info = new SplFileInfo($path);
@@ -182,11 +200,27 @@ class StorableFileFactoryTest extends TestCase
     }
 
     /**
+     * @return Mockery\MockInterface|ContentInterpreterInterface
+     */
+    protected function getMockInterpreter()
+    {
+        return Mockery::mock(ContentInterpreterInterface::class);
+    }
+
+    /**
      * @return Mockery\MockInterface|UrlDownloaderInterface
      */
     protected function getMockDownloader()
     {
         return Mockery::mock(UrlDownloaderInterface::class);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExampleDataUri()
+    {
+        return 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     }
 
 }

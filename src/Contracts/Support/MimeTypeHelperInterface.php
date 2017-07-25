@@ -30,4 +30,14 @@ interface MimeTypeHelperInterface
      */
     public function guessExtensionForPath($path);
 
+    /**
+     * Returns extension for a given mime type.
+     *
+     * Does not include the '.'
+     *
+     * @param string $type
+     * @return string
+     */
+    public function guessExtensionForMimeType($type);
+
 }

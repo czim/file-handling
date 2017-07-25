@@ -1,7 +1,7 @@
 <?php
 namespace Czim\FileHandling\Contracts\Support;
 
-interface ContentInterpreter
+interface ContentInterpreterInterface
 {
 
     /**

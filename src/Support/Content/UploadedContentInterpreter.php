@@ -1,10 +1,11 @@
 <?php
 namespace Czim\FileHandling\Support\Content;
 
+use Czim\FileHandling\Contracts\Support\ContentInterpreterInterface;
 use Czim\FileHandling\Contracts\Support\RawContentInterface;
 use Czim\FileHandling\Enums\ContentTypes;
 
-class UploadedContentInterpreter
+class UploadedContentInterpreter implements ContentInterpreterInterface
 {
     const FULL_DATA_THRESHOLD = 2048;
 

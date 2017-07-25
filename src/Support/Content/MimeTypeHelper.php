@@ -52,8 +52,21 @@ class MimeTypeHelper implements MimeTypeHelperInterface
      */
     public function guessExtensionForPath($path)
     {
-        $type = $this->guessMimeTypeForPath($path);
+        return $this->guessExtensionForMimeType(
+            $this->guessMimeTypeForPath($path)
+        );
+    }
 
+    /**
+     * Returns extension for a given mime type.
+     *
+     * Does not include the '.'
+     *
+     * @param string $type
+     * @return string
+     */
+    public function guessExtensionForMimeType($type)
+    {
         return static::getMimeTypeExtensionGuesserInstance()->guess($type);
     }
 
