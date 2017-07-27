@@ -1,0 +1,125 @@
+<?php
+namespace Czim\FileHandling\Test\Unit\Storage\File;
+
+use Czim\FileHandling\Storage\File\RawStorableFile;
+use Czim\FileHandling\Test\TestCase;
+
+class RawStorableFileTest extends TestCase
+{
+
+    // ------------------------------------------------------------------------------
+    //      Abstract
+    // ------------------------------------------------------------------------------
+
+    /**
+     * @test
+     */
+    function it_can_set_and_retrieve_the_mime_type()
+    {
+        $file = new RawStorableFile;
+
+        $file->setMimeType('type');
+
+        static::assertEquals('type', $file->mimeType());
+    }
+
+    /**
+     * @test
+     */
+    function it_can_set_and_retrieve_the_name()
+    {
+        $file = new RawStorableFile;
+
+        $file->setName('test.txt');
+
+        static::assertEquals('test.txt', $file->name());
+    }
+
+    /**
+     * @test
+     */
+    function it_can_be_marked_as_uploaded()
+    {
+        $file = new RawStorableFile;
+
+        static::assertFalse($file->isUploaded());
+
+        $file->setUploaded();
+
+        static::assertTrue($file->isUploaded());
+
+        $file->setUploaded(false);
+
+        static::assertFalse($file->isUploaded());
+    }
+
+    /**
+     * @test
+     */
+    function it_returns_the_extension_for_its_name()
+    {
+        $file = new RawStorableFile;
+
+        static::assertNull($file->extension(), 'Should return null without a name set');
+
+        $file->setName('test.txt');
+
+        static::assertEquals('txt', $file->extension());
+    }
+
+    /**
+     * @test
+     */
+    function it_returns_content_size_as_null_by_default()
+    {
+        $file = new RawStorableFile;
+
+        static::assertNull($file->size());
+    }
+
+
+    // ------------------------------------------------------------------------------
+    //      Specific
+    // ------------------------------------------------------------------------------
+
+    /**
+     * @test
+     */
+    function it_can_set_and_retrieve_content_data()
+    {
+        $file = new RawStorableFile;
+
+        static::assertSame($file, $file->setData('testing content'));
+
+        static::assertEquals('testing content', $file->content());
+
+        // And it can be overwritten
+        static::assertSame($file, $file->setData('new content'));
+
+        static::assertEquals('new content', $file->content());
+    }
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    function it_throws_an_exception_if_non_string_data_is_given()
+    {
+        $file = new RawStorableFile;
+
+        $file->setData(['not', 'a string']);
+    }
+
+    /**
+     * @test
+     */
+    function it_returns_content_size_when_set()
+    {
+        $file = new RawStorableFile;
+
+        $file->setData('testing content');
+
+        static::assertEquals(15, $file->size());
+    }
+
+}

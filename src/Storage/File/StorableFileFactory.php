@@ -212,9 +212,10 @@ class StorableFileFactory
 
         try {
             $meta = stream_get_meta_data($resource);
-
+            // @codeCoverageIgnoreStart
         } catch (Exception $e) {
             throw new CouldNotReadDataException('Failed to interpret Data URI as stream', $e->getCode(), $e);
+            // @codeCoverageIgnoreEnd
         }
 
         if (null === $mimeType) {
@@ -226,8 +227,10 @@ class StorableFileFactory
 
         try {
             file_put_contents($localPath, stream_get_contents($resource));
+            // @codeCoverageIgnoreStart
         } catch (Exception $e) {
             throw new CouldNotReadDataException('Failed to make local file from Data URI', $e->getCode(), $e);
+            // @codeCoverageIgnoreEnd
         }
 
         // Always flag as uploaded, since a temp file was created

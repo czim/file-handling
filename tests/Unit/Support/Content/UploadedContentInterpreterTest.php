@@ -1,5 +1,5 @@
 <?php
-namespace Czim\FileHandling\Test\Unit\Storage\Support\Content;
+namespace Czim\FileHandling\Test\Unit\Support\Content;
 
 use Czim\FileHandling\Enums\ContentTypes;
 use Czim\FileHandling\Support\Content\RawContent;

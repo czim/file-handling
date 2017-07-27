@@ -3,7 +3,9 @@ namespace Czim\FileHandling\Test\Unit\Storage\File;
 
 use Czim\FileHandling\Contracts\Support\ContentInterpreterInterface;
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
+use Czim\FileHandling\Contracts\Support\RawContentInterface;
 use Czim\FileHandling\Contracts\Support\UrlDownloaderInterface;
+use Czim\FileHandling\Enums\ContentTypes;
 use Czim\FileHandling\Storage\File\RawStorableFile;
 use Czim\FileHandling\Storage\File\SplFileInfoStorableFile;
 use Czim\FileHandling\Storage\File\StorableFileFactory;
@@ -30,8 +32,7 @@ class StorableFileFactoryTest extends TestCase
     {
         $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
-        $path = realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
-        $info = new SplFileInfo($path);
+        $info = new SplFileInfo($this->getExampleLocalPath());
 
         $file = $factory->makeFromFileInfo($info);
 
@@ -48,8 +49,7 @@ class StorableFileFactoryTest extends TestCase
     {
         $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
-        $path = realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
-        $info = new SplFileInfo($path);
+        $info = new SplFileInfo($this->getExampleLocalPath());
 
         $file = $factory->makeFromFileInfo($info, 'other_name.xml', 'image/gif');
 
@@ -147,7 +147,7 @@ class StorableFileFactoryTest extends TestCase
     {
         $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
-        $rawData = file_get_contents(realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE));
+        $rawData = $this->getExampleRawData();
 
         $file = $factory->makeFromRawData($rawData, 'testing.xml');
 
@@ -168,12 +168,64 @@ class StorableFileFactoryTest extends TestCase
     /**
      * @test
      */
+    function it_makes_storable_file_instances_for_interpreted_source_data()
+    {
+        $mimeGuesser = $this->getMockMimeTypeHelper();
+        $interpreter = $this->getMockInterpreter();
+        $downloader  = $this->getMockDownloader();
+
+        // Data URI expectation
+        $interpreter->shouldReceive('interpret')
+            ->with(Mockery::on(function ($argument) {
+                return $argument instanceof RawContentInterface && $argument->chunk(0, 5) == 'data:';
+            }))
+            ->andReturn(ContentTypes::DATAURI);
+
+        // URI expectation
+        $interpreter->shouldReceive('interpret')
+            ->with(Mockery::on(function ($argument) {
+                return $argument instanceof RawContentInterface && $argument->chunk(0, 5) == 'http:';
+            }))
+            ->andReturn(ContentTypes::URI);
+
+        // Raw data expectation
+        $interpreter->shouldReceive('interpret')
+            ->with(Mockery::on(function ($argument) {
+                return $argument instanceof RawContentInterface && $argument->chunk(0, 5) == 'some ';
+            }))
+            ->andReturn(ContentTypes::RAW);
+
+        // Expectations for download logic
+        $downloader->shouldReceive('download')
+            ->with('http://yourfilehere.com')
+            ->andReturn($this->getExampleLocalPath());
+
+        $mimeGuesser->shouldReceive('guessExtensionForMimeType')->with('image/gif')->andReturn('gif');
+
+
+        $factory = new StorableFileFactory($mimeGuesser, $interpreter, $downloader);
+
+        $file = $factory->makeFromAny(new SplFileInfo($this->getExampleLocalPath()));
+        static::assertInstanceOf(SplFileInfoStorableFile::class, $file);
+
+        $file = $factory->makeFromAny('http://yourfilehere.com');
+        static::assertInstanceOf(SplFileInfoStorableFile::class, $file);
+
+        $file = $factory->makeFromAny($this->getExampleDataUri(), 'helpful.gif');
+        static::assertInstanceOf(SplFileInfoStorableFile::class, $file);
+
+        $file = $factory->makeFromAny($this->getExampleSimpleRawData());
+        static::assertInstanceOf(RawStorableFile::class, $file);
+    }
+
+    /**
+     * @test
+     */
     function it_marks_a_file_uploaded_with_fluent_syntax()
     {
         $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
-        $path = realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
-        $info = new SplFileInfo($path);
+        $info = new SplFileInfo($this->getExampleLocalPath());
 
         $file = $factory->makeFromFileInfo($info);
         static::assertFalse($file->isUploaded());
@@ -183,6 +235,28 @@ class StorableFileFactoryTest extends TestCase
 
         $file = $factory->makeFromFileInfo($info);
         static::assertFalse($file->isUploaded(), 'Should not be uploaded for next call');
+    }
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    function it_throws_an_exception_if_any_data_is_not_a_string()
+    {
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+
+        $factory->makeFromAny(['not', 'a string']);
+    }
+
+    /**
+     * @test
+     * @expectedException \Czim\FileHandling\Exceptions\CouldNotReadDataException
+     */
+    function it_throws_an_exception_if_data_uri_cannot_be_interpreted()
+    {
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+
+        $factory->makeFromDataUri('_data://invalid/mimetype,base32brokencontent', 'name.txt');
     }
 
 
@@ -218,9 +292,33 @@ class StorableFileFactoryTest extends TestCase
     /**
      * @return string
      */
+    protected function getExampleLocalPath()
+    {
+        return realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
+    }
+
+    /**
+     * @return string
+     */
     protected function getExampleDataUri()
     {
         return 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExampleRawData()
+    {
+        return file_get_contents($this->getExampleLocalPath());
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExampleSimpleRawData()
+    {
+        return 'some raw data that is just a line of text';
     }
 
 }
