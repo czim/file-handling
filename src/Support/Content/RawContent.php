@@ -67,7 +67,7 @@ class RawContent implements RawContentInterface
      */
     public function chunk($start = 0, $length = 512)
     {
-        return substr($this->content, $start, $start + $length);
+        return substr($this->content, $start, max(1, $length));
     }
 
 }
