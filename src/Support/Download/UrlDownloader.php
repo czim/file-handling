@@ -52,19 +52,36 @@ class UrlDownloader implements UrlDownloaderInterface
     }
 
     /**
+     * Downloads raw file content from a URL to a local path.
+     *
      * @param string $url
      * @param string $localPath
      * @throws CouldNotRetrieveRemoteFileException
      */
     protected function downloadToTempLocalPath($url, $localPath)
     {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        $rawFile = curl_exec($ch);
-        curl_close($ch);
+        try {
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            $rawFile = curl_exec($ch);
+            curl_close($ch);
+
+            if (false === $rawFile) {
+                throw new CouldNotRetrieveRemoteFileException(
+                    "curl_exec failed while downloading '{$url}': " . curl_error($ch)
+                );
+            }
+
+        } catch (Exception $e) {
+            throw new CouldNotRetrieveRemoteFileException(
+                "Failed to download file content from '{$url}': ",
+                $e->getCode(),
+                $e
+            );
+        }
 
         try {
             if (false === file_put_contents($localPath, $rawFile)) {
@@ -73,7 +90,11 @@ class UrlDownloader implements UrlDownloaderInterface
 
         } catch (Exception $e) {
 
-            throw new CouldNotRetrieveRemoteFileException('file_put_contents call threw an exception', $e->getCode(), $e);
+            throw new CouldNotRetrieveRemoteFileException(
+                'file_put_contents call threw an exception',
+                $e->getCode(),
+                $e
+            );
         }
     }
 
@@ -105,7 +126,7 @@ class UrlDownloader implements UrlDownloaderInterface
      */
     protected function makeLocalTemporaryPath()
     {
-        return sys_get_temp_dir() . '/' . uniqid('media-download-');
+        return sys_get_temp_dir() . '/' . uniqid('filehandling-download-');
     }
 
     /**
@@ -120,7 +141,15 @@ class UrlDownloader implements UrlDownloaderInterface
     {
         $newPath = pathinfo($path, PATHINFO_DIRNAME) . '/' . $newName;
 
-        if ( ! rename($path, $newPath)) {
+        try {
+            $success = rename($path, $newPath);
+
+        } catch (\Exception $e) {
+            throw new CouldNotRetrieveRemoteFileException("Failed to rename '{$path}' to '{$newName}'", $e->getCode(), $e);
+            // @codeCoverageIgnoreEnd
+        }
+
+        if ( ! $success) {
             throw new CouldNotRetrieveRemoteFileException("Failed to rename '{$path}' to '{$newName}'");
         }
 
