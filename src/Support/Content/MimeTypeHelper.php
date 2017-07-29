@@ -7,6 +7,11 @@ use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
+/**
+ * Class MimeTypeHelper
+ *
+ * @codeCoverageIgnore
+ */
 class MimeTypeHelper implements MimeTypeHelperInterface
 {
 
