@@ -57,6 +57,7 @@ class UrlDownloader implements UrlDownloaderInterface
      * @param string $url
      * @param string $localPath
      * @throws CouldNotRetrieveRemoteFileException
+     * @codeCoverageIgnore
      */
     protected function downloadToTempLocalPath($url, $localPath)
     {
@@ -123,6 +124,7 @@ class UrlDownloader implements UrlDownloaderInterface
 
     /**
      * @return string
+     * @codeCoverageIgnore
      */
     protected function makeLocalTemporaryPath()
     {
@@ -144,14 +146,17 @@ class UrlDownloader implements UrlDownloaderInterface
         try {
             $success = rename($path, $newPath);
 
+            // @codeCoverageIgnoreStart
         } catch (\Exception $e) {
             throw new CouldNotRetrieveRemoteFileException("Failed to rename '{$path}' to '{$newName}'", $e->getCode(), $e);
             // @codeCoverageIgnoreEnd
         }
 
+        // @codeCoverageIgnoreStart
         if ( ! $success) {
             throw new CouldNotRetrieveRemoteFileException("Failed to rename '{$path}' to '{$newName}'");
         }
+        // @codeCoverageIgnoreEnd
 
         return $newPath;
     }
