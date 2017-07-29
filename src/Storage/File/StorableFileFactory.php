@@ -1,6 +1,7 @@
 <?php
 namespace Czim\FileHandling\Storage\File;
 
+use Czim\FileHandling\Contracts\Storage\StorableFileFactoryInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 use Czim\FileHandling\Contracts\Support\ContentInterpreterInterface;
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
@@ -14,7 +15,7 @@ use Exception;
 use SplFileInfo;
 use UnexpectedValueException;
 
-class StorableFileFactory
+class StorableFileFactory implements StorableFileFactoryInterface
 {
 
     /**
@@ -63,20 +64,6 @@ class StorableFileFactory
         $this->markNextUploaded = true;
 
         return $this;
-    }
-
-    /**
-     * @param AbstractStorableFile $file
-     * @return AbstractStorableFile
-     */
-    protected function getReturnPreparedFile(AbstractStorableFile $file)
-    {
-        if ($this->markNextUploaded) {
-            $file->setUploaded();
-            $this->markNextUploaded = false;
-        }
-
-        return $file;
     }
 
     /**
@@ -264,6 +251,20 @@ class StorableFileFactory
         $file->setMimeType($mimeType);
 
         return $this->getReturnPreparedFile($file);
+    }
+
+    /**
+     * @param AbstractStorableFile $file
+     * @return AbstractStorableFile
+     */
+    protected function getReturnPreparedFile(AbstractStorableFile $file)
+    {
+        if ($this->markNextUploaded) {
+            $file->setUploaded();
+            $this->markNextUploaded = false;
+        }
+
+        return $file;
     }
 
     /**

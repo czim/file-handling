@@ -77,6 +77,16 @@ class RawStorableFileTest extends TestCase
         static::assertNull($file->size());
     }
 
+    /**
+     * @test
+     */
+    function it_returns_null_for_path()
+    {
+        $file = new RawStorableFile;
+
+        static::assertNull($file->path());
+    }
+
 
     // ------------------------------------------------------------------------------
     //      Specific

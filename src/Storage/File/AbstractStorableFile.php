@@ -125,4 +125,14 @@ abstract class AbstractStorableFile implements StorableFileInterface
         return $this->uploaded;
     }
 
+    /**
+     * Returns (local) path to file, if possible.
+     *
+     * @return string|null
+     */
+    public function path()
+    {
+        return null;
+    }
+
 }

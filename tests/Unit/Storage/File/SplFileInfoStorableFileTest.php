@@ -67,6 +67,20 @@ class SplFileInfoStorableFileTest extends TestCase
 
         static::assertEquals($fileInfo->getSize(), $file->size());
     }
+    
+    /**
+     * @test
+     */
+    function it_returns_the_path()
+    {
+        $file = new SplFileInfoStorableFile;
+
+        $fileInfo = new SplFileInfo($this->getExampleLocalPath());
+
+        static::assertSame($file, $file->setData($fileInfo));
+
+        static::assertEquals($fileInfo->getRealPath(), $file->path());
+    }
 
     /**
      * @return string

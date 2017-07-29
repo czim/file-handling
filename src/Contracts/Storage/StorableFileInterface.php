@@ -12,6 +12,13 @@ interface StorableFileInterface
     public function content();
 
     /**
+     * Returns (local) path to file, if possible.
+     *
+     * @return string|null
+     */
+    public function path();
+
+    /**
      * Returns the content type of the file.
      *
      * @return string|null
