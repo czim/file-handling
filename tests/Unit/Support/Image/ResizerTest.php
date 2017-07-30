@@ -1,0 +1,174 @@
+<?php
+namespace Czim\FileHandling\Test\Unit\Support\Image;
+
+use Czim\FileHandling\Support\Image\Resizer;
+use Czim\FileHandling\Test\TestCase;
+use Imagine\Image\Box;
+use Imagine\Image\BoxInterface;
+use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
+use Imagine\Image\Point;
+use Imagine\Image\PointInterface;
+use Mockery;
+use SplFileInfo;
+
+class ResizerTest extends TestCase
+{
+    const IMAGE_COPY_PATH = __DIR__ . '/../../../resources/tmp.gif';
+
+
+    public function setUp()
+    {
+        $this->cleanupTempFile();
+    }
+
+    public function tearDown()
+    {
+        Mockery::close();
+
+        $this->cleanupTempFile();
+    }
+
+
+    /**
+     * @test
+     */
+    public function it_should_be_able_to_resize_and_crop_an_image()
+    {
+        $source = $this->makeSourceFile();
+
+        $originalSize      = new Box(600, 400);
+        $expectedResize    = new Box(768, 512);
+        $expectedCropPoint = new Point(128, 0);
+        $expectedCropBox   = new Box(512, 512);
+
+        $image = $this->getMockImage($originalSize, $expectedResize, $expectedCropPoint, $expectedCropBox);
+        $imageProcessor = $this->getMockImageProcessor($image);
+
+        $resizer = new Resizer($imageProcessor);
+
+        $options = $this->buildMockOptions('512x512#');
+
+        $file = $resizer->resize($source, $options);
+
+        static::assertEquals(realpath(static::IMAGE_COPY_PATH), $file);
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_be_able_to_resize_and_crop_an_edge_case()
+    {
+        $source = $this->makeSourceFile();
+
+        $originalSize      = new Box(1000, 653);
+        $expectedResize    = new Box(440, 287.32);
+        $expectedCropPoint = new Point(0, 21.66);
+        $expectedCropBox   = new Box(440, 244);
+
+        $image = $this->getMockImage($originalSize, $expectedResize, $expectedCropPoint, $expectedCropBox);
+        $imageProcessor = $this->getMockImageProcessor($image);
+
+        $resizer = new Resizer($imageProcessor);
+
+        $options = $this->buildMockOptions('440x244#');
+
+        $file = $resizer->resize($source, $options);
+    }
+
+    /**
+     * @return SplFileInfo
+     */
+    protected function makeSourceFile()
+    {
+        $original = realpath(__DIR__ . '/../../../resources/empty.gif');
+        $copy     = static::IMAGE_COPY_PATH;
+
+        copy($original, $copy);
+
+        return new SplFileInfo($copy);
+    }
+
+    /**
+     * @param BoxInterface   $originalSize
+     * @param BoxInterface   $expectedResize
+     * @param PointInterface $expectedCropPoint
+     * @param BoxInterface   $expectedCropBox
+     * @return Mockery\MockInterface|ImageInterface
+     */
+    protected function getMockImage($originalSize, $expectedResize, $expectedCropPoint = null, $expectedCropBox = null)
+    {
+        $image = Mockery::mock(ImageInterface::class);
+
+        $resizeComparison = function ($resize) use ($expectedResize) {
+            if ( ! ($resize instanceof BoxInterface)) {
+                return false;
+            }
+            return  $resize->getWidth() == $expectedResize->getWidth()
+                &&  $resize->getHeight() == $expectedResize->getHeight();
+        };
+
+        $cropPointComparison = function ($cropPoint) use ($expectedCropPoint) {
+            if ( ! ($cropPoint instanceof PointInterface)) {
+                return false;
+            }
+            return  round($cropPoint->getX(), 2) == round($expectedCropPoint->getX(), 2)
+                &&  round($cropPoint->getY(), 2) == round($expectedCropPoint->getY(), 2);
+        };
+
+        $cropBoxComparison = function ($cropBox) use ($expectedCropBox) {
+
+            if ( ! ($cropBox instanceof BoxInterface)) {
+                return false;
+            }
+
+            return  $cropBox->getWidth() == $expectedCropBox->getWidth()
+                &&  $cropBox->getHeight() == $expectedCropBox->getHeight();
+        };
+
+        $image->shouldReceive('getSize')->once()->andReturn($originalSize);
+        $image->shouldReceive('resize')->once()->with(Mockery::on($resizeComparison))->andReturn($image);
+        $image->shouldReceive('crop')->once()->with(Mockery::on($cropPointComparison), Mockery::on($cropBoxComparison))->andReturn($image);
+        $image->shouldReceive('save')->once();
+
+        return $image;
+    }
+
+    /**
+     * @param ImageInterface $image
+     * @return Mockery\MockInterface|ImagineInterface
+     */
+    protected function getMockImageProcessor($image)
+    {
+        $imageProcessor = Mockery::mock(ImagineInterface::class);
+        $imageProcessor->shouldReceive('open')->once()->andReturn($image);
+
+        return $imageProcessor;
+    }
+
+    /**
+     * Helper method to build an options array.
+     *
+     * @param string $value
+     * @param array  $convertOptions
+     * @return array
+     */
+    protected function buildMockOptions($value, $convertOptions = [])
+    {
+        return [
+            'dimensions'     => $value,
+            'convertOptions' => $convertOptions,
+        ];
+    }
+
+    /**
+     * Cleans up the temporary image file.
+     */
+    protected function cleanupTempFile()
+    {
+        if (file_exists(realpath(static::IMAGE_COPY_PATH))) {
+            unlink(realpath(static::IMAGE_COPY_PATH));
+        }
+    }
+
+}
