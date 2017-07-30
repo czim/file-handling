@@ -3,6 +3,7 @@ namespace Czim\FileHandling\Test\Unit\Support\Image;
 
 use Czim\FileHandling\Support\Image\Resizer;
 use Czim\FileHandling\Test\TestCase;
+use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\ImageInterface;
@@ -33,7 +34,7 @@ class ResizerTest extends TestCase
     /**
      * @test
      */
-    public function it_should_be_able_to_resize_and_crop_an_image()
+    public function it_resizes_and_crops_an_image()
     {
         $source = $this->makeSourceFile();
 
@@ -45,19 +46,17 @@ class ResizerTest extends TestCase
         $image = $this->getMockImage($originalSize, $expectedResize, $expectedCropPoint, $expectedCropBox);
         $imageProcessor = $this->getMockImageProcessor($image);
 
-        $resizer = new Resizer($imageProcessor);
-
         $options = $this->buildMockOptions('512x512#');
 
-        $file = $resizer->resize($source, $options);
+        $resizer = new Resizer($imageProcessor);
 
-        static::assertEquals(realpath(static::IMAGE_COPY_PATH), $file);
+        static::assertTrue($resizer->resize($source, $options));
     }
 
     /**
      * @test
      */
-    public function it_should_be_able_to_resize_and_crop_an_edge_case()
+    public function it_resizes_and_crops_an_edge_case()
     {
         $source = $this->makeSourceFile();
 
@@ -69,12 +68,42 @@ class ResizerTest extends TestCase
         $image = $this->getMockImage($originalSize, $expectedResize, $expectedCropPoint, $expectedCropBox);
         $imageProcessor = $this->getMockImageProcessor($image);
 
-        $resizer = new Resizer($imageProcessor);
-
         $options = $this->buildMockOptions('440x244#');
 
-        $file = $resizer->resize($source, $options);
+        $resizer = new Resizer($imageProcessor);
+
+        static::assertTrue($resizer->resize($source, $options));
     }
+
+    /**
+     * @test
+     */
+    function it_resizes_using_a_custom_callback()
+    {
+        $source = $this->makeSourceFile();
+
+        /** @var ImagineInterface $imageProcessor */
+        $imageProcessor = Mockery::mock(ImagineInterface::class);
+
+        $customCalled = false;
+
+        $custom = function () use (&$customCalled) {
+            $customCalled = true;
+            return (new Imagine())->create(new Box(100, 100));
+        };
+
+        $options = $this->buildMockOptions($custom);
+
+        $resizer = new Resizer($imageProcessor);
+
+        static::assertTrue($resizer->resize($source, $options));
+        static::assertTrue($customCalled, 'Custom callable spy not flagged');
+    }
+
+
+    // ------------------------------------------------------------------------------
+    //      Helpers
+    // ------------------------------------------------------------------------------
 
     /**
      * @return SplFileInfo

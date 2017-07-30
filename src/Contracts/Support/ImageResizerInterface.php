@@ -11,7 +11,7 @@ interface ImageResizerInterface
      *
      * @param SplFileInfo $file
      * @param array       $options
-     * @return string   resized file path
+     * @return bool
      */
     public function resize(SplFileInfo $file, array $options);
 

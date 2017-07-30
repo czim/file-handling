@@ -36,7 +36,7 @@ class Resizer implements ImageResizerInterface
      *
      * @param SplFileInfo $file
      * @param array       $options
-     * @return string   resized file path
+     * @return bool
      */
     public function resize(SplFileInfo $file, array $options)
     {
@@ -55,7 +55,7 @@ class Resizer implements ImageResizerInterface
                 ->resizeCustom($file, $callable)
                 ->save($filePath, $this->arrGet($options, 'convertOptions'));
 
-            return $filePath;
+            return true;
         }
 
         $image = $this->imagine->open($file->getRealPath());
@@ -67,7 +67,7 @@ class Resizer implements ImageResizerInterface
         $this->$method($image, $width, $height)
            ->save($filePath, $this->arrGet($options, 'convertOptions'));
 
-        return $filePath;
+        return true;
     }
 
 
@@ -127,8 +127,8 @@ class Resizer implements ImageResizerInterface
 
 
     /**
-     * Resize an image as closely as possible to a given
-     * width and height while still maintaining aspect ratio.
+     * Resize an image as closely as possible to a given width and height while still maintaining aspect ratio
+     *
      * This method is really just a proxy to other resize methods:.
      *
      * If the current image is wider than it is tall, we'll resize landscape.
@@ -193,14 +193,14 @@ class Resizer implements ImageResizerInterface
      * Resize an image as a portrait (height fixed).
      *
      * @param ImageInterface $image
-     * @param string         $width  - The image's new width.
-     * @param string         $height - The image's new height.
-     *
+     * @param string         $width     new width
+     * @param string         $height    new height
      * @return ImageInterface
      */
     protected function resizePortrait(ImageInterface $image, $width, $height)
     {
         $optimalWidth = $this->getSizeByFixedHeight($image, $height);
+
         $dimensions = $image->getSize()
             ->heighten($height)
             ->widen($optimalWidth);
@@ -211,12 +211,11 @@ class Resizer implements ImageResizerInterface
     }
 
     /**
-     * Resize an image and then center crop it.
+     * Resize an image and then center crop it
      *
      * @param ImageInterface $image
-     * @param string         $width  - The image's new width.
-     * @param string         $height - The image's new height.
-     *
+     * @param string         $width     new width
+     * @param string         $height    new height
      * @return ImageInterface
      */
     protected function resizeCrop(ImageInterface $image, $width, $height)
@@ -235,9 +234,8 @@ class Resizer implements ImageResizerInterface
      * Resize an image to an exact width and height.
      *
      * @param ImageInterface $image
-     * @param string         $width  - The image's new width.
-     * @param string         $height - The image's new height.
-     *
+     * @param string         $width     new width
+     * @param string         $height    new height
      * @return ImageInterface
      */
     protected function resizeExact(ImageInterface $image, $width, $height)
@@ -249,8 +247,7 @@ class Resizer implements ImageResizerInterface
      * Resize an image using a user defined callback.
      *
      * @param SplFileInfo $file
-     * @param  $callable
-     *
+     * @param callable    $callable
      * @return ImageInterface
      */
     protected function resizeCustom(SplFileInfo $file, callable $callable)
