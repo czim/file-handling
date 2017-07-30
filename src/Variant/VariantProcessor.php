@@ -133,13 +133,17 @@ class VariantProcessor implements VariantProcessorInterface
         try {
             $success = copy($source->path(), $path);
 
+            // @codeCoverageIgnoreStart
         } catch (Exception $e) {
             throw new CouldNotProcessDataException("Failed to make variant copy to '{$path}'", $e->getCode(), $e);
+            // @codeCoverageIgnoreEnd
         }
 
+        // @codeCoverageIgnoreStart
         if ( ! $success) {
             throw new CouldNotProcessDataException("Failed to make variant copy to '{$path}'");
         }
+        // @codeCoverageIgnoreEnd
 
         return $this->fileFactory->uploaded()->makeFromLocalPath($path);
     }

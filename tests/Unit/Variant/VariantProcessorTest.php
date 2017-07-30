@@ -129,6 +129,35 @@ class VariantProcessorTest extends TestCase
         $processor->process($source, 'variant', [ 'test-strategy' => ['test' => 'a'] ]);
     }
 
+    /**
+     * @test
+     */
+    function it_silently_ignores_a_strategy_if_it_should_not_be_applied_for_a_mimetype()
+    {
+        $fileFactory     = $this->getMockFileFactory();
+        $strategyFactory = $this->getMockStrategyFactory();
+
+        $processor = new VariantProcessor($fileFactory, $strategyFactory);
+
+        // Prepare mock source file
+        vfsStream::newFile('file')->at($this->vfsRoot)->setContent('dummy contents');
+        $tmpPath = $this->vfsRoot->url() . '/file';
+
+        $target = $this->makeMockTargetStorableFile();
+        $source = $this->makeMockSourceStorableFile($tmpPath);
+
+        $fileFactory->shouldReceive('uploaded')->once()->andReturnSelf();
+        $fileFactory->shouldReceive('makeFromLocalPath')->once()->andReturn($target);
+
+        // Prepare mock strategy
+        $mockStrategy = $this->makeMockVariantStrategy(true, false);
+        $strategyFactory->shouldReceive('make')->with('test-strategy')->once()->andReturn($mockStrategy);
+
+        $variant = $processor->process($source, 'variant', [ 'test-strategy' => ['test' => 'a'] ]);
+
+        static::assertSame($target, $variant);
+    }
+
 
 
     // ------------------------------------------------------------------------------
