@@ -5,52 +5,44 @@ interface StorageInterface
 {
 
     /**
-     * Returns whether a stored media file exists.
+     * Returns whether a stored file exists.
      *
-     * If a variant key is given, existance of the variant is returned.
-     *
-     * @param string      $path
-     * @param string|null $variant  the key/name for a variant of the file
+     * @param string $path
      * @return bool
      */
-    public function exists($path, $variant = null);
+    public function exists($path);
 
     /**
-     * Returns a public URL to the stored media file.
+     * Returns a public URL to the stored file.
      *
-     * @param string      $path
-     * @param string|null $variant
+     * @param string $path
      * @return string
      */
-    public function url($path, $variant = null);
+    public function url($path);
 
     /**
      * Returns the file from storage.
      *
-     * @param string      $path
-     * @param string|null $variant
-     * @return StorableFileInterface
+     * @param string $path
+     * @return StoredFileInterface
      */
-    public function get($path, $variant = null);
+    public function get($path);
 
     /**
-     * Stores a media file.
+     * Stores a file.
      *
-     * If a variant key is given, the given data will be stored as a variant of the file.
-     *
-     * @param StorableFileInterface $data       mixed content to store
-     * @param string                $path       where the file should be stored
-     * @param string|null           $variant    the key/name for a variant of the file
+     * @param StorableFileInterface $file   mixed content to store
+     * @param string                $path   where the file should be stored
+     * @return StoredFileInterface
      */
-    public function store(StorableFileInterface $data, $path, $variant = null);
+    public function store(StorableFileInterface $file, $path);
 
     /**
      * Deletes a stored media file.
      *
-     * @param string               $path
-     * @param string|string[]|null $variants    if set, only delete these variants
+     * @param string $path
      * @return bool
      */
-    public function delete($path, $variants = null);
+    public function delete($path);
 
 }
