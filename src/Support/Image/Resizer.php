@@ -2,7 +2,6 @@
 namespace Czim\FileHandling\Support\Image;
 
 use Czim\FileHandling\Contracts\Support\ImageResizerInterface;
-use ErrorException;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\ImageInterface;
@@ -59,10 +58,6 @@ class Resizer implements ImageResizerInterface
         }
 
         $image = $this->imagine->open($file->getRealPath());
-
-        if ($this->arrGet($options, 'autoOrient')) {
-            $image = $this->autoOrient($file->getRealPath(), $image);
-        }
 
         $this->$method($image, $width, $height)
            ->save($filePath, $this->arrGet($options, 'convertOptions'));
@@ -319,70 +314,6 @@ class Resizer implements ImageResizerInterface
     }
 
     /**
-     * Re-orient an image using its embedded Exif profile orientation.
-     *
-     * 1. Attempt to read the embedded exif data inside the image to determine it's orientation.
-     *    if there is no exif data (i.e an exeption is thrown when trying to read it) then we'll
-     *    just return the image as is.
-     * 2. If there is exif data, we'll rotate and flip the image accordingly to re-orient it.
-     * 3. Finally, we'll strip the exif data from the image so that there can be no
-     *    attempt to 'correct' it again.
-     *
-     * @param string         $path
-     * @param ImageInterface $image
-     * @return ImageInterface $image
-     */
-    protected function autoOrient($path, ImageInterface $image)
-    {
-        if ( ! function_exists('exif_read_data')) {
-            return $image;
-        }
-
-        try {
-            $exif = exif_read_data($path);
-        } catch (ErrorException $e) {
-            return $image;
-        }
-
-        if (isset($exif['Orientation'])) {
-
-            switch ($exif['Orientation']) {
-
-                case 2:
-                    $image->flipHorizontally();
-                    break;
-
-                case 3:
-                    $image->rotate(180);
-                    break;
-                case 4:
-                    $image->flipVertically();
-                    break;
-
-                case 5:
-                    $image->flipVertically()
-                        ->rotate(90);
-                    break;
-
-                case 6:
-                    $image->rotate(90);
-                    break;
-
-                case 7:
-                    $image->flipHorizontally()
-                        ->rotate(90);
-                    break;
-
-                case 8:
-                    $image->rotate(-90);
-                    break;
-            }
-        }
-
-        return $image->strip();
-    }
-
-    /**
      * Safely get array value from config array.
      *
      * @param array      $array
@@ -392,9 +323,11 @@ class Resizer implements ImageResizerInterface
      */
     protected function arrGet(array $array, $key, $default = null)
     {
+        // @codeCoverageIgnoreStart
         if ( ! array_key_exists($key, $array)) {
             return $default;
         }
+        // @codeCoverageIgnoreEnd
 
         return $array[ $key ];
     }
