@@ -1,6 +1,7 @@
 <?php
 namespace Czim\FileHandling\Handler;
 
+use Czim\FileHandling\Contracts\Handler\FileHandlerInterface;
 use Czim\FileHandling\Contracts\Storage\PathHelperInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 use Czim\FileHandling\Contracts\Storage\StorageInterface;
@@ -8,9 +9,21 @@ use Czim\FileHandling\Contracts\Storage\StoredFileInterface;
 use Czim\FileHandling\Contracts\Variant\VariantProcessorInterface;
 use UnexpectedValueException;
 
-class FileHandler
+class FileHandler implements FileHandlerInterface
 {
+
+    /**
+     * The name of the original image 'variant'.
+     *
+     * @var string
+     */
     const ORIGINAL = 'original';
+
+    /**
+     * The configuration key for the variant definitions.
+     *
+     * @var string
+     */
     const CONFIG_VARIANTS = 'variants';
 
 
@@ -52,22 +65,23 @@ class FileHandler
      * @param StorableFileInterface $source
      * @param string $targetPath
      * @param array $options
-     * @return StoredFileInterface
+     * @return StoredFileInterface[]    keyed by variant name (or 'original')
      */
     public function process(StorableFileInterface $source, $targetPath, array $options = [])
     {
         $originalPath = $this->pathHelper->addVariantToBasePath($targetPath);
 
-        $originalStored = $this->storage->store($source, $originalPath);
+        $stored = [];
+        $stored[ static::ORIGINAL ] = $this->storage->store($source, $originalPath);
 
         if (array_key_exists(static::CONFIG_VARIANTS, $options)) {
             foreach ($options[ static::CONFIG_VARIANTS ] as $variant => $variantOptions) {
 
-                $this->processVariant($source, $targetPath, $variant, $variantOptions);
+                $stored[ $variant ] = $this->processVariant($source, $targetPath, $variant, $variantOptions);
             }
         }
 
-        return $originalStored;
+        return $stored;
     }
 
     /**
@@ -93,7 +107,7 @@ class FileHandler
      * @param string[]            $variants
      * @return string[]
      */
-    public function variantUrlForStoredFile(StoredFileInterface $file, array $variants = [])
+    public function variantUrlsForStoredFile(StoredFileInterface $file, array $variants = [])
     {
         $basePath = $this->pathHelper->basePath($file->path());
 

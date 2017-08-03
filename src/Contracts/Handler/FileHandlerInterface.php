@@ -13,7 +13,7 @@ interface FileHandlerInterface
      * @param StorableFileInterface $source
      * @param string $targetPath
      * @param array $options
-     * @return StoredFileInterface
+     * @return StoredFileInterface[]    keyed by variant name
      */
     public function process(StorableFileInterface $source, $targetPath, array $options = []);
 
@@ -33,7 +33,7 @@ interface FileHandlerInterface
      * @param string[]            $variants
      * @return string[]
      */
-    public function variantUrlForStoredFile(StoredFileInterface $file, array $variants = []);
+    public function variantUrlsForStoredFile(StoredFileInterface $file, array $variants = []);
 
     /**
      * Returns the URLs keyed by the variant keys requested.
