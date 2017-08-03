@@ -16,7 +16,7 @@ class PathHelper implements PathHelperInterface
      */
     public function addVariantToBasePath($path, $variant = FileHandler::ORIGINAL)
     {
-        return rtrim($path, '/') . '/' . $variant;
+        return rtrim($path, '/') . '/' . trim($variant, '/');
     }
 
     /**
@@ -28,20 +28,20 @@ class PathHelper implements PathHelperInterface
      */
     public function replaceVariantInPath($path, $variant = FileHandler::ORIGINAL)
     {
-        return $this->basePath($path) . '/' . $variant;
+        return $this->addVariantToBasePath($this->basePath($path), $variant);
     }
 
     /**
-     * Returns the base path for a full path for a variant.
+     * Returns the base path for a full path for a variant, without the filename.
      *
-     * @param string $path
+     * @param string $path      without the filename
      * @return string
      */
     public function basePath($path)
     {
         $segments = explode('/', rtrim($path, '/'));
 
-        if ( ! count($segments)) {
+        if (count($segments) < 2) {
             return '';
         }
 
