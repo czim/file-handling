@@ -7,6 +7,7 @@ use Imagine\Image\ImagineInterface;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
+use InvalidArgumentException;
 use SplFileInfo;
 
 /**
@@ -173,6 +174,12 @@ class Resizer implements ImageResizerInterface
      */
     protected function resizeLandscape(ImageInterface $image, $width, $height)
     {
+        if (empty($width)) {
+            throw new InvalidArgumentException(
+                'Width value for portrait resize is empty. This may be caused by unfixed EXIF-rotated images.'
+            );
+        }
+
         $optimalHeight = $this->getSizeByFixedWidth($image, $width);
 
         $dimensions = $image->getSize()
@@ -194,6 +201,12 @@ class Resizer implements ImageResizerInterface
      */
     protected function resizePortrait(ImageInterface $image, $width, $height)
     {
+        if (empty($height)) {
+            throw new InvalidArgumentException(
+                'Height value for portrait resize is empty. This may be caused by unfixed EXIF-rotated images'
+            );
+        }
+
         $optimalWidth = $this->getSizeByFixedHeight($image, $height);
 
         $dimensions = $image->getSize()
