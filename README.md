@@ -95,8 +95,14 @@ For images:
     
 For videos:
 - `VideoScreenshotStrategy`: Extracts a video frame for a preview.  
-    (Requires `ffmpeg`/`ffprobe`)
+    (Requires `ffmpeg`/`ffprobe`) **Not included yet, planned**
+
  
+### Variant Gotcha
+
+When using the resize strategy while working with potentially EXIF-rotated images, keep in mind that portrait/landscape width/height only resizes may run into trouble unless they are auto-oriented first.
+
+For this reason, it is recommended to precede the `ImageResizeStrategy` by the `ImageAutoOrientStrategy`.
 
  
 ## Configuration
