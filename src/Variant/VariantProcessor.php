@@ -128,7 +128,7 @@ class VariantProcessor implements VariantProcessorInterface
      */
     protected function makeTemporaryCopy(StorableFileInterface $source)
     {
-        $path = $this->makeLocalTemporaryPath();
+        $path = $this->makeLocalTemporaryPath($source->extension());
 
         try {
             $success = copy($source->path(), $path);
@@ -145,15 +145,17 @@ class VariantProcessor implements VariantProcessorInterface
         }
         // @codeCoverageIgnoreEnd
 
-        return $this->fileFactory->uploaded()->makeFromLocalPath($path);
+        return $this->fileFactory->uploaded()->makeFromLocalPath($path, $source->name());
     }
 
     /**
+     * @param string $extension
      * @return string
      */
-    protected function makeLocalTemporaryPath()
+    protected function makeLocalTemporaryPath($extension = null)
     {
-        return sys_get_temp_dir() . '/' . uniqid('filehandling-variant-');
+        return sys_get_temp_dir() . '/' . uniqid('filehandling-variant-')
+             . ($extension ? ".{$extension}" : null);
     }
 
 }
