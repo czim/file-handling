@@ -16,6 +16,10 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
     {
         $fixer = $this->getOrientationFixer();
 
+        if ($this->isQuietModeDisabled()) {
+            $fixer->disableQuietMode();
+        }
+
         return (bool) $fixer->fixFile($this->file, new Imagine);
     }
 
@@ -25,6 +29,20 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
     protected function getOrientationFixer()
     {
         return new OrientationFixer;
+    }
+
+    /**
+     * Returns whether we should throw exceptions on exif problems.
+     *
+     * @return bool
+     */
+    protected function isQuietModeDisabled()
+    {
+        if ( ! array_key_exists('quiet', $this->options)) {
+            return false;
+        }
+
+        return ! $this->options['quiet'];
     }
 
 }
