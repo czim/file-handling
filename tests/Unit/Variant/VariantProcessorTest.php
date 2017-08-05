@@ -188,6 +188,8 @@ class VariantProcessorTest extends TestCase
         $source = Mockery::mock(StorableFileInterface::class);
         $source->shouldReceive('path')->andReturn($tmpPath);
         $source->shouldReceive('mimeType')->andReturn($mimeType);
+        $source->shouldReceive('name')->andReturn(pathinfo($tmpPath, PATHINFO_BASENAME));
+        $source->shouldReceive('extension')->andReturn(pathinfo($tmpPath, PATHINFO_EXTENSION));
 
         return $source;
     }
