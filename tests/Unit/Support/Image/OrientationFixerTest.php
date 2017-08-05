@@ -183,6 +183,24 @@ class OrientationFixerTest extends TestCase
         static::assertTrue($fixer->fixFile($file, $imagine));
     }
 
+    /**
+     * @test
+     */
+    function it_enables_and_disables_quiet_mode()
+    {
+        $fixer = new OrientationFixer;
+
+        static::assertTrue($fixer->isQuiet());
+
+        $fixer->disableQuietMode();
+
+        static::assertFalse($fixer->isQuiet());
+
+        $fixer->enableQuietMode();
+
+        static::assertTrue($fixer->isQuiet());
+    }
+
     // ------------------------------------------------------------------------------
     //      Helpers
     // ------------------------------------------------------------------------------

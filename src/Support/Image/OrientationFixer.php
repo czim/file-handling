@@ -23,6 +23,40 @@ class OrientationFixer
     const ORIENTATION_RIGHTBOTTOM = 7;
     const ORIENTATION_LEFTBOTTOM  = 8;
 
+    /**
+     * Whether to silently ignore exceptions.
+     *
+     * @var bool
+     */
+    protected $quiet = true;
+
+    /**
+     * @return $this
+     */
+    public function enableQuietMode()
+    {
+        $this->quiet = true;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableQuietMode()
+    {
+        $this->quiet = false;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isQuiet()
+    {
+        return $this->quiet;
+    }
 
     /**
      * Fixes the orientation in a local file.
@@ -60,6 +94,7 @@ class OrientationFixer
      * @param string         $path
      * @param ImageInterface $image
      * @return ImageInterface $image
+     * @throws ErrorException
      */
     public function fixImage($path, ImageInterface $image)
     {
@@ -73,7 +108,10 @@ class OrientationFixer
             $exif = exif_read_data($path);
             // @codeCoverageIgnoreStart
         } catch (ErrorException $e) {
-            return $image;
+            if ($this->quiet) {
+                return $image;
+            }
+            throw $e;
             // @codeCoverageIgnoreEnd
         }
 
