@@ -31,7 +31,9 @@ abstract class AbstractVariantStrategy implements VariantStrategyInterface
     {
         $this->file = $file;
 
-        return null === $this->perform() ? true : false;
+        $result = $this->perform();
+
+        return $result || null === $result;
     }
 
     /**
