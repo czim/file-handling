@@ -130,11 +130,11 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/czim/laravel-cms-media-module.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/czim/file-handling.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/czim/laravel-cms-media-module.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/czim/file-handling.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/czim/laravel-cms-media-module
-[link-downloads]: https://packagist.org/packages/czim/laravel-cms-media-module
+[link-packagist]: https://packagist.org/packages/czim/file-handling
+[link-downloads]: https://packagist.org/packages/czim/file-handling
 [link-author]: https://github.com/czim
 [link-contributors]: ../../contributors
