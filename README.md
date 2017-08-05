@@ -4,7 +4,71 @@ Handles uploads, manipulations and (external) storage
 
 ## Usage
 
-This package is framework-independent. 
+This package is framework-independent.
+
+Here's an example of how to set up variant processing in general:
+
+```php
+<?php
+    // Set up a storage implementation (for your framework of choice)
+    /** @var \Czim\FileHandling\Contracts\Storage\StorageInterface $storage */
+    $sourcePath = 'storage/input-file-name.jpg';
+    
+
+    // Source File
+    $helper      = new \Czim\FileHandling\Support\Content\MimeTypeHelper;
+    $interpreter = new \Czim\FileHandling\Support\Content\UploadedContentInterpreter;
+    $downloader  = new Czim\FileHandling\Support\Download\UrlDownloader($helper);
+    $factory     = new Czim\FileHandling\Storage\File\StorableFileFactory($helper, $interpreter, $downloader);
+
+    $file = $factory->makeFromLocalPath($sourcePath);
+
+    // Handler
+    $strategyFactory = new Czim\FileHandling\Variant\VariantStrategyFactory;
+    $strategyFactory->setConfig([
+        'aliases' => [
+            'resize'     => \Czim\FileHandling\Variant\Strategies\ImageResizeStrategy::class,
+            'autoOrient' => \Czim\FileHandling\Variant\Strategies\ImageAutoOrientStrategy::class,
+        ],
+    ]);
+
+    $processor = new Czim\FileHandling\Variant\VariantProcessor($factory, $strategyFactory);
+    $pather    = new Czim\FileHandling\Storage\PathHelper;
+
+    $handler = new Czim\FileHandling\Handler\FileHandler($storage, $processor, $pather);
+
+    $handler->process($file, 'target/test-path', [
+        'variants' => [
+            'tiny' => [
+                'autoOrient' => [],
+                'resize' => [
+                    'dimensions' => '30x30',
+                ],
+            ],
+            'orient' => [
+                'autoOrient' => [
+                    'quiet' => false,
+                ],
+            ],
+        ],
+    ]);
+``` 
+
+For Laravel, you could use the following framework specific storage implementation:
+
+```php
+<?php
+    // Storage
+    $storage = new Czim\FileHandling\Storage\Laravel\LaravelStorage(
+        \Storage::disk('testing'),
+        'filesystems.disks.testing',
+        true,
+        url('testing')
+    );
+```
+
+It is recommended of course to use the dependency container / IoC solution of your framework to simplify the above approach.
+
 
 
 ### Storage
@@ -31,7 +95,7 @@ For images:
     
 For videos:
 - `VideoScreenshotStrategy`: Extracts a video frame for a preview.  
-    (Requires `ffmpeg`/`ffprobe`.)
+    (Requires `ffmpeg`/`ffprobe`)
  
 
  
