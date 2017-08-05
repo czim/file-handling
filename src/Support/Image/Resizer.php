@@ -60,7 +60,7 @@ class Resizer implements ImageResizerInterface
         $image = $this->imagine->open($file->getRealPath());
 
         $this->$method($image, $width, $height)
-           ->save($filePath, $this->arrGet($options, 'convertOptions'));
+           ->save($filePath, $this->arrGet($options, 'convertOptions', []));
 
         return true;
     }
