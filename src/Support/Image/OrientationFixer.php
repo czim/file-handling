@@ -14,14 +14,14 @@ use SplFileInfo;
  */
 class OrientationFixer
 {
-    const ORIENTATION_CORRECT                               = 1;
-    const ORIENTATION_FLIPPED_HORIZONTALLY                  = 2;
-    const ORIENTATION_UPSIDE_DOWN                           = 3;
-    const ORIENTATION_FLIPPED_VERTICALLY                    = 4;
-    const ORIENTATION_FLIPPED_VERTICALLY_AND_ROTATED_LEFT   = 5;
-    const ORIENTATION_ROTATED_LEFT                          = 6;
-    const ORIENTATION_FLIPPED_HORIZONTALLY_AND_ROTATED_LEFT = 7;
-    const ORIENTATION_ROTATED_RIGHT                         = 8;
+    const ORIENTATION_TOPLEFT     = 1;
+    const ORIENTATION_TOPRIGHT    = 2;
+    const ORIENTATION_BOTTOMRIGHT = 3;
+    const ORIENTATION_BOTTOMLEFT  = 4;
+    const ORIENTATION_LEFTTOP     = 5;
+    const ORIENTATION_RIGHTTOP    = 6;
+    const ORIENTATION_RIGHTBOTTOM = 7;
+    const ORIENTATION_LEFTBOTTOM  = 8;
 
 
     /**
@@ -77,37 +77,37 @@ class OrientationFixer
             // @codeCoverageIgnoreEnd
         }
 
-        if ( ! isset($exif['Orientation']) || $exif['Orientation'] == static::ORIENTATION_CORRECT) {
+        if ( ! isset($exif['Orientation']) || $exif['Orientation'] == static::ORIENTATION_TOPLEFT) {
             return $image;
         }
 
         switch ($exif['Orientation']) {
 
-            case static::ORIENTATION_FLIPPED_HORIZONTALLY:
+            case static::ORIENTATION_TOPRIGHT:
                 $image->flipHorizontally();
                 break;
 
-            case static::ORIENTATION_UPSIDE_DOWN:
+            case static::ORIENTATION_BOTTOMRIGHT:
                 $image->rotate(180);
                 break;
 
-            case static::ORIENTATION_FLIPPED_VERTICALLY:
+            case static::ORIENTATION_BOTTOMLEFT:
                 $image->flipVertically();
                 break;
 
-            case static::ORIENTATION_FLIPPED_VERTICALLY_AND_ROTATED_LEFT:
+            case static::ORIENTATION_LEFTTOP:
                 $image->flipVertically()->rotate(90);
                 break;
 
-            case static::ORIENTATION_ROTATED_LEFT:
+            case static::ORIENTATION_RIGHTTOP:
                 $image->rotate(90);
                 break;
 
-            case static::ORIENTATION_FLIPPED_HORIZONTALLY_AND_ROTATED_LEFT:
+            case static::ORIENTATION_RIGHTBOTTOM:
                 $image->flipHorizontally()->rotate(90);
                 break;
 
-            case static::ORIENTATION_ROTATED_RIGHT:
+            case static::ORIENTATION_LEFTBOTTOM:
                 $image->rotate(-90);
                 break;
         }

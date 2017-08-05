@@ -34,11 +34,11 @@ class OrientationFixerTest extends TestCase
     {
         $fixer = new OrientationFixer;
 
-        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_FLIPPED_HORIZONTALLY);
+        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_TOPRIGHT);
 
         $image = $fixer->fixImage(
             $source->getRealPath(),
-            $this->getMockImage(OrientationFixer::ORIENTATION_FLIPPED_HORIZONTALLY)
+            $this->getMockImage(OrientationFixer::ORIENTATION_TOPRIGHT)
         );
 
         static::assertInstanceof(ImageInterface::class, $image);
@@ -52,11 +52,11 @@ class OrientationFixerTest extends TestCase
     {
         $fixer = new OrientationFixer;
 
-        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_UPSIDE_DOWN);
+        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_BOTTOMRIGHT);
 
         $image = $fixer->fixImage(
             $source->getRealPath(),
-            $this->getMockImage(OrientationFixer::ORIENTATION_UPSIDE_DOWN)
+            $this->getMockImage(OrientationFixer::ORIENTATION_BOTTOMRIGHT)
         );
 
         static::assertInstanceof(ImageInterface::class, $image);
@@ -70,11 +70,11 @@ class OrientationFixerTest extends TestCase
     {
         $fixer = new OrientationFixer;
 
-        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_FLIPPED_VERTICALLY);
+        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_BOTTOMLEFT);
 
         $image = $fixer->fixImage(
             $source->getRealPath(),
-            $this->getMockImage(OrientationFixer::ORIENTATION_FLIPPED_VERTICALLY)
+            $this->getMockImage(OrientationFixer::ORIENTATION_BOTTOMLEFT)
         );
 
         static::assertInstanceof(ImageInterface::class, $image);
@@ -88,11 +88,11 @@ class OrientationFixerTest extends TestCase
     {
         $fixer = new OrientationFixer;
 
-        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_FLIPPED_VERTICALLY_AND_ROTATED_LEFT);
+        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_LEFTTOP);
 
         $image = $fixer->fixImage(
             $source->getRealPath(),
-            $this->getMockImage(OrientationFixer::ORIENTATION_FLIPPED_VERTICALLY_AND_ROTATED_LEFT)
+            $this->getMockImage(OrientationFixer::ORIENTATION_LEFTTOP)
         );
 
         static::assertInstanceof(ImageInterface::class, $image);
@@ -106,11 +106,11 @@ class OrientationFixerTest extends TestCase
     {
         $fixer = new OrientationFixer;
 
-        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_ROTATED_LEFT);
+        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_RIGHTTOP);
 
         $image = $fixer->fixImage(
             $source->getRealPath(),
-            $this->getMockImage(OrientationFixer::ORIENTATION_ROTATED_LEFT)
+            $this->getMockImage(OrientationFixer::ORIENTATION_RIGHTTOP)
         );
 
         static::assertInstanceof(ImageInterface::class, $image);
@@ -124,11 +124,11 @@ class OrientationFixerTest extends TestCase
     {
         $fixer = new OrientationFixer;
 
-        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_FLIPPED_HORIZONTALLY_AND_ROTATED_LEFT);
+        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_RIGHTBOTTOM);
 
         $image = $fixer->fixImage(
             $source->getRealPath(),
-            $this->getMockImage(OrientationFixer::ORIENTATION_FLIPPED_HORIZONTALLY_AND_ROTATED_LEFT)
+            $this->getMockImage(OrientationFixer::ORIENTATION_RIGHTBOTTOM)
         );
 
         static::assertInstanceof(ImageInterface::class, $image);
@@ -142,11 +142,11 @@ class OrientationFixerTest extends TestCase
     {
         $fixer = new OrientationFixer;
 
-        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_ROTATED_RIGHT);
+        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_LEFTBOTTOM);
 
         $image = $fixer->fixImage(
             $source->getRealPath(),
-            $this->getMockImage(OrientationFixer::ORIENTATION_ROTATED_RIGHT)
+            $this->getMockImage(OrientationFixer::ORIENTATION_LEFTBOTTOM)
         );
 
         static::assertInstanceof(ImageInterface::class, $image);
@@ -174,10 +174,10 @@ class OrientationFixerTest extends TestCase
     {
         $fixer = new OrientationFixer;
 
-        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_FLIPPED_HORIZONTALLY);
+        $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_TOPRIGHT);
         $file   = new SplFileInfo($source->getRealPath());
 
-        $image   = $this->getMockImage(OrientationFixer::ORIENTATION_FLIPPED_HORIZONTALLY, true);
+        $image   = $this->getMockImage(OrientationFixer::ORIENTATION_TOPRIGHT, true);
         $imagine = $this->getMockImageProcessor($image);
 
         static::assertTrue($fixer->fixFile($file, $imagine));
@@ -191,7 +191,7 @@ class OrientationFixerTest extends TestCase
      * @param int|false $rotated
      * @return SplFileInfo
      */
-    protected function makeSourceFile($rotated = OrientationFixer::ORIENTATION_ROTATED_LEFT)
+    protected function makeSourceFile($rotated = OrientationFixer::ORIENTATION_RIGHTTOP)
     {
         if ( ! $rotated) {
             $original = realpath(static::UNROTATED_IMAGE_PATH);
@@ -210,40 +210,40 @@ class OrientationFixerTest extends TestCase
      * @param bool      $expectsSave
      * @return ImageInterface|Mockery\MockInterface
      */
-    protected function getMockImage($expectsChange = OrientationFixer::ORIENTATION_ROTATED_LEFT, $expectsSave = false)
+    protected function getMockImage($expectsChange = OrientationFixer::ORIENTATION_RIGHTTOP, $expectsSave = false)
     {
         $image = Mockery::mock(ImageInterface::class);
 
         if ($expectsChange) {
             switch ($expectsChange) {
 
-                case OrientationFixer::ORIENTATION_FLIPPED_HORIZONTALLY:
+                case OrientationFixer::ORIENTATION_TOPRIGHT:
                     $image->shouldReceive('flipHorizontally')->once()->andReturnSelf();
                     break;
 
-                case OrientationFixer::ORIENTATION_UPSIDE_DOWN:
+                case OrientationFixer::ORIENTATION_BOTTOMRIGHT:
                     $image->shouldReceive('rotate')->once()->with(180)->andReturnSelf();
                     break;
 
-                case OrientationFixer::ORIENTATION_FLIPPED_VERTICALLY:
+                case OrientationFixer::ORIENTATION_BOTTOMLEFT:
                     $image->shouldReceive('flipVertically')->once()->andReturnSelf();
                     break;
 
-                case OrientationFixer::ORIENTATION_FLIPPED_VERTICALLY_AND_ROTATED_LEFT:
+                case OrientationFixer::ORIENTATION_LEFTTOP:
                     $image->shouldReceive('flipVertically')->once()->andReturnSelf();
                     $image->shouldReceive('rotate')->once()->with(90)->andReturnSelf();
                     break;
 
-                case OrientationFixer::ORIENTATION_ROTATED_LEFT:
+                case OrientationFixer::ORIENTATION_RIGHTTOP:
                     $image->shouldReceive('rotate')->once()->with(90)->andReturnSelf();
                     break;
 
-                case OrientationFixer::ORIENTATION_FLIPPED_HORIZONTALLY_AND_ROTATED_LEFT:
+                case OrientationFixer::ORIENTATION_RIGHTBOTTOM:
                     $image->shouldReceive('flipHorizontally')->once()->andReturnSelf();
                     $image->shouldReceive('rotate')->once()->with(90)->andReturnSelf();
                     break;
 
-                case OrientationFixer::ORIENTATION_ROTATED_RIGHT:
+                case OrientationFixer::ORIENTATION_LEFTBOTTOM:
                     $image->shouldReceive('rotate')->once()->with(-90)->andReturnSelf();
                     break;
             }
