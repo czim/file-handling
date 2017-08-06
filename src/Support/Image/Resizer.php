@@ -174,11 +174,13 @@ class Resizer implements ImageResizerInterface
      */
     protected function resizeLandscape(ImageInterface $image, $width, $height)
     {
+        // @codeCoverageIgnoreStart
         if (empty($width)) {
             throw new InvalidArgumentException(
                 'Width value for portrait resize is empty. This may be caused by unfixed EXIF-rotated images.'
             );
         }
+        // @codeCoverageIgnoreEnd
 
         $optimalHeight = $this->getSizeByFixedWidth($image, $width);
 
@@ -201,11 +203,13 @@ class Resizer implements ImageResizerInterface
      */
     protected function resizePortrait(ImageInterface $image, $width, $height)
     {
+        // @codeCoverageIgnoreStart
         if (empty($height)) {
             throw new InvalidArgumentException(
                 'Height value for portrait resize is empty. This may be caused by unfixed EXIF-rotated images'
             );
         }
+        // @codeCoverageIgnoreEnd
 
         $optimalWidth = $this->getSizeByFixedHeight($image, $height);
 

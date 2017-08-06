@@ -56,5 +56,4 @@ class DecoratorStoredFileTest extends TestCase
         return Mockery::mock(StorableFileInterface::class);
     }
 
-
 }
