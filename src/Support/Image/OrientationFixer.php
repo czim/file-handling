@@ -2,7 +2,6 @@
 namespace Czim\FileHandling\Support\Image;
 
 use ErrorException;
-use Imagine\Gd\Imagine;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use SplFileInfo;
@@ -29,6 +28,21 @@ class OrientationFixer
      * @var bool
      */
     protected $quiet = true;
+
+    /**
+     * @var ImagineInterface
+     */
+    protected $imagine;
+
+
+    /**
+     * @param ImagineInterface $imagine
+     */
+    public function __construct(ImagineInterface $imagine)
+    {
+        $this->imagine = $imagine;
+    }
+
 
     /**
      * @return $this
@@ -63,17 +77,14 @@ class OrientationFixer
      *
      * This overwrites the current file.
      *
-     * @param SplFileInfo           $file
-     * @param ImagineInterface|null $imagine
+     * @param SplFileInfo $file
      * @return bool
      */
-    public function fixFile(SplFileInfo $file, ImagineInterface $imagine = null)
+    public function fixFile(SplFileInfo $file)
     {
-        $imagine = $imagine ?: new Imagine;
-
         $filePath = $file->getRealPath();
 
-        $image = $imagine->open($file->getRealPath());
+        $image = $this->imagine->open($file->getRealPath());
 
         $image = $this->fixImage($filePath, $image);
         $image->save();

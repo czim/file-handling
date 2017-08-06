@@ -2,10 +2,24 @@
 namespace Czim\FileHandling\Variant\Strategies;
 
 use Czim\FileHandling\Support\Image\Resizer;
-use Imagine\Gd\Imagine;
 
 class ImageResizeStrategy extends AbstractImageStrategy
 {
+
+    /**
+     * @var Resizer
+     */
+    protected $resizer;
+
+
+    /**
+     * @param Resizer $resizer
+     */
+    public function __construct(Resizer $resizer)
+    {
+        $this->resizer = $resizer;
+    }
+
 
     /**
      * Performs manipulation of the file.
@@ -14,17 +28,7 @@ class ImageResizeStrategy extends AbstractImageStrategy
      */
     protected function perform()
     {
-        $resizer = $this->getResizer();
-
-        return (bool) $resizer->resize($this->file, $this->options);
-    }
-
-    /**
-     * @return Resizer
-     */
-    protected function getResizer()
-    {
-        return new Resizer(new Imagine);
+        return (bool) $this->resizer->resize($this->file, $this->options);
     }
 
 }

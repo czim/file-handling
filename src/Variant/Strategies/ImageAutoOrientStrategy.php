@@ -2,10 +2,24 @@
 namespace Czim\FileHandling\Variant\Strategies;
 
 use Czim\FileHandling\Support\Image\OrientationFixer;
-use Imagine\Gd\Imagine;
 
 class ImageAutoOrientStrategy extends AbstractImageStrategy
 {
+
+    /**
+     * @var OrientationFixer
+     */
+    protected $fixer;
+
+
+    /**
+     * @param OrientationFixer $fixer
+     */
+    public function __construct(OrientationFixer $fixer)
+    {
+        $this->fixer = $fixer;
+    }
+
 
     /**
      * Performs manipulation of the file.
@@ -14,21 +28,11 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
      */
     protected function perform()
     {
-        $fixer = $this->getOrientationFixer();
-
         if ($this->isQuietModeDisabled()) {
-            $fixer->disableQuietMode();
+            $this->fixer->disableQuietMode();
         }
 
-        return (bool) $fixer->fixFile($this->file, new Imagine);
-    }
-
-    /**
-     * @return OrientationFixer
-     */
-    protected function getOrientationFixer()
-    {
-        return new OrientationFixer;
+        return (bool) $this->fixer->fixFile($this->file);
     }
 
     /**
