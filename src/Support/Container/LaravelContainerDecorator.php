@@ -7,12 +7,16 @@ use ReflectionClass;
 use ReflectionException;
 
 /**
- * Copy of Prooph conainer wrapper
+ * Copy of Prooph conainer wrapper.
+ *
+ * Modified to work with PHP 5.6.
  *
  * @see       http://getprooph.org/
  * @see       https://github.com/prooph/laravel-package for the canonical source repository
  * @copyright Copyright (c) 2016-2017 prooph software GmbH (http://prooph-software.com/)
  * @license   https://github.com/prooph/laravel-package/blob/master/LICENSE.md New BSD License
+ *
+ * @codeCoverageIgnore
  */
 class LaravelContainerDecorator implements ContainerInterface
 {
@@ -58,22 +62,22 @@ class LaravelContainerDecorator implements ContainerInterface
         return $has;
     }
 
-    private function hasIsCached(string $id): bool
+    private function hasIsCached($id)
     {
         return array_key_exists($id, $this->cacheForHas);
     }
 
-    private function hasFromCache(string $id)
+    private function hasFromCache($id)
     {
         return $this->cacheForHas[$id];
     }
 
-    private function cacheHas(string $id, bool $has)
+    private function cacheHas($id, $has)
     {
-        $this->cacheForHas[$id] = $has;
+        $this->cacheForHas[$id] = (bool) $has;
     }
 
-    private function isInstantiable(string $id): bool
+    private function isInstantiable($id)
     {
         if (class_exists($id)) {
             return true;
