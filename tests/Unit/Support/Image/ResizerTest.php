@@ -56,6 +56,166 @@ class ResizerTest extends TestCase
     /**
      * @test
      */
+    public function it_resizes_an_image_to_exact_dimensions()
+    {
+        $source = $this->makeSourceFile();
+
+        $originalSize      = new Box(600, 400);
+        $expectedResize    = new Box(50, 50);
+
+        $image = $this->getMockImage($originalSize, $expectedResize);
+        $imageProcessor = $this->getMockImageProcessor($image);
+
+        $options = $this->buildMockOptions('50x50!');
+
+        $resizer = new Resizer($imageProcessor);
+
+        static::assertTrue($resizer->resize($source, $options));
+    }
+
+    /**
+     * @test
+     */
+    public function it_resizes_an_image_to_automatic_dimensions_for_landscape()
+    {
+        $source = $this->makeSourceFile();
+
+        $originalSize      = new Box(600, 400);
+        $expectedResize    = new Box(520, 347);
+
+        $image = $this->getMockImage($originalSize, $expectedResize);
+        $imageProcessor = $this->getMockImageProcessor($image);
+
+        $options = $this->buildMockOptions('520x360');
+
+        $resizer = new Resizer($imageProcessor);
+
+        static::assertTrue($resizer->resize($source, $options));
+    }
+
+    /**
+     * @test
+     */
+    public function it_resizes_an_image_to_automatic_dimensions_for_portrait()
+    {
+        $source = $this->makeSourceFile();
+
+        $originalSize      = new Box(400, 600);
+        $expectedResize    = new Box(240, 360);
+
+        $image = $this->getMockImage($originalSize, $expectedResize);
+        $imageProcessor = $this->getMockImageProcessor($image);
+
+        $options = $this->buildMockOptions('520x360');
+
+        $resizer = new Resizer($imageProcessor);
+
+        static::assertTrue($resizer->resize($source, $options));
+    }
+
+    /**
+     * @test
+     */
+    public function it_resizes_an_image_to_automatic_dimensions_for_square_to_landscape()
+    {
+        $source = $this->makeSourceFile();
+
+        $originalSize      = new Box(400, 400);
+        $expectedResize    = new Box(520, 520);
+
+        $image = $this->getMockImage($originalSize, $expectedResize);
+        $imageProcessor = $this->getMockImageProcessor($image);
+
+        $options = $this->buildMockOptions('520x360');
+
+        $resizer = new Resizer($imageProcessor);
+
+        static::assertTrue($resizer->resize($source, $options));
+    }
+
+    /**
+     * @test
+     */
+    public function it_resizes_an_image_to_automatic_dimensions_for_square_to_portrait()
+    {
+        $source = $this->makeSourceFile();
+
+        $originalSize      = new Box(400, 400);
+        $expectedResize    = new Box(520, 520);
+
+        $image = $this->getMockImage($originalSize, $expectedResize);
+        $imageProcessor = $this->getMockImageProcessor($image);
+
+        $options = $this->buildMockOptions('360x520');
+
+        $resizer = new Resizer($imageProcessor);
+
+        static::assertTrue($resizer->resize($source, $options));
+    }
+
+    /**
+     * @test
+     */
+    public function it_resizes_an_image_to_automatic_dimensions_for_square_to_square()
+    {
+        $source = $this->makeSourceFile();
+
+        $originalSize      = new Box(400, 400);
+        $expectedResize    = new Box(360, 360);
+
+        $image = $this->getMockImage($originalSize, $expectedResize);
+        $imageProcessor = $this->getMockImageProcessor($image);
+
+        $options = $this->buildMockOptions('360x360');
+
+        $resizer = new Resizer($imageProcessor);
+
+        static::assertTrue($resizer->resize($source, $options));
+    }
+
+    /**
+     * @test
+     */
+    public function it_resizes_an_image_to_keep_ratio_for_specific_width()
+    {
+        $source = $this->makeSourceFile();
+
+        $originalSize      = new Box(600, 400);
+        $expectedResize    = new Box(510, 340);
+
+        $image = $this->getMockImage($originalSize, $expectedResize);
+        $imageProcessor = $this->getMockImageProcessor($image);
+
+        $options = $this->buildMockOptions('510');
+
+        $resizer = new Resizer($imageProcessor);
+
+        static::assertTrue($resizer->resize($source, $options));
+    }
+
+    /**
+     * @test
+     */
+    public function it_resizes_an_image_to_keep_ratio_for_specific_height()
+    {
+        $source = $this->makeSourceFile();
+
+        $originalSize      = new Box(600, 400);
+        $expectedResize    = new Box(510, 340);
+
+        $image = $this->getMockImage($originalSize, $expectedResize);
+        $imageProcessor = $this->getMockImageProcessor($image);
+
+        $options = $this->buildMockOptions('x340');
+
+        $resizer = new Resizer($imageProcessor);
+
+        static::assertTrue($resizer->resize($source, $options));
+    }
+
+    /**
+     * @test
+     */
     public function it_resizes_and_crops_an_edge_case()
     {
         $source = $this->makeSourceFile();
@@ -145,19 +305,27 @@ class ResizerTest extends TestCase
                 &&  round($cropPoint->getY(), 2) == round($expectedCropPoint->getY(), 2);
         };
 
-        $cropBoxComparison = function ($cropBox) use ($expectedCropBox) {
-
-            if ( ! ($cropBox instanceof BoxInterface)) {
-                return false;
-            }
-
-            return  $cropBox->getWidth() == $expectedCropBox->getWidth()
-                &&  $cropBox->getHeight() == $expectedCropBox->getHeight();
-        };
-
-        $image->shouldReceive('getSize')->once()->andReturn($originalSize);
+        $image->shouldReceive('getSize')->andReturn($originalSize);
         $image->shouldReceive('resize')->once()->with(Mockery::on($resizeComparison))->andReturn($image);
-        $image->shouldReceive('crop')->once()->with(Mockery::on($cropPointComparison), Mockery::on($cropBoxComparison))->andReturn($image);
+
+        if (null !== $expectedCropPoint) {
+
+            $cropBoxComparison = function ($cropBox) use ($expectedCropBox) {
+
+                if ( ! ($cropBox instanceof BoxInterface)) {
+                    return false;
+                }
+
+                return  $cropBox->getWidth() == $expectedCropBox->getWidth()
+                    &&  $cropBox->getHeight() == $expectedCropBox->getHeight();
+            };
+
+            $image->shouldReceive('crop')
+                ->once()
+                ->with(Mockery::on($cropPointComparison), Mockery::on($cropBoxComparison))
+                ->andReturn($image);
+        }
+
         $image->shouldReceive('save')->once();
 
         return $image;
