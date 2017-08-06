@@ -111,7 +111,8 @@ If you don't have a feasible PSR-11 container available, you can use a very simp
 
 Files can be stored using customizable storage implementations.
 
-A very simple adapter for the Laravel storage   
+A very simple adapter/decorator for the Laravel storage is provided.
+For any other framework/setup you will (for now) have to write your own implementation of the `\Czim\FileHandling\Contracts\Storage\StorageInterface`.  
 
 
 ### Variants
