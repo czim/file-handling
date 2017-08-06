@@ -3,6 +3,7 @@ namespace Czim\FileHandling\Variant;
 
 use Czim\FileHandling\Contracts\Variant\VariantStrategyFactoryInterface;
 use Czim\FileHandling\Contracts\Variant\VariantStrategyInterface;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 
 /**
@@ -15,9 +16,24 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
     const CONFIG_ALIASES = 'aliases';
 
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * @var array
      */
     protected $config = [];
+
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
 
     /**
      * Sets the configuration for the factory.
@@ -66,8 +82,8 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
             $strategyClass = $strategy;
         }
 
-        if ( ! class_exists($strategyClass)) {
-            throw new RuntimeException("Resolved variant strategy '{$strategy}' does not exist");
+        if ( ! $this->container->has($strategyClass)) {
+            throw new RuntimeException("Cannot resolve variant strategy '{$strategy}'");
         }
 
         return $strategyClass;
@@ -79,7 +95,7 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
      */
     protected function instantiateClass($class)
     {
-        return new $class;
+        return $this->container->get($class);
     }
 
 }
