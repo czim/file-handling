@@ -18,13 +18,6 @@ class LaravelStorage implements StorageInterface
     protected $filesystem;
 
     /**
-     * Config key path for filesystem
-     *
-     * @var string
-     */
-    protected $configPath;
-
-    /**
      * Whether the filesystem (and thus the paths given) are local
      *
      * @var bool
@@ -40,18 +33,15 @@ class LaravelStorage implements StorageInterface
 
     /**
      * @param Filesystem  $filesystem
-     * @param string      $config
      * @param bool        $isLocal
      * @param null|string $baseUrl
      */
     public function __construct(
         Filesystem $filesystem,
-        $config = 'filesystems.disks.local',
         $isLocal = true,
         $baseUrl = null
     ) {
         $this->filesystem = $filesystem;
-        $this->configPath = $config;
         $this->isLocal    = $isLocal;
         $this->baseUrl    = trim($baseUrl ?: '', '/');
     }
@@ -81,6 +71,8 @@ class LaravelStorage implements StorageInterface
     /**
      * Returns the file from storage.
      *
+     * Note that the mimetype is not filled in here. Tackle this manually if it is required.
+     *
      * @param string $path
      * @return StoredFileInterface
      */
@@ -90,7 +82,6 @@ class LaravelStorage implements StorageInterface
 
         $raw->setName(pathinfo($path, PATHINFO_BASENAME));
         $raw->setData($this->filesystem->get($path));
-        // todo: handle mimetype
 
         $stored = new DecoratorStoredFile($raw);
         $stored->setUrl($this->prefixBaseUrl($path));

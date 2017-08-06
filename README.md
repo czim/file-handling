@@ -67,7 +67,6 @@ For Laravel, you could use the following framework specific storage implementati
     // Storage
     $storage = new Czim\FileHandling\Storage\Laravel\LaravelStorage(
         \Storage::disk('testing'),
-        'filesystems.disks.testing',
         true,
         url('testing')
     );
