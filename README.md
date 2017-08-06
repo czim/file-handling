@@ -16,21 +16,23 @@ Here's an example of how to set up variant processing in general:
 
 ```php
 <?php
-    // Set up a storage implementation (for your framework of choice)
+    // Set up a storage implementation (for your framework of choice), and a PSR-11 container implementation.
     /** @var \Czim\FileHandling\Contracts\Storage\StorageInterface $storage */
+    /** @var \Psr\Container\ContainerInterface $container */
+    
     $sourcePath = 'storage/input-file-name.jpg';
     
 
     // Source File
     $helper      = new \Czim\FileHandling\Support\Content\MimeTypeHelper;
     $interpreter = new \Czim\FileHandling\Support\Content\UploadedContentInterpreter;
-    $downloader  = new Czim\FileHandling\Support\Download\UrlDownloader($helper);
-    $factory     = new Czim\FileHandling\Storage\File\StorableFileFactory($helper, $interpreter, $downloader);
+    $downloader  = new \Czim\FileHandling\Support\Download\UrlDownloader($helper);
+    $factory     = new \Czim\FileHandling\Storage\File\StorableFileFactory($helper, $interpreter, $downloader);
 
     $file = $factory->makeFromLocalPath($sourcePath);
 
     // Handler
-    $strategyFactory = new Czim\FileHandling\Variant\VariantStrategyFactory;
+    $strategyFactory = new \Czim\FileHandling\Variant\VariantStrategyFactory($container);
     $strategyFactory->setConfig([
         'aliases' => [
             'resize'     => \Czim\FileHandling\Variant\Strategies\ImageResizeStrategy::class,
@@ -38,10 +40,10 @@ Here's an example of how to set up variant processing in general:
         ],
     ]);
 
-    $processor = new Czim\FileHandling\Variant\VariantProcessor($factory, $strategyFactory);
-    $pather    = new Czim\FileHandling\Storage\PathHelper;
+    $processor = new \Czim\FileHandling\Variant\VariantProcessor($factory, $strategyFactory);
+    $pather    = new \Czim\FileHandling\Storage\PathHelper;
 
-    $handler = new Czim\FileHandling\Handler\FileHandler($storage, $processor, $pather);
+    $handler = new \Czim\FileHandling\Handler\FileHandler($storage, $processor, $pather);
 
     $handler->process($file, 'target/test-path', [
         'variants' => [
@@ -65,20 +67,52 @@ For Laravel, you could use the following framework specific storage implementati
 ```php
 <?php
     // Storage
-    $storage = new Czim\FileHandling\Storage\Laravel\LaravelStorage(
+    $storage = new \Czim\FileHandling\Storage\Laravel\LaravelStorage(
         \Storage::disk('testing'),
         true,
         url('testing')
     );
+   
+    // If you're using a Laravel version that does not have a PSR-11 compliant container yet:
+    $container = new \Czim\FileHandling\Support\Container\LaravelContainerDecorator(app());
+    
+    app()->bind(\Imagine\Image\ImagineInterface::class, \Imagine\Gd\Imagine::class);
 ```
 
 It is recommended of course to use the dependency container / IoC solution of your framework to simplify the above approach.
 
 
+### Custom Container 
+
+If you don't have a feasible PSR-11 container available, you can use a very simple implementation provided with this package.
+
+```php
+<?php
+    $container = new \Czim\FileHandling\Support\Container\SimpleContainer;
+    
+    $container->registerInstance(
+        \Czim\FileHandling\Variant\Strategies\ImageResizeStrategy::class,
+        new \Czim\FileHandling\Variant\Strategies\ImageResizeStrategy(
+            new \Czim\FileHandling\Support\Image\Resizer(
+                new \Imagine\Gd\Imagine
+            )
+        )
+    );
+    $container->registerInstance(
+        \Czim\FileHandling\Variant\Strategies\ImageAutoOrientStrategy::class,
+        new \Czim\FileHandling\Variant\Strategies\ImageAutoOrientStrategy(
+                new \Czim\FileHandling\Support\Image\OrientationFixer(new \Imagine\Gd\Imagine)
+            )
+    );
+```
+
 
 ### Storage
 
 Files can be stored using customizable storage implementations.
+
+A very simple adapter for the Laravel storage   
+
 
 ### Variants
 
