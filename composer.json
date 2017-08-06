@@ -7,6 +7,7 @@
         "php": ">=5.5.9",
         "imagine/imagine": "^0.7.0",
         "myclabs/php-enum": "^1.4",
+        "psr/container": "^1.0",
         "symfony/http-foundation": "^3.1"
     },
     "require-dev": {
