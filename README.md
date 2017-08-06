@@ -1,7 +1,7 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status](https://travis-ci.org/czim/file-handling.svg?branch=master)](https://travis-ci.org/czim/file-handling)
-[![Coverage Status](https://coveralls.io/repos/github/czim/file-handling/badge.svg?branch=master)](https://coveralls.io/github/czim/laravel-cms-upload-module?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/czim/file-handling/badge.svg?branch=master)](https://coveralls.io/github/czim/file-handling?branch=master)
 
 
 # File Handling and Storage Helper
