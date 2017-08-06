@@ -3,7 +3,6 @@ namespace Czim\FileHandling\Storage\Laravel;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 use Czim\FileHandling\Contracts\Storage\StoredFileInterface;
-use Czim\FileHandling\Storage\File\DecoratorStoredFile;
 use Czim\FileHandling\Test\TestCase;
 use Mockery;
 
