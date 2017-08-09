@@ -1,26 +1,20 @@
 <?php
 namespace Czim\FileHandling\Contracts\Variant;
 
-use SplFileInfo;
+use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
+use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 
 interface VariantStrategyInterface
 {
 
     /**
-     * Returns whether this strategy can be applied to a file with a given mimeType.
-     *
-     * @param string $mimeType
-     * @return bool
-     */
-    public function shouldApplyForMimeType($mimeType);
-
-    /**
      * Applies strategy to a file.
      *
-     * @param SplFileInfo $file
-     * @return bool
+     * @param ProcessableFileInterface $file
+     * @return ProcessableFileInterface|false
+     * @throws VariantStrategyShouldNotBeAppliedException
      */
-    public function apply(SplFileInfo $file);
+    public function apply(ProcessableFileInterface $file);
 
     /**
      * Sets the options

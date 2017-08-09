@@ -1,8 +1,9 @@
 <?php
 namespace Czim\FileHandling\Variant\Strategies;
 
+use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
 use Czim\FileHandling\Contracts\Variant\VariantStrategyInterface;
-use SplFileInfo;
+use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 
 abstract class AbstractVariantStrategy implements VariantStrategyInterface
 {
@@ -10,7 +11,7 @@ abstract class AbstractVariantStrategy implements VariantStrategyInterface
     /**
      * The file to be manipulated.
      *
-     * @var SplFileInfo
+     * @var ProcessableFileInterface
      */
     protected $file;
 
@@ -24,16 +25,21 @@ abstract class AbstractVariantStrategy implements VariantStrategyInterface
     /**
      * Applies strategy to a file.
      *
-     * @param SplFileInfo $file
-     * @return bool
+     * @param ProcessableFileInterface $file
+     * @return ProcessableFileInterface|false
+     * @throws VariantStrategyShouldNotBeAppliedException
      */
-    public function apply(SplFileInfo $file)
+    public function apply(ProcessableFileInterface $file)
     {
         $this->file = $file;
 
+        if ( ! $this->shouldBeApplied()) {
+            throw new VariantStrategyShouldNotBeAppliedException;
+        }
+
         $result = $this->perform();
 
-        return $result || null === $result;
+        return ($result || null === $result) ? $this->file : false;
     }
 
     /**
@@ -47,6 +53,19 @@ abstract class AbstractVariantStrategy implements VariantStrategyInterface
         $this->options = $options;
 
         return $this;
+    }
+
+    /**
+     * Returns whether the variant strategy should be applied.
+     *
+     * The file property should be available at this point.
+     *
+     * @return bool
+     * @codeCoverageIgnore
+     */
+    protected function shouldBeApplied()
+    {
+        return true;
     }
 
     /**

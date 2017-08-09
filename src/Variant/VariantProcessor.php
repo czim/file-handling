@@ -1,14 +1,16 @@
 <?php
 namespace Czim\FileHandling\Variant;
 
+use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileFactoryInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 use Czim\FileHandling\Contracts\Variant\VariantProcessorInterface;
 use Czim\FileHandling\Contracts\Variant\VariantStrategyFactoryInterface;
 use Czim\FileHandling\Exceptions\CouldNotProcessDataException;
 use Czim\FileHandling\Exceptions\VariantStrategyNotAppliedException;
+use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
+use Czim\FileHandling\Storage\File\ProcessableFile;
 use Exception;
-use SplFileInfo;
 
 /**
  * Class VariantProcessor
@@ -85,7 +87,15 @@ class VariantProcessor implements VariantProcessorInterface
 
             $instance = $this->strategyFactory->make($strategy)->setOptions($options);
 
-            if ( ! $instance->shouldApplyForMimeType($source->mimeType())) {
+            // The file returned by the strategy step may have altered the path,
+            // name, extension and/or mime type of the file being processed.
+            // This information is present in the returned ProcessableFile instance.
+
+            try {
+                $newFile = $instance->apply($file);
+
+            } catch (VariantStrategyShouldNotBeAppliedException $e) {
+
                 if ($this->shouldThrowExceptionForUnappliedStrategy()) {
                     throw new VariantStrategyNotAppliedException(
                         "Strategy '{$strategy}' not applied to '{$source->path()}'"
@@ -95,11 +105,13 @@ class VariantProcessor implements VariantProcessorInterface
                 continue;
             }
 
-            if ( ! $instance->apply(new SplFileInfo($file->path()))) {
+            if (false === $newFile) {
                 throw new VariantStrategyNotAppliedException(
                     "Failed to apply '{$strategy}' to '{$source->path()}'"
                 );
             }
+
+            $file = $newFile;
         }
 
         return $file;
@@ -123,7 +135,7 @@ class VariantProcessor implements VariantProcessorInterface
      * Makes a copy of the original file info that will be manipulated into the variant.
      *
      * @param StorableFileInterface $source
-     * @return StorableFileInterface
+     * @return ProcessableFileInterface
      * @throws CouldNotProcessDataException
      */
     protected function makeTemporaryCopy(StorableFileInterface $source)
@@ -145,7 +157,13 @@ class VariantProcessor implements VariantProcessorInterface
         }
         // @codeCoverageIgnoreEnd
 
-        return $this->fileFactory->uploaded()->makeFromLocalPath($path, $source->name());
+        $file = new ProcessableFile;
+
+        $file->setName($source->name());
+        $file->setMimeType($source->mimeType());
+        $file->setData($path);
+
+        return $file;
     }
 
     /**

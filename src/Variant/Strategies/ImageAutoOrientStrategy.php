@@ -2,6 +2,7 @@
 namespace Czim\FileHandling\Variant\Strategies;
 
 use Czim\FileHandling\Support\Image\OrientationFixer;
+use SplFileInfo;
 
 class ImageAutoOrientStrategy extends AbstractImageStrategy
 {
@@ -32,7 +33,9 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
             $this->fixer->disableQuietMode();
         }
 
-        return (bool) $this->fixer->fixFile($this->file);
+        $spl = new SplFileInfo($this->file->path());
+
+        return (bool) $this->fixer->fixFile($spl);
     }
 
     /**

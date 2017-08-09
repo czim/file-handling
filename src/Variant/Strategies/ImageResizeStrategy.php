@@ -2,6 +2,7 @@
 namespace Czim\FileHandling\Variant\Strategies;
 
 use Czim\FileHandling\Support\Image\Resizer;
+use SplFileInfo;
 
 class ImageResizeStrategy extends AbstractImageStrategy
 {
@@ -28,7 +29,9 @@ class ImageResizeStrategy extends AbstractImageStrategy
      */
     protected function perform()
     {
-        return (bool) $this->resizer->resize($this->file, $this->options);
+        $spl = new SplFileInfo($this->file->path());
+
+        return (bool) $this->resizer->resize($spl, $this->options);
     }
 
 }

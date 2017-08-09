@@ -5,14 +5,13 @@ abstract class AbstractVideoStrategy extends AbstractVariantStrategy
 {
 
     /**
-     * Returns whether this strategy can be applied to a file with a given mimeType.
+     * Returns whether the variant strategy should be applied.
      *
-     * @param string $mimeType
      * @return bool
      */
-    public function shouldApplyForMimeType($mimeType)
+    protected function shouldBeApplied()
     {
-        return 'video/' == substr($mimeType, 0, 6);
+        return 'video/' == substr($this->file->mimeType(), 0, 6);
     }
 
 }
