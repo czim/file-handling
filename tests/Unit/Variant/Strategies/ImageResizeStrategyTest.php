@@ -2,10 +2,8 @@
 namespace Czim\FileHandling\Test\Unit\Variant\Strategies;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
-use Czim\FileHandling\Support\Image\OrientationFixer;
 use Czim\FileHandling\Support\Image\Resizer;
 use Czim\FileHandling\Test\TestCase;
-use Czim\FileHandling\Variant\Strategies\ImageAutoOrientStrategy;
 use Czim\FileHandling\Variant\Strategies\ImageResizeStrategy;
 use Mockery;
 
@@ -13,15 +11,15 @@ class ImageResizeStrategyTest extends TestCase
 {
 
     /**
-     * @test]
+     * @test
      * @expectedException \Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException
      */
     function it_should_throw_an_exception_if_it_is_applied_to_a_non_image()
     {
-        /** @var Mockery\MockInterface|OrientationFixer $fixer */
-        $fixer = Mockery::mock(OrientationFixer::class);
+        /** @var Mockery\MockInterface|Resizer $resizer */
+        $resizer = Mockery::mock(Resizer::class);
 
-        $strategy = new ImageAutoOrientStrategy($fixer);
+        $strategy = new ImageResizeStrategy($resizer);
 
         /** @var Mockery\MockInterface|ProcessableFileInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);

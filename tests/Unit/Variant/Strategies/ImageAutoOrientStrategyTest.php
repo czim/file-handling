@@ -11,7 +11,7 @@ class ImageAutoOrientStrategyTest extends TestCase
 {
 
     /**
-     * @test]
+     * @test
      * @expectedException \Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException
      */
     function it_should_throw_an_exception_if_it_is_applied_to_a_non_image()

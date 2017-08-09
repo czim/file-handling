@@ -2,7 +2,6 @@
 namespace Czim\FileHandling\Test\Unit\Storage\File;
 
 use Czim\FileHandling\Storage\File\ProcessableFile;
-use Czim\FileHandling\Storage\File\SplFileInfoStorableFile;
 use Czim\FileHandling\Test\TestCase;
 use SplFileInfo;
 
