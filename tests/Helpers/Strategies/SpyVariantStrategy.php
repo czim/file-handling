@@ -1,8 +1,9 @@
 <?php
 namespace Czim\FileHandling\Test\Helpers\Strategies;
 
+use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
 use Czim\FileHandling\Contracts\Variant\VariantStrategyInterface;
-use SplFileInfo;
+use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 
 class SpyVariantStrategy implements VariantStrategyInterface
 {
@@ -27,28 +28,27 @@ class SpyVariantStrategy implements VariantStrategyInterface
      */
     public $optionsSet = false;
 
-    /**
-     * Returns whether this strategy can be applied to a file with a given mimeType.
-     *
-     * @param string $mimeType
-     * @return bool
-     */
-    public function shouldApplyForMimeType($mimeType)
-    {
-        return $this->shouldApply;
-    }
 
     /**
      * Applies strategy to a file.
      *
-     * @param SplFileInfo $file
-     * @return bool
+     * @param ProcessableFileInterface $file
+     * @return ProcessableFileInterface|false
+     * @throws VariantStrategyShouldNotBeAppliedException
      */
-    public function apply(SplFileInfo $file)
+    public function apply(ProcessableFileInterface $file)
     {
+        if ( ! $this->shouldApply) {
+            throw new VariantStrategyShouldNotBeAppliedException;
+        }
+
         $this->applied = true;
 
-        return $this->applySuccessfully;
+        if ( ! $this->applySuccessfully) {
+            return false;
+        }
+
+        return $file;
     }
 
     /**

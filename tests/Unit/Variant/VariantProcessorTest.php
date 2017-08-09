@@ -1,16 +1,17 @@
 <?php
 namespace Czim\FileHandling\Test\Unit\Support\Content;
 
+use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileFactoryInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 use Czim\FileHandling\Contracts\Variant\VariantStrategyFactoryInterface;
 use Czim\FileHandling\Contracts\Variant\VariantStrategyInterface;
+use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 use Czim\FileHandling\Test\TestCase;
 use Czim\FileHandling\Variant\VariantProcessor;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use SplFileInfo;
 
 class VariantProcessorTest extends TestCase
 {
@@ -69,7 +70,8 @@ class VariantProcessorTest extends TestCase
 
         $variant = $processor->process($source, 'variant', [ 'test-strategy' => ['test' => 'a'] ]);
 
-        static::assertSame($target, $variant);
+        static::assertInstanceOf(ProcessableFileInterface::class, $variant);
+        static::assertEquals('text/plain', $variant->mimeType());
     }
 
     /**
@@ -155,7 +157,8 @@ class VariantProcessorTest extends TestCase
 
         $variant = $processor->process($source, 'variant', [ 'test-strategy' => ['test' => 'a'] ]);
 
-        static::assertSame($target, $variant);
+        static::assertInstanceOf(ProcessableFileInterface::class, $variant);
+        static::assertEquals('text/plain', $variant->mimeType());
     }
 
 
@@ -200,12 +203,26 @@ class VariantProcessorTest extends TestCase
      * @param array $options
      * @return VariantStrategyInterface|Mockery\MockInterface
      */
-    protected function makeMockVariantStrategy($successful = true, $shouldApply = true, $options = ['test' => 'a'])
-    {
+    protected function makeMockVariantStrategy(
+        $successful = true,
+        $shouldApply = true,
+        $options = ['test' => 'a']
+    ) {
         $mock = Mockery::mock(VariantStrategyInterface::class);
         $mock->shouldReceive('setOptions')->once()->with($options)->andReturnSelf();
-        $mock->shouldReceive('shouldApplyForMimeType')->andReturn($shouldApply);
-        $mock->shouldReceive('apply')->once()->with(Mockery::type(SplFileInfo::class))->andReturn($successful);
+
+        if ($shouldApply) {
+            $mock->shouldReceive('apply')->once()
+                ->with(Mockery::type(ProcessableFileInterface::class))
+                ->andReturnUsing(function ($file) use ($successful) {
+                    return $successful ? $file : false;
+                });
+        } else {
+            $mock->shouldReceive('apply')->once()
+                ->with(Mockery::type(ProcessableFileInterface::class))
+                ->andThrow(new VariantStrategyShouldNotBeAppliedException);
+        }
+
 
         return $mock;
     }

@@ -1,30 +1,33 @@
 <?php
 namespace Czim\FileHandling\Test\Unit\Variant\Strategies;
 
+use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
 use Czim\FileHandling\Support\Image\OrientationFixer;
 use Czim\FileHandling\Support\Image\Resizer;
 use Czim\FileHandling\Test\TestCase;
 use Czim\FileHandling\Variant\Strategies\ImageAutoOrientStrategy;
 use Czim\FileHandling\Variant\Strategies\ImageResizeStrategy;
 use Mockery;
-use SplFileInfo;
 
 class ImageResizeStrategyTest extends TestCase
 {
 
     /**
-     * @test
+     * @test]
+     * @expectedException \Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException
      */
-    function it_should_apply_only_to_images()
+    function it_should_throw_an_exception_if_it_is_applied_to_a_non_image()
     {
-        /** @var Mockery\MockInterface|Resizer $resizer */
-        $resizer = Mockery::mock(Resizer::class);
+        /** @var Mockery\MockInterface|OrientationFixer $fixer */
+        $fixer = Mockery::mock(OrientationFixer::class);
 
-        $strategy = new ImageResizeStrategy($resizer);
+        $strategy = new ImageAutoOrientStrategy($fixer);
 
-        static::assertTrue($strategy->shouldApplyForMimeType('image/jpeg'));
-        static::assertFalse($strategy->shouldApplyForMimeType('video/mpeg'));
-        static::assertFalse($strategy->shouldApplyForMimeType('text/plain'));
+        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        $file = Mockery::mock(ProcessableFileInterface::class);
+        $file->shouldReceive('mimeType')->andReturn('text/plain');
+
+        $strategy->apply($file);
     }
 
     /**
@@ -35,17 +38,22 @@ class ImageResizeStrategyTest extends TestCase
         /** @var Mockery\MockInterface|Resizer $resizer */
         $resizer = Mockery::mock(Resizer::class);
 
-        /** @var Mockery\MockInterface|SplFileInfo $file */
-        $file = Mockery::mock(SplFileInfo::class);
+        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        $file = Mockery::mock(ProcessableFileInterface::class);
+        $file->shouldReceive('mimeType')->andReturn('image/jpeg');
+        $file->shouldReceive('path')->andReturn('tmp/test.jpg');
 
         $options = ['test' => true];
 
-        $resizer->shouldReceive('resize')->once()->with($file, $options)->andReturn(true);
+        $resizer->shouldReceive('resize')
+            ->once()
+            ->with(Mockery::type(\SplFileInfo::class), $options)
+            ->andReturn(true);
 
         $strategy = new ImageResizeStrategy($resizer);
         $strategy->setOptions($options);
 
-        static::assertTrue($strategy->apply($file));
+        static::assertSame($file, $strategy->apply($file));
     }
 
 }
