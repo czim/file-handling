@@ -1,0 +1,74 @@
+<?php
+namespace Czim\FileHandling\Test\Integration\Variant\Strategies;
+
+use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
+use Czim\FileHandling\Storage\File\ProcessableFile;
+use Czim\FileHandling\Test\TestCase;
+use Czim\FileHandling\Variant\Strategies\VideoScreenshotStrategy;
+use Mockery;
+
+class VideoScreenshotStrategyTest extends TestCase
+{
+    const MOVIE_TEST_FILE = 'tests/resources/video.mov';
+
+    public function setUp()
+    {
+        if ( ! file_exists('/usr/local/bin/ffmpeg')) {
+            static::markTestSkipped('FFMpeg binary not available');
+        }
+    }
+
+    /**
+     * @test
+     * @expectedException \Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException
+     */
+    function it_should_throw_an_exception_if_it_is_applied_to_a_non_video()
+    {
+        $strategy = new VideoScreenshotStrategy;
+
+        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        $file = Mockery::mock(ProcessableFileInterface::class);
+        $file->shouldReceive('mimeType')->andReturn('image/jpeg');
+
+        $strategy->apply($file);
+    }
+
+    /**
+     * @test
+     */
+    function it_takes_a_screenshot()
+    {
+        $file = new ProcessableFile;
+        $file->setName('video.mov');
+        $file->setMimeType('video/mov');
+        $file->setData($this->getExampleLocalPath());
+
+
+        $options = [
+            'ffmpeg'  => '/usr/local/bin/ffmpeg',
+            'ffprobe' => '/usr/local/bin/ffprobe',
+        ];
+
+        $strategy = new VideoScreenshotStrategy;
+        $strategy->setOptions($options);
+
+        static::assertInstanceOf(ProcessableFileInterface::class, $strategy->apply($file));
+
+        static::assertEquals('video.jpg', $file->name());
+        static::assertEquals('tests/resources/video.jpg', substr($file->path(), -25));
+
+        // Clean up
+        if (file_exists($file->path())) {
+            unlink($file->path());
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExampleLocalPath()
+    {
+        return realpath(dirname(__DIR__) . '/../../../' . static::MOVIE_TEST_FILE);
+    }
+
+}
