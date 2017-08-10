@@ -11,8 +11,8 @@ before_install:
   - sudo add-apt-repository -y ppa:mc3man/trusty-media
   - sudo apt-get -y -q update
   - sudo apt-get -y -q install ffmpeg
-  - sudo ln -s /usr/local/bin/ffmpeg /usr/bin/ffmpeg
-  - sudo ln -s /usr/local/bin/ffprobe /usr/bin/ffprobe
+  - sudo ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
+  - sudo ln -s /usr/bin/ffprobe /usr/local/bin/ffprobe
 
 script:
   - mkdir -p build/logs
