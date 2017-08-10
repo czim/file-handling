@@ -11,6 +11,7 @@ use Czim\FileHandling\Storage\File\SplFileInfoStorableFile;
 use Czim\FileHandling\Storage\File\StorableFileFactory;
 use Czim\FileHandling\Support\Content\RawContent;
 use Czim\FileHandling\Test\TestCase;
+use ErrorException;
 use Mockery;
 use SplFileInfo;
 
@@ -108,7 +109,7 @@ class StorableFileFactoryTest extends TestCase
 
         $downloader->shouldReceive('download')
             ->with('http://test.com/test.xml')
-            ->andThrow(\ErrorException::class, 'testing');
+            ->andThrow(ErrorException::class, 'testing');
 
         $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $downloader);
 
@@ -120,23 +121,26 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_from_a_datauri()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+        $mimeTypeHelper = $this->getMockMimeTypeHelper();
+        $mimeTypeHelper->shouldReceive('guessExtensionForMimeType')->with('image/gif')->andReturn('gif');
+
+        $factory = new StorableFileFactory($mimeTypeHelper, $this->getMockInterpreter(), $this->getMockDownloader());
 
         $rawData = $this->getExampleDataUri();
 
-        $file = $factory->makeFromRawData($rawData, 'helpful.gif');
+        $file = $factory->makeFromDataUri($rawData, 'helpful.gif');
 
-        static::assertInstanceOf(RawStorableFile::class, $file);
+        static::assertInstanceOf(SplFileInfoStorableFile::class, $file);
         static::assertEquals('helpful.gif', $file->name());
-        static::assertEquals(74, $file->size());
+        static::assertEquals(37, $file->size());
         static::assertEquals('application/xml', $file->mimeType());
 
         // And from a raw content instance
-        $file = $factory->makeFromRawData(new RawContent($rawData), 'helpful.gif');
+        $file = $factory->makeFromDataUri(new RawContent($rawData));
 
-        static::assertInstanceOf(RawStorableFile::class, $file);
-        static::assertEquals('helpful.gif', $file->name());
-        static::assertEquals(74, $file->size());
+        static::assertInstanceOf(SplFileInfoStorableFile::class, $file);
+        static::assertRegExp('#[a-z0-9]{16}\.gif#', $file->name());
+        static::assertEquals(37, $file->size());
         static::assertEquals('application/xml', $file->mimeType());
     }
 
@@ -201,6 +205,7 @@ class StorableFileFactoryTest extends TestCase
             ->andReturn($this->getExampleLocalPath());
 
         $mimeGuesser->shouldReceive('guessExtensionForMimeType')->with('image/gif')->andReturn('gif');
+        $mimeGuesser->shouldReceive('guessExtensionForMimeType')->with('application/xml')->andReturn('xml');
 
 
         $factory = new StorableFileFactory($mimeGuesser, $interpreter, $downloader);
