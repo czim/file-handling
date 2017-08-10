@@ -64,6 +64,68 @@ class VideoScreenshotStrategyTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    function it_takes_a_screenshot_at_a_specific_second_amount()
+    {
+        $file = new ProcessableFile;
+        $file->setName('video.mov');
+        $file->setMimeType('video/mov');
+        $file->setData($this->getExampleLocalPath());
+
+
+        $options = [
+            'seconds' => 0.1,
+            'ffmpeg'  => '/usr/local/bin/ffmpeg',
+            'ffprobe' => '/usr/local/bin/ffprobe',
+        ];
+
+        $strategy = new VideoScreenshotStrategy;
+        $strategy->setOptions($options);
+
+        static::assertInstanceOf(ProcessableFileInterface::class, $strategy->apply($file));
+
+        static::assertEquals('video.jpg', $file->name());
+        static::assertEquals('tests/resources/video.jpg', substr($file->path(), -25));
+
+        // Clean up
+        if (file_exists($file->path())) {
+            unlink($file->path());
+        }
+    }
+
+    /**
+     * @test
+     */
+    function it_takes_a_screenshot_from_a_percentage_of_duration()
+    {
+        $file = new ProcessableFile;
+        $file->setName('video.mov');
+        $file->setMimeType('video/mov');
+        $file->setData($this->getExampleLocalPath());
+
+
+        $options = [
+            'percentage' => 75,
+            'ffmpeg'     => '/usr/local/bin/ffmpeg',
+            'ffprobe'    => '/usr/local/bin/ffprobe',
+        ];
+
+        $strategy = new VideoScreenshotStrategy;
+        $strategy->setOptions($options);
+
+        static::assertInstanceOf(ProcessableFileInterface::class, $strategy->apply($file));
+
+        static::assertEquals('video.jpg', $file->name());
+        static::assertEquals('tests/resources/video.jpg', substr($file->path(), -25));
+
+        // Clean up
+        if (file_exists($file->path())) {
+            unlink($file->path());
+        }
+    }
+
+    /**
      * @return string
      */
     protected function getExampleLocalPath()
