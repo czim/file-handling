@@ -115,16 +115,20 @@ class StorableFileFactory implements StorableFileFactoryInterface
         $file = new SplFileInfoStorableFile;
         $file->setData($data);
 
-        if (null !== $name) {
-            $file->setName($name);
-        }
-
         if (null !== $mimeType) {
             $file->setMimeType($mimeType);
         } else {
             $file->setMimeType(
                 $this->mimeTypeHelper->guessMimeTypeForPath($data->getRealPath())
             );
+        }
+
+        if (empty($name)) {
+            $name = pathinfo($data->getRealPath(), PATHINFO_BASENAME);
+        }
+
+        if (null !== $name) {
+            $file->setName($name);
         }
 
         return $this->getReturnPreparedFile($file);
@@ -180,12 +184,12 @@ class StorableFileFactory implements StorableFileFactoryInterface
      * Makes a normalized storable file instance from a data URI.
      *
      * @param string|RawContentInterface $data
-     * @param string                     $name
+     * @param string|null                $name
      * @param string|null                $mimeType
      * @return StorableFileInterface
      * @throws CouldNotReadDataException
      */
-    public function makeFromDataUri($data, $name, $mimeType = null)
+    public function makeFromDataUri($data, $name = null, $mimeType = null)
     {
         if ($data instanceof RawContentInterface) {
             $data = $data->content();
@@ -212,6 +216,10 @@ class StorableFileFactory implements StorableFileFactoryInterface
         $extension = $this->mimeTypeHelper->guessExtensionForMimeType($mimeType);
         $localPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . md5($meta['uri']) . '.' . $extension;
 
+        if (null === $name) {
+            $name = pathinfo($localPath, PATHINFO_BASENAME);
+        }
+
         try {
             file_put_contents($localPath, stream_get_contents($resource));
             // @codeCoverageIgnoreStart
@@ -228,11 +236,11 @@ class StorableFileFactory implements StorableFileFactoryInterface
      * Makes a normalized storable file instance from raw content data.
      *
      * @param string|RawContentInterface $data
-     * @param string                     $name
+     * @param string|null                $name
      * @param string|null                $mimeType
      * @return StorableFileInterface
      */
-    public function makeFromRawData($data, $name, $mimeType = null)
+    public function makeFromRawData($data, $name = null, $mimeType = null)
     {
         $file = new RawStorableFile;
 
@@ -240,14 +248,19 @@ class StorableFileFactory implements StorableFileFactoryInterface
             $data = $data->content();
         }
 
-        $file->setName($name);
-        $file->setData($data);
-
         // Guess the mimetype directly from the content
         if (null === $mimeType) {
             $mimeType = $this->mimeTypeHelper->guessMimeTypeForContent($data);
         }
 
+        if (empty($name)) {
+            $name = $this->makeRandomName(
+                $this->mimeTypeHelper->guessExtensionForMimeType($mimeType)
+            );
+        }
+
+        $file->setName($name);
+        $file->setData($data);
         $file->setMimeType($mimeType);
 
         return $this->getReturnPreparedFile($file);
@@ -278,6 +291,18 @@ class StorableFileFactory implements StorableFileFactoryInterface
         }
 
         return pathinfo($url, PATHINFO_BASENAME);
+    }
+
+    /**
+     * Returns random name for a file.
+     *
+     * @param string $extension
+     * @return string
+     */
+    protected function makeRandomName($extension)
+    {
+        return substr(md5(microtime()), 0, 16)
+             . ($extension ? '.' . $extension : '');
     }
 
 }

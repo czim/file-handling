@@ -58,20 +58,20 @@ interface StorableFileFactoryInterface
      * Makes a normalized storable file instance from a data URI.
      *
      * @param string|RawContentInterface $data
-     * @param string                     $name
+     * @param string|null                $name
      * @param string|null                $mimeType
      * @return StorableFileInterface
      */
-    public function makeFromDataUri($data, $name, $mimeType = null);
+    public function makeFromDataUri($data, $name = null, $mimeType = null);
 
     /**
      * Makes a normalized storable file instance from raw content data.
      *
      * @param string|RawContentInterface $data
-     * @param string                     $name
+     * @param string|null                $name
      * @param string|null                $mimeType
      * @return StorableFileInterface
      */
-    public function makeFromRawData($data, $name, $mimeType = null);
+    public function makeFromRawData($data, $name = null, $mimeType = null);
 
 }
