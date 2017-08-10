@@ -126,16 +126,37 @@ A single variant is defined by one or more strategy steps, making it possible to
 
 Variants can be re-created from the original.
 
-Included strategies:
 
-For images:
+Note that it this package is designed to easily create and add in custom variant strategies. Consider the source code for the strategies listed below examples to get you started.
+
+
+#### Image Strategies
+
+Included strategies for image manipulation:
+
 - `ImageAutoOrientStrategy`: Re-orients rotated or flipped images.
+
 - `ImageResizeStrategy`: Resizes (and crops) images.  
-    (Uses Stapler's approach to resizes.)
-    
-For videos:
+    (Uses Stapler's options & approach to resizes.)
+
+- `ImageWatermarkStrategy`: Pastes a watermark onto an image.  
+    In any corner or the center.  
+    Options:  
+    `position` (string): `top-left`, `top-right`, `center`, `bottom-left`, `bottom-right`.  
+    `watermark` (string): full path to the watermark image.  
+    The watermark should be a PNG (transparent) image for best results. 
+
+#### Video Strategies
+
+Included strategies for video manipulation:
+
 - `VideoScreenshotStrategy`: Extracts a video frame for a preview.  
-    (Requires `ffmpeg`/`ffprobe`) **Not included yet, planned**
+    (Requires `ffmpeg`/`ffprobe`).  
+    Options:  
+    `seconds` (int): the second of video runtime to take the shot at.  
+    `percentage` (int): the percentage of video runtime to take the shot at (overruled by `seconds`).
+    `ffmpeg` (string): path to ffmpeg binary (if not `/usr/bin/ffmpeg`).
+    `ffprobe` (string): path to ffprobe binary (if not `/usr/bin/ffprobe`).  
 
  
 ### Variant Gotcha
@@ -143,6 +164,10 @@ For videos:
 When using the resize strategy while working with potentially EXIF-rotated images, keep in mind that portrait/landscape width/height only resizes may run into trouble unless they are auto-oriented first.
 
 For this reason, it is recommended to precede the `ImageResizeStrategy` by the `ImageAutoOrientStrategy`.
+
+In general, it is always a good idea to consider the order in which strategies are applied.
+
+You may also opt to combine multiple strategies into one strategy class, if efficiency is important. You may use this approach to prevent opening/saving the same file more than once.
 
  
 ## Configuration
