@@ -65,5 +65,4 @@ interface FileHandlerInterface
      */
     public function deleteVariant($path, $variant = null, $file = null);
 
-
 }
