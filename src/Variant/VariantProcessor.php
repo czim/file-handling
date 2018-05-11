@@ -143,7 +143,7 @@ class VariantProcessor implements VariantProcessorInterface
         $path = $this->makeLocalTemporaryPath($source->extension());
 
         try {
-            $success = copy($source->path(), $path);
+            $success = $source->copy($path);
 
             // @codeCoverageIgnoreStart
         } catch (Exception $e) {
