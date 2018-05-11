@@ -62,6 +62,14 @@ class SplFileInfoStorableFile extends AbstractStorableFile
     /**
      * {@inheritdoc}
      */
+    public function copy($path)
+    {
+        return copy($this->path(), $path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function path()
     {
         return $this->file->getRealPath();

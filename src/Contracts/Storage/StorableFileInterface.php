@@ -12,6 +12,14 @@ interface StorableFileInterface
     public function content();
 
     /**
+     * Writes a copy to a given (local) file path;
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function copy($path);
+
+    /**
      * Returns (local) path to file, if possible.
      *
      * @return string|null

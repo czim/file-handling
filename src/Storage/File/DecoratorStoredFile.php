@@ -64,6 +64,17 @@ class DecoratorStoredFile implements StoredFileInterface
     }
 
     /**
+     * Writes a copy to a (local) path.
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function copy($path)
+    {
+        return $this->file->copy($path);
+    }
+
+    /**
      * Returns (local) path to file, if possible.
      *
      * @return string|null

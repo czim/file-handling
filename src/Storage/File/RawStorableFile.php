@@ -41,4 +41,12 @@ class RawStorableFile extends AbstractStorableFile
         return $this->content;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function copy($path)
+    {
+        return (bool) file_put_contents($path, $this->content());
+    }
+
 }

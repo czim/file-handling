@@ -69,6 +69,14 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
     /**
      * {@inheritdoc}
      */
+    public function copy($path)
+    {
+        return copy($this->path(), $path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function path()
     {
         return $this->file->getRealPath();

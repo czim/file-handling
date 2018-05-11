@@ -36,6 +36,14 @@ abstract class AbstractStorableFile implements StorableFileInterface
     abstract public function setData($data);
 
     /**
+     * Writes a copy to a given (local) file path;
+     *
+     * @param string $path
+     * @return bool
+     */
+    abstract public function copy($path);
+
+    /**
      * Sets the mime type for the file.
      *
      * @param string $type
