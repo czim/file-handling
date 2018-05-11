@@ -9,6 +9,7 @@ use Czim\FileHandling\Contracts\Variant\VariantStrategyInterface;
 use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 use Czim\FileHandling\Test\TestCase;
 use Czim\FileHandling\Variant\VariantProcessor;
+use Hamcrest\Matchers;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -193,6 +194,13 @@ class VariantProcessorTest extends TestCase
         $source->shouldReceive('mimeType')->andReturn($mimeType);
         $source->shouldReceive('name')->andReturn(pathinfo($tmpPath, PATHINFO_BASENAME));
         $source->shouldReceive('extension')->andReturn(pathinfo($tmpPath, PATHINFO_EXTENSION));
+
+        $source->shouldReceive('copy')->once()
+            ->with(Matchers::nonEmptyString())
+            ->andReturnUsing(function ($path) {
+                file_put_contents($path, 'dummy contents');
+                return true;
+            });
 
         return $source;
     }
