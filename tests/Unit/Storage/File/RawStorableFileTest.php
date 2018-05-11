@@ -3,6 +3,7 @@ namespace Czim\FileHandling\Test\Unit\Storage\File;
 
 use Czim\FileHandling\Storage\File\RawStorableFile;
 use Czim\FileHandling\Test\TestCase;
+use org\bovigo\vfs\vfsStream;
 
 class RawStorableFileTest extends TestCase
 {
@@ -85,6 +86,21 @@ class RawStorableFileTest extends TestCase
         $file = new RawStorableFile;
 
         static::assertNull($file->path());
+    }
+
+    /**
+     * @test
+     */
+    function it_creates_a_copy()
+    {
+        $root = vfsStream::setup('tmp');
+
+        $file = new RawStorableFile();
+        $file->setData('contents to be copied');
+
+        static::assertTrue($file->copy(vfsStream::url('tmp/copy.txt')));
+        static::assertTrue($root->hasChild('copy.txt'));
+        static::assertEquals('contents to be copied', $root->getChild('tmp/copy.txt')->getContent());
     }
 
 

@@ -3,6 +3,7 @@ namespace Czim\FileHandling\Test\Unit\Storage\File;
 
 use Czim\FileHandling\Storage\File\SplFileInfoStorableFile;
 use Czim\FileHandling\Test\TestCase;
+use org\bovigo\vfs\vfsStream;
 use SplFileInfo;
 
 /**
@@ -80,6 +81,25 @@ class SplFileInfoStorableFileTest extends TestCase
         static::assertSame($file, $file->setData($fileInfo));
 
         static::assertEquals($fileInfo->getRealPath(), $file->path());
+    }
+
+    /**
+     * @test
+     */
+    function it_creates_a_copy()
+    {
+        $root = vfsStream::setup('tmp');
+
+        $file = new SplFileInfoStorableFile();
+        $file->setData(new SplFileInfo($this->getExampleLocalPath()));
+
+        static::assertTrue($file->copy(vfsStream::url('tmp/copy.txt')));
+
+        static::assertTrue($root->hasChild('copy.txt'));
+        static::assertEquals(
+            file_get_contents($this->getExampleLocalPath()),
+            $root->getChild('tmp/copy.txt')->getContent()
+        );
     }
 
     /**
