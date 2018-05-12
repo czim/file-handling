@@ -103,7 +103,7 @@ class FileHandler implements FileHandlerInterface
         ];
 
         if (in_array(static::ORIGINAL, $variants)) {
-            unset($variants[ static::ORIGINAL ]);
+            $variants = array_diff($variants, [ static::ORIGINAL ]);
         }
 
         foreach ($variants as $variant) {
