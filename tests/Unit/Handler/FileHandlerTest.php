@@ -1,10 +1,10 @@
 <?php
 namespace Czim\FileHandling\Test\Unit\Handler;
 
-use Czim\FileHandling\Contracts\Storage\PathHelperInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 use Czim\FileHandling\Contracts\Storage\StorageInterface;
 use Czim\FileHandling\Contracts\Storage\StoredFileInterface;
+use Czim\FileHandling\Contracts\Storage\TargetInterface;
 use Czim\FileHandling\Contracts\Variant\VariantProcessorInterface;
 use Czim\FileHandling\Handler\FileHandler;
 use Czim\FileHandling\Test\TestCase;
@@ -25,24 +25,23 @@ class FileHandlerTest extends TestCase
     {
         $storage   = $this->getMockStorage();
         $processor = $this->getMockVariantProcessor();
-        $helper    = $this->getMockPathHelper();
+        $target    = $this->getMockTarget();
 
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path')
+        $target->shouldReceive('original')
             ->once()
-            ->andReturn('test/target/path/original');
+            ->andReturn('test/target/path/original/file.txt');
 
         $storedMock = $this->getMockStoredFile();
         $storage->shouldReceive('store')
-            ->with(Mockery::type(StorableFileInterface::class), 'test/target/path/original')
+            ->with(Mockery::type(StorableFileInterface::class), 'test/target/path/original/file.txt')
             ->once()
             ->andReturn($storedMock);
 
-        $handler = new FileHandler($storage, $processor, $helper);
+        $handler = new FileHandler($storage, $processor);
 
         $file = $this->getMockStorableFile();
 
-        $stored = $handler->process($file, 'test/target/path', ['test' => true]);
+        $stored = $handler->process($file, $target, ['test' => true]);
 
         static::assertInternalType('array', $stored);
         static::assertCount(1, $stored);
@@ -58,7 +57,7 @@ class FileHandlerTest extends TestCase
     {
         $storage   = $this->getMockStorage();
         $processor = $this->getMockVariantProcessor();
-        $helper    = $this->getMockPathHelper();
+        $target    = $this->getMockTarget();
 
         $file           = $this->getMockStorableFile();
         $storedMock     = $this->getMockStoredFile();
@@ -69,15 +68,12 @@ class FileHandlerTest extends TestCase
             'autoorient' => [],
         ];
 
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path')
+        $target->shouldReceive('original')
             ->once()
-            ->andReturn('test/target/path/original');
-
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path', 'tiny')
+            ->andReturn('test/target/path/original/file.txt');
+        $target->shouldReceive('variant')
             ->once()
-            ->andReturn('test/target/path/tiny');
+            ->andReturn('test/target/path/tiny/file.txt');
 
         $processor->shouldReceive('process')
             ->with($file, 'tiny', $tinyVariantConfig)
@@ -85,18 +81,18 @@ class FileHandlerTest extends TestCase
             ->andReturn($storedTinyMock);
 
         $storage->shouldReceive('store')
-            ->with(Mockery::type(StorableFileInterface::class), 'test/target/path/original')
+            ->with(Mockery::type(StorableFileInterface::class), 'test/target/path/original/file.txt')
             ->once()
             ->andReturn($storedMock);
 
         $storage->shouldReceive('store')
-            ->with(Mockery::type(StorableFileInterface::class), 'test/target/path/tiny')
+            ->with(Mockery::type(StorableFileInterface::class), 'test/target/path/tiny/file.txt')
             ->once()
             ->andReturn($storedTinyMock);
 
-        $handler = new FileHandler($storage, $processor, $helper);
+        $handler = new FileHandler($storage, $processor);
 
-        $stored = $handler->process($file, 'test/target/path', [
+        $stored = $handler->process($file, $target, [
             FileHandler::CONFIG_VARIANTS => [
                 'tiny' => $tinyVariantConfig,
             ],
@@ -118,7 +114,7 @@ class FileHandlerTest extends TestCase
     {
         $storage   = $this->getMockStorage();
         $processor = $this->getMockVariantProcessor();
-        $helper    = $this->getMockPathHelper();
+        $target    = $this->getMockTarget();
 
         $file           = $this->getMockStorableFile();
         $storedMock     = $this->getMockStoredFile();
@@ -127,10 +123,9 @@ class FileHandlerTest extends TestCase
             'resize' => ['dimensions' => '10x10'],
         ];
 
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path', 'tiny')
+        $target->shouldReceive('variant')
             ->once()
-            ->andReturn('test/target/path/tiny');
+            ->andReturn('test/target/path/tiny/file.txt');
 
         $processor->shouldReceive('process')
             ->with($file, 'tiny', $tinyVariantConfig)
@@ -138,13 +133,13 @@ class FileHandlerTest extends TestCase
             ->andReturn($storedMock);
 
         $storage->shouldReceive('store')
-            ->with(Mockery::type(StorableFileInterface::class), 'test/target/path/tiny')
+            ->with(Mockery::type(StorableFileInterface::class), 'test/target/path/tiny/file.txt')
             ->once()
             ->andReturn($storedMock);
 
-        $handler = new FileHandler($storage, $processor, $helper);
+        $handler = new FileHandler($storage, $processor);
 
-        $stored = $handler->processVariant($file, 'test/target/path', 'tiny', $tinyVariantConfig);
+        $stored = $handler->processVariant($file, $target, 'tiny', $tinyVariantConfig);
 
         static::assertInstanceOf(StoredFileInterface::class, $stored);
         static::assertSame($storedMock, $stored);
@@ -153,21 +148,19 @@ class FileHandlerTest extends TestCase
     /**
      * @test
      */
-    function it_returns_variant_urls_for_a_basepath_and_list_of_variants()
+    function it_returns_variant_urls_for_a_target_and_list_of_variants()
     {
         $storage   = $this->getMockStorage();
         $processor = $this->getMockVariantProcessor();
-        $helper    = $this->getMockPathHelper();
+        $target    = $this->getMockTarget();
 
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path', 'tiny')
+        $target->shouldReceive('original')
             ->once()
-            ->andReturn('test/target/path/tiny');
-
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path', FileHandler::ORIGINAL)
+            ->andReturn('test/target/path/original/test.gif');
+        $target->shouldReceive('variant')
+            ->with('tiny')
             ->once()
-            ->andReturn('test/target/path/original');
+            ->andReturn('test/target/path/tiny/test.gif');
 
         $storage->shouldReceive('url')
             ->with('test/target/path/tiny/test.gif')
@@ -177,56 +170,9 @@ class FileHandlerTest extends TestCase
             ->with('test/target/path/original/test.gif')
             ->andReturn('http://test.com/test/target/path/original/test.gif');
 
-        $handler = new FileHandler($storage, $processor, $helper);
+        $handler = new FileHandler($storage, $processor);
 
-        $urls = $handler->variantUrlsForBasePath('test/target/path', 'test.gif', ['tiny']);
-
-        static::assertEquals([
-            'original' => 'http://test.com/test/target/path/original/test.gif',
-            'tiny'     => 'http://test.com/test/target/path/tiny/test.gif',
-        ], $urls);
-    }
-
-    /**
-     * @test
-     */
-    function it_returns_variant_urls_for_a_stored_file_and_a_list_of_variants()
-    {
-        $storage   = $this->getMockStorage();
-        $processor = $this->getMockVariantProcessor();
-        $helper    = $this->getMockPathHelper();
-
-        $storedMock = $this->getMockStoredFile();
-
-        $storedMock->shouldReceive('path')->once()->andReturn('test/target/path/tiny');
-        $storedMock->shouldReceive('name')->once()->andReturn('test.gif');
-
-        $helper->shouldReceive('basePath')
-            ->once()
-            ->with('test/target/path/tiny')
-            ->andReturn('test/target/path');
-
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path', 'tiny')
-            ->once()
-            ->andReturn('test/target/path/tiny');
-
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path', FileHandler::ORIGINAL)
-            ->once()
-            ->andReturn('test/target/path/original');
-
-        $storage->shouldReceive('url')
-            ->with('test/target/path/tiny/test.gif')
-            ->andReturn('http://test.com/test/target/path/tiny/test.gif');
-
-        $storage->shouldReceive('url')
-            ->with('test/target/path/original/test.gif')
-            ->andReturn('http://test.com/test/target/path/original/test.gif');
-
-        $handler = new FileHandler($storage, $processor, $helper);
-
-        $urls = $handler->variantUrlsForStoredFile($storedMock, ['tiny']);
+        $urls = $handler->variantUrlsForTarget($target, ['tiny', 'original']);
 
         static::assertEquals([
             'original' => 'http://test.com/test/target/path/original/test.gif',
@@ -241,17 +187,14 @@ class FileHandlerTest extends TestCase
     {
         $storage   = $this->getMockStorage();
         $processor = $this->getMockVariantProcessor();
-        $helper    = $this->getMockPathHelper();
+        $target    = $this->getMockTarget();
 
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path', 'tiny')
+        $target->shouldReceive('original')
             ->once()
-            ->andReturn('test/target/path/tiny');
-
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path', FileHandler::ORIGINAL)
+            ->andReturn('test/target/path/original/test.gif');
+        $target->shouldReceive('variant')
             ->once()
-            ->andReturn('test/target/path/original');
+            ->andReturn('test/target/path/tiny/test.gif');
 
         $storage->shouldReceive('exists')
             ->with('test/target/path/tiny/test.gif')
@@ -268,19 +211,23 @@ class FileHandlerTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $handler = new FileHandler($storage, $processor, $helper);
+        $handler = new FileHandler($storage, $processor);
 
-        static::assertTrue($handler->delete('test/target/path', 'test.gif', ['tiny']));
+        static::assertTrue($handler->delete($target, ['tiny']));
     }
 
     /**
      * @test
      */
-    function it_deletes_a_single_variant_using_a_full_variant_path()
+    function it_deletes_a_single_variant()
     {
         $storage   = $this->getMockStorage();
         $processor = $this->getMockVariantProcessor();
-        $helper    = $this->getMockPathHelper();
+        $target    = $this->getMockTarget();
+
+        $target->shouldReceive('variant')
+            ->once()
+            ->andReturn('test/target/path/tiny/test.gif');
 
         $storage->shouldReceive('exists')
             ->with('test/target/path/tiny/test.gif')
@@ -292,49 +239,9 @@ class FileHandlerTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $handler = new FileHandler($storage, $processor, $helper);
+        $handler = new FileHandler($storage, $processor);
 
-        static::assertTrue($handler->deleteVariant('test/target/path/tiny/test.gif'));
-    }
-
-    /**
-     * @test
-     */
-    function it_deletes_a_single_variant_using_basepath_and_partial_parameters()
-    {
-        $storage   = $this->getMockStorage();
-        $processor = $this->getMockVariantProcessor();
-        $helper    = $this->getMockPathHelper();
-
-        $helper->shouldReceive('addVariantToBasePath')
-            ->with('test/target/path', 'tiny')
-            ->once()
-            ->andReturn('test/target/path/tiny');
-
-        $storage->shouldReceive('exists')
-            ->with('test/target/path/tiny/test.gif')
-            ->once()
-            ->andReturn(true);
-
-        $storage->shouldReceive('delete')
-            ->with('test/target/path/tiny/test.gif')
-            ->once()
-            ->andReturn(true);
-
-        $handler = new FileHandler($storage, $processor, $helper);
-
-        static::assertTrue($handler->deleteVariant('test/target/path', 'tiny', 'test.gif'));
-    }
-
-    /**
-     * @test
-     * @expectedException \UnexpectedValueException
-     */
-    function it_throws_an_exception_when_trying_to_delete_a_variant_with_incomplete_parameters()
-    {
-        $handler = new FileHandler($this->getMockStorage(), $this->getMockVariantProcessor(), $this->getMockPathHelper());
-
-        $handler->deleteVariant('some/path', 'variant');
+        static::assertTrue($handler->deleteVariant($target, 'tiny'));
     }
 
 
@@ -355,11 +262,11 @@ class FileHandlerTest extends TestCase
     }
 
     /**
-     * @return Mockery\MockInterface|PathHelperInterface
+     * @return Mockery\MockInterface|TargetInterface
      */
-    protected function getMockPathHelper()
+    protected function getMockTarget()
     {
-        return Mockery::mock(PathHelperInterface::class);
+        return Mockery::mock(TargetInterface::class);
     }
 
     /**
