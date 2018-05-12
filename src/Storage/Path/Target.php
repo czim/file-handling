@@ -167,7 +167,7 @@ class Target implements TargetInterface, TargetSetupInterface
         $segments = explode(DIRECTORY_SEPARATOR, $dirname);
 
         if (count($segments) < 2) {
-            return '';
+            return $replacement;
         }
 
         array_pop($segments);
