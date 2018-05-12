@@ -73,6 +73,8 @@ class StorableFileFactory implements StorableFileFactoryInterface
      * @param string|null $name
      * @param string|null $mimeType
      * @return StorableFileInterface
+     * @throws CouldNotReadDataException
+     * @throws CouldNotRetrieveRemoteFileException
      */
     public function makeFromAny($data, $name = null, $mimeType = null)
     {

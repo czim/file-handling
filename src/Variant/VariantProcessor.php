@@ -78,6 +78,7 @@ class VariantProcessor implements VariantProcessorInterface
      * @param array[]               $strategies associative, ordered set of strategies to apply
      * @return StorableFileInterface
      * @throws VariantStrategyNotAppliedException
+     * @throws CouldNotProcessDataException
      */
     public function process(StorableFileInterface $source, $variant, array $strategies)
     {

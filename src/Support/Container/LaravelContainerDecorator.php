@@ -7,7 +7,7 @@ use ReflectionClass;
 use ReflectionException;
 
 /**
- * Copy of Prooph conainer wrapper.
+ * Copy of Prooph container wrapper.
  *
  * Modified to work with PHP 5.6.
  *

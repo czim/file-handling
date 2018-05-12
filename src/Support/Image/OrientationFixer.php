@@ -79,6 +79,7 @@ class OrientationFixer
      *
      * @param SplFileInfo $file
      * @return bool
+     * @throws ErrorException
      */
     public function fixFile(SplFileInfo $file)
     {

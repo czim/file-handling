@@ -29,6 +29,7 @@ class UrlDownloader implements UrlDownloaderInterface
      *
      * @param string $url
      * @return string
+     * @throws CouldNotRetrieveRemoteFileException
      */
     public function download($url)
     {
