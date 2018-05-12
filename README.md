@@ -41,11 +41,10 @@ Here's an example of how to set up variant processing in general:
     ]);
 
     $processor = new \Czim\FileHandling\Variant\VariantProcessor($factory, $strategyFactory);
-    $pather    = new \Czim\FileHandling\Storage\PathHelper;
 
-    $handler = new \Czim\FileHandling\Handler\FileHandler($storage, $processor, $pather);
-
-    $handler->process($file, 'target/test-path', [
+    $handler = new \Czim\FileHandling\Handler\FileHandler($storage, $processor);
+    
+    $handler->process($file, new Target($file->path()), [
         'variants' => [
             'tiny' => [
                 'autoOrient' => [],

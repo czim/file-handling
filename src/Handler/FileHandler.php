@@ -2,12 +2,11 @@
 namespace Czim\FileHandling\Handler;
 
 use Czim\FileHandling\Contracts\Handler\FileHandlerInterface;
-use Czim\FileHandling\Contracts\Storage\PathHelperInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 use Czim\FileHandling\Contracts\Storage\StorageInterface;
 use Czim\FileHandling\Contracts\Storage\StoredFileInterface;
+use Czim\FileHandling\Contracts\Storage\TargetInterface;
 use Czim\FileHandling\Contracts\Variant\VariantProcessorInterface;
-use UnexpectedValueException;
 
 class FileHandler implements FileHandlerInterface
 {
@@ -37,25 +36,17 @@ class FileHandler implements FileHandlerInterface
      */
     protected $processor;
 
-    /**
-     * @var PathHelperInterface
-     */
-    protected $pathHelper;
-
 
     /**
      * @param StorageInterface          $storage
      * @param VariantProcessorInterface $processor
-     * @param PathHelperInterface       $pathHelper
      */
     public function __construct(
         StorageInterface $storage,
-        VariantProcessorInterface $processor,
-        PathHelperInterface $pathHelper
+        VariantProcessorInterface $processor
     ) {
         $this->storage    = $storage;
         $this->processor  = $processor;
-        $this->pathHelper = $pathHelper;
     }
 
 
@@ -63,21 +54,19 @@ class FileHandler implements FileHandlerInterface
      * Processes and stores a storable file.
      *
      * @param StorableFileInterface $source
-     * @param string $targetPath
+     * @param TargetInterface $target
      * @param array $options
      * @return StoredFileInterface[]    keyed by variant name (or 'original')
      */
-    public function process(StorableFileInterface $source, $targetPath, array $options = [])
+    public function process(StorableFileInterface $source, TargetInterface $target, array $options = [])
     {
-        $originalPath = $this->pathHelper->addVariantToBasePath($targetPath);
-
         $stored = [];
-        $stored[ static::ORIGINAL ] = $this->storage->store($source, $originalPath);
+        $stored[ static::ORIGINAL ] = $this->storage->store($source, $target->original());
 
         if (array_key_exists(static::CONFIG_VARIANTS, $options)) {
             foreach ($options[ static::CONFIG_VARIANTS ] as $variant => $variantOptions) {
 
-                $stored[ $variant ] = $this->processVariant($source, $targetPath, $variant, $variantOptions);
+                $stored[ $variant ] = $this->processVariant($source, $target, $variant, $variantOptions);
             }
         }
 
@@ -88,53 +77,37 @@ class FileHandler implements FileHandlerInterface
      * Processes and stores a single variant for a storable file.
      *
      * @param StorableFileInterface $source
-     * @param string                $targetPath
+     * @param TargetInterface       $target
      * @param string                $variant
      * @param array                 $options
      * @return StoredFileInterface
      */
-    public function processVariant(StorableFileInterface $source, $targetPath, $variant, array $options = [])
+    public function processVariant(StorableFileInterface $source, TargetInterface $target, $variant, array $options = [])
     {
-        $variantPath = $this->pathHelper->addVariantToBasePath($targetPath, $variant);
-
         $storableVariant = $this->processor->process($source, $variant, $options);
 
-        return $this->storage->store($storableVariant, $variantPath);
-    }
-
-    /**
-     * @param StoredFileInterface $file
-     * @param string[]            $variants
-     * @return string[]
-     */
-    public function variantUrlsForStoredFile(StoredFileInterface $file, array $variants = [])
-    {
-        $basePath = $this->pathHelper->basePath($file->path());
-
-        return $this->variantUrlsForBasePath($basePath, $file->name(), $variants);
+        return $this->storage->store($storableVariant, $target->variant($variant));
     }
 
     /**
      * Returns the URLs keyed by the variant keys requested.
      *
-     * @param string   $path        base path without variant and filename
-     * @param string   $file        file name
-     * @param string[] $variants    keys for variants to include
+     * @param TargetInterface $target
+     * @param string[]        $variants     keys for variants to include
      * @return string[]
      */
-    public function variantUrlsForBasePath($path, $file, array $variants = [])
+    public function variantUrlsForTarget(TargetInterface $target, array $variants = [])
     {
-        $urls = [];
+        $urls = [
+            static::ORIGINAL => $this->storage->url($target->original()),
+        ];
 
-        if ( ! in_array(static::ORIGINAL, $variants)) {
-            array_unshift($variants, static::ORIGINAL);
+        if (in_array(static::ORIGINAL, $variants)) {
+            unset($variants[ static::ORIGINAL ]);
         }
 
         foreach ($variants as $variant) {
-
-            $urls[ $variant ] = $this->storage->url(
-                $this->pathHelper->addVariantToBasePath($path, $variant) . '/' . $file
-            );
+            $urls[ $variant ] = $this->storage->url($target->variant($variant));
         }
 
         return $urls;
@@ -143,12 +116,11 @@ class FileHandler implements FileHandlerInterface
     /**
      * Deletes a file and all indicated variants.
      *
-     * @param string   $basePath
-     * @param string   $file
-     * @param string[] $variants    variant keys
+     * @param TargetInterface $target
+     * @param string[]        $variants     variant keys
      * @return bool
      */
-    public function delete($basePath, $file, array $variants = [])
+    public function delete(TargetInterface $target, array $variants = [])
     {
         $success = true;
 
@@ -157,7 +129,7 @@ class FileHandler implements FileHandlerInterface
         }
 
         foreach ($variants as $variant) {
-            if ( ! $this->deleteVariant($basePath, $variant, $file)) {
+            if ( ! $this->deleteVariant($target, $variant)) {
                 $success = false;
             }
         }
@@ -168,31 +140,24 @@ class FileHandler implements FileHandlerInterface
     /**
      * Deletes a single variant.
      *
-     * @param string      $path         may be a full file path, or a base path
-     * @param null|string $variant      must be given if file path is not full
-     * @param null|string $file         must be given if file path is not full
+     * @param TargetInterface $target       may be a full file path, or a base path
+     * @param string          $variant      'original' refers to the original file
      * @return bool
      */
-    public function deleteVariant($path, $variant = null, $file = null)
+    public function deleteVariant(TargetInterface $target, $variant)
     {
-        if (null !== $variant && null !== $file) {
-            // If variant and file are given, the path is expected to be a basepath
-            $variantPath = $this->pathHelper->addVariantToBasePath($path, $variant) . '/' . $file;
-
-        } elseif (null === $variant && null === $file) {
-            // If neither file nor variant are given, the path is expected to be a full path to the variant
-            $variantPath = $path;
-
+        if ($variant == static::ORIGINAL) {
+            $path = $target->original();
         } else {
-            throw new UnexpectedValueException("Expected either no variant or file parameter, or both");
+            $path = $target->variant($variant);
         }
 
         // If the file does not exist, consider 'deletion' a success
-        if ( ! $this->storage->exists($variantPath)) {
+        if ( ! $this->storage->exists($path)) {
             return true;
         }
 
-        return $this->storage->delete($variantPath);
+        return $this->storage->delete($path);
     }
 
 }
