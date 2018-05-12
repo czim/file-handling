@@ -65,7 +65,7 @@ class LaravelStorageTest extends TestCase
 
         $storage = new LaravelStorage($files, true, 'http://testing');
 
-        $stored = $storage->store($file, 'relative/path');
+        $stored = $storage->store($file, 'relative/path/test.txt');
 
         static::assertInstanceOf(StoredFileInterface::class, $stored);
         static::assertEquals('test.txt', $stored->name());
@@ -87,7 +87,7 @@ class LaravelStorageTest extends TestCase
 
         $storage = new LaravelStorage($files, true, 'http://testing');
 
-        $storage->store($file, 'relative/path');
+        $storage->store($file, 'relative/path/test.txt');
     }
 
     /**
