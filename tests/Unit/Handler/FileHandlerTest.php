@@ -27,7 +27,7 @@ class FileHandlerTest extends TestCase
         $processor = $this->getMockVariantProcessor();
         $target    = $this->getMockTarget();
 
-        $target->shouldReceive('original')
+        $target->shouldReceive(FileHandler::ORIGINAL)
             ->once()
             ->andReturn('test/target/path/original/file.txt');
 
@@ -68,7 +68,7 @@ class FileHandlerTest extends TestCase
             'autoorient' => [],
         ];
 
-        $target->shouldReceive('original')
+        $target->shouldReceive(FileHandler::ORIGINAL)
             ->once()
             ->andReturn('test/target/path/original/file.txt');
         $target->shouldReceive('variant')
@@ -154,7 +154,7 @@ class FileHandlerTest extends TestCase
         $processor = $this->getMockVariantProcessor();
         $target    = $this->getMockTarget();
 
-        $target->shouldReceive('original')
+        $target->shouldReceive(FileHandler::ORIGINAL)
             ->once()
             ->andReturn('test/target/path/original/test.gif');
         $target->shouldReceive('variant')
@@ -172,11 +172,11 @@ class FileHandlerTest extends TestCase
 
         $handler = new FileHandler($storage, $processor);
 
-        $urls = $handler->variantUrlsForTarget($target, ['tiny', 'original']);
+        $urls = $handler->variantUrlsForTarget($target, ['tiny', FileHandler::ORIGINAL]);
 
         static::assertEquals([
-            'original' => 'http://test.com/test/target/path/original/test.gif',
-            'tiny'     => 'http://test.com/test/target/path/tiny/test.gif',
+            FileHandler::ORIGINAL => 'http://test.com/test/target/path/original/test.gif',
+            'tiny'                => 'http://test.com/test/target/path/tiny/test.gif',
         ], $urls);
     }
 
@@ -189,7 +189,7 @@ class FileHandlerTest extends TestCase
         $processor = $this->getMockVariantProcessor();
         $target    = $this->getMockTarget();
 
-        $target->shouldReceive('original')
+        $target->shouldReceive(FileHandler::ORIGINAL)
             ->once()
             ->andReturn('test/target/path/original/test.gif');
         $target->shouldReceive('variant')
