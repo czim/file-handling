@@ -32,7 +32,7 @@ interface StorageInterface
      * Stores a file.
      *
      * @param StorableFileInterface $file   mixed content to store
-     * @param string                $path   where the file should be stored
+     * @param string                $path   where the file should be stored, including filename
      * @return StoredFileInterface
      */
     public function store(StorableFileInterface $file, $path);
