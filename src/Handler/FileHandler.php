@@ -60,8 +60,9 @@ class FileHandler implements FileHandlerInterface
      */
     public function process(StorableFileInterface $source, TargetInterface $target, array $options = [])
     {
-        $stored = [];
-        $stored[ static::ORIGINAL ] = $this->storage->store($source, $target->original());
+        $stored = [
+            static::ORIGINAL => $this->storage->store($source, $target->original()),
+        ];
 
         if (array_key_exists(static::CONFIG_VARIANTS, $options)) {
             foreach ($options[ static::CONFIG_VARIANTS ] as $variant => $variantOptions) {
