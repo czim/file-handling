@@ -8,6 +8,12 @@
 
 Handles uploads, manipulations and (external) storage
 
+
+## Changelog
+
+[View the changelog](CHANGELOG.md).
+
+
 ## Usage
 
 This package is framework-independent.
