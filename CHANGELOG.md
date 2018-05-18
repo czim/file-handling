@@ -2,7 +2,7 @@
 
 ## 1.*
 
-### [1.1.0] - 2018-05-13
+### [1.0.0] - 2018-05-13
 
 Much improved path handling and flexibility.  
 There are *many* breaking changes here!
