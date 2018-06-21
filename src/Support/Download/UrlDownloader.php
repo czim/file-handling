@@ -35,6 +35,8 @@ class UrlDownloader implements UrlDownloaderInterface
     {
         $localPath = $this->makeLocalTemporaryPath();
 
+        $url = $this->normalizeUrl($url);
+
         $this->downloadToTempLocalPath($url, $localPath);
 
         // Remove the query string if it exists, to make sure the extension is valid
@@ -160,6 +162,17 @@ class UrlDownloader implements UrlDownloaderInterface
         // @codeCoverageIgnoreEnd
 
         return $newPath;
+    }
+
+    /**
+     * Normalizes URL for safe cURL use.
+     *
+     * @param string $url
+     * @return string
+     */
+    protected function normalizeUrl($url)
+    {
+        return str_replace(' ', '+', $url);
     }
 
 }
