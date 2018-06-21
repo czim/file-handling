@@ -2,6 +2,11 @@
 
 ## 1.*
 
+### [1.0.1] - 2018-06-21
+
+Fixed issue where downloader failed to work with URLs that contained spaces. 
+
+
 ### [1.0.0] - 2018-05-13
 
 Much improved path handling and flexibility.  
@@ -19,5 +24,5 @@ Please take care when updating, this will likely affect any code relying on this
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
 
-
-[1.1.0]: https://github.com/czim/file-handling/compare/0.9.10...1.0.0
+[1.0.1]: https://github.com/czim/file-handling/compare/1.0.0...1.0.1
+[1.0.0]: https://github.com/czim/file-handling/compare/0.9.10...1.0.0
