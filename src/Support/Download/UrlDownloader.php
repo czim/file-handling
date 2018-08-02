@@ -172,7 +172,7 @@ class UrlDownloader implements UrlDownloaderInterface
      */
     protected function normalizeUrl($url)
     {
-        return str_replace(' ', '+', $url);
+        return str_replace(' ', '%20', $url);
     }
 
 }
