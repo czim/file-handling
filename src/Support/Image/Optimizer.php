@@ -16,6 +16,7 @@ class Optimizer
      */
     protected $optimizerChain;
 
+    
     /**
      * @param OptimizerChainFactory $optimizer
      */
@@ -23,6 +24,7 @@ class Optimizer
     {
         $this->optimizerChain = $optimizerChain::create();
     }
+    
 
     /**
      * Optimize an image using given options.
@@ -33,15 +35,14 @@ class Optimizer
      */
     public function optimize(SplFileInfo $file, array $options)
     {
-        // ToDo offer confiuration options (logging?)
-        $options = $this->arrGet($options, 'convertOptions', []);
+        $options  = $this->arrayGet($options, 'convertOptions', []);
         $filePath = $file->getRealPath();
 
         $this->optimizerChain
             ->setTimeout(10)
             ->optimize($filePath);
 
-        return True;
+        return true;
     }
 
 
@@ -54,7 +55,7 @@ class Optimizer
      * @param null|mixed $default
      * @return mixed|null
      */
-    protected function arrGet(array $array, $key, $default = null)
+    protected function arrayGet(array $array, $key, $default = null)
     {
         // @codeCoverageIgnoreStart
         if ( ! array_key_exists($key, $array)) {
