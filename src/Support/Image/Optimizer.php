@@ -45,8 +45,6 @@ class Optimizer
         return true;
     }
 
-
-
     /**
      * Safely get array value from config array.
      *
