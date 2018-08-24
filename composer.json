@@ -8,8 +8,7 @@
         "imagine/imagine": "^0.7",
         "myclabs/php-enum": "^1.4",
         "psr/container": "^1.0",
-        "symfony/http-foundation": "^3.0|^4.0",
-        "spatie/image-optimizer": "^1.1"
+        "symfony/http-foundation": "^3.0|^4.0"
     },
     "require-dev": {
         "illuminate/contracts": "^5.3",
@@ -34,7 +33,8 @@
     },
     "suggest": {
         "php-ffmpeg/php-ffmpeg": "Required for video conversion and thumbnail generation",
-        "league/flysystem-aws-s3-v3": "Required for AWS S3 file storage"
+        "league/flysystem-aws-s3-v3": "Required for AWS S3 file storage",
+        "spatie/image-optimizer": "Required to use the image optimizer variant strategy"
     },
     "scripts": {
         "test": "phpunit"
