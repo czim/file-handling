@@ -25,7 +25,7 @@ class ImageOptimizeStrategy extends AbstractImageStrategy
     /**
      * Performs manipulation of the file.
      *
-     * @return bool|null
+     * @return bool
      */
     protected function perform()
     {
