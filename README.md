@@ -153,28 +153,26 @@ Included strategies for image manipulation:
 
 - `ImageOptimizationStrategy` Optimizes images to decreate their file size.
 
-    This package makes use of [spatie/image-optimizer](https://github.com/spatie/image-optimizer/))
-
-    In order for it to work, you'll need to install a few image optimizers.
-
-    Here's how to install all the optimizers on Ubuntu:
+    This strategy requires installation of [spatie/image-optimizer](https://github.com/spatie/image-optimizer).
+    
+    In order for it to work, you'll need to install a few image optimizers as well:
+    - `jpegoptim`
+    - `optipng`
+    - `pngquant`
+    - `svgo`
+    - `gifsicle`
+   
+    Installation example for Ubuntu:
 
     ```bash
-    sudo apt-get install jpegoptim
-    sudo apt-get install optipng
-    sudo apt-get install pngquant
+    sudo apt-get install jpegoptim optipng pngquant gifsicle
     sudo npm install -g svgo
-    sudo apt-get install gifsicle
     ```
 
-    And here's how to install the binaries on MacOS (using [Homebrew](https://brew.sh/)):
+    Installation example for MacOS, using [Homebrew](https://brew.sh):
 
     ```bash
-    brew install jpegoptim
-    brew install optipng
-    brew install pngquant
-    brew install svgo
-    brew install gifsicle
+    brew install jpegoptim optipng pngquant svgo gifsicle
     ```
 
 
