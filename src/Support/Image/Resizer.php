@@ -53,7 +53,7 @@ class Resizer implements ImageResizerInterface
 
             $this
                 ->resizeCustom($file, $callable)
-                ->save($filePath, $this->arrGet($options, 'convertOptions'));
+                ->save($filePath, $this->getConvertOptions($options));
 
             return true;
         }
@@ -61,11 +61,26 @@ class Resizer implements ImageResizerInterface
         $image = $this->imagine->open($file->getRealPath());
 
         $this->$method($image, $width, $height)
-           ->save($filePath, $this->arrGet($options, 'convertOptions', []));
+           ->save($filePath, $this->getConvertOptions($options));
 
         return true;
     }
 
+
+    /**
+     * Returns the convert options for image manipulation.
+     *
+     * @param array $options
+     * @return array
+     */
+    protected function getConvertOptions(array $options)
+    {
+        if ($this->arrHas($options, 'convertOptions')) {
+            return $this->arrGet($options, 'convertOptions', []);
+        }
+
+        return $this->arrGet($options, 'convert_options', []);
+    }
 
     /**
      * Parses the dimensions given in the options.
@@ -341,12 +356,22 @@ class Resizer implements ImageResizerInterface
     protected function arrGet(array $array, $key, $default = null)
     {
         // @codeCoverageIgnoreStart
-        if ( ! array_key_exists($key, $array)) {
+        if ( ! $this->arrHas($array, $key)) {
             return $default;
         }
         // @codeCoverageIgnoreEnd
 
         return $array[ $key ];
+    }
+
+    /**
+     * @param array  $array
+     * @param string $key
+     * @return bool
+     */
+    protected function arrHas(array $array, $key)
+    {
+        return array_key_exists($key, $array);
     }
 
 }
