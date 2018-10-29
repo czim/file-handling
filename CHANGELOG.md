@@ -2,6 +2,10 @@
 
 ## 1.*
 
+### [1.0.3] - 2018-10-29
+
+Fixed resizer to allow use of either `convertOptions` or `convert_options` in configuration options. 
+
 
 ### [1.0.2] - 2018-08-02
 
@@ -30,6 +34,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
 
+[1.0.3]: https://github.com/czim/file-handling/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/czim/file-handling/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/czim/file-handling/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/czim/file-handling/compare/0.9.10...1.0.0
