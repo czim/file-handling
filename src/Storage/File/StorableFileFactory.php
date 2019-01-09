@@ -78,6 +78,12 @@ class StorableFileFactory implements StorableFileFactoryInterface
      */
     public function makeFromAny($data, $name = null, $mimeType = null)
     {
+        // If the data is already a storable file, return it as-is.
+        if ($data instanceof StorableFileInterface) {
+            return $this->getReturnPreparedFile($data);
+        }
+
+
         if (null === $name && is_a($data, \Symfony\Component\HttpFoundation\File\UploadedFile::class)) {
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $data */
             $name = $data->getClientOriginalName();
