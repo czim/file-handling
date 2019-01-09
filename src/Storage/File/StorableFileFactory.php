@@ -3,6 +3,7 @@ namespace Czim\FileHandling\Storage\File;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileFactoryInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
+use Czim\FileHandling\Contracts\Storage\UploadedMarkableInterface;
 use Czim\FileHandling\Contracts\Support\ContentInterpreterInterface;
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
 use Czim\FileHandling\Contracts\Support\RawContentInterface;
