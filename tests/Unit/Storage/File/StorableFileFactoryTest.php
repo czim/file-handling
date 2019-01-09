@@ -14,17 +14,56 @@ use Czim\FileHandling\Test\TestCase;
 use ErrorException;
 use Mockery;
 use SplFileInfo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class StorableFileFactoryTest
  *
  * @uses \SplFileInfo
  * @uses \Czim\FileHandling\Support\Content\RawContent
+ * @uses \Czim\FileHandling\Storage\File\RawStorableFile
+ *
  */
 class StorableFileFactoryTest extends TestCase
 {
     const XML_TEST_FILE = 'tests/resources/test.xml';
 
+
+    /**
+     * @test
+     */
+    function it_returns_a_storable_file_intance_as_is()
+    {
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+
+        $file = new RawStorableFile;
+        $file->setData('random content');
+        $file->setMimeType('text/plain');
+        $file->setName('test.txt');
+
+        $output = $factory->makeFromAny($file);
+
+        static::assertSame($file, $output);
+    }
+
+    /**
+     * @test
+     */
+    function it_makes_a_storable_file_instance_from_an_uploaded_file_instance()
+    {
+        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+
+        $testPath = realpath(__DIR__ . '/../../../resources/test.txt');
+
+        $upload = new UploadedFile($testPath, 'some_original_name.txt', 'text/plain');
+
+        $file = $factory->makeFromAny($upload);
+
+        static::assertInstanceOf(SplFileInfoStorableFile::class, $file);
+        static::assertEquals('some_original_name.txt', $file->name());
+        static::assertEquals(8, $file->size());
+        static::assertEquals('application/xml', $file->mimeType());
+    }
 
     /**
      * @test
