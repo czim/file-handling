@@ -94,14 +94,14 @@ class StorableFileFactory implements StorableFileFactoryInterface
             return $this->makeFromFileInfo($data, $name, $mimeType);
         }
 
-        if ( ! is_string($data)) {
-            throw new UnexpectedValueException('Could not interpret given data, string value expected');
-        }
 
-        if ( ! ($data instanceof RawContentInterface)) {
+        // Fallback: expect raw or string data, and attempt to interpret it.
+        if (is_string($data)) {
             $data = new RawContent($data);
         }
 
+        if ( ! ($data instanceof RawContentInterface)) {
+            throw new UnexpectedValueException('Could not interpret given data, string value expected');
         }
 
         return $this->interpretFromRawContent($data, $name, $mimeType);
