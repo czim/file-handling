@@ -274,12 +274,12 @@ class StorableFileFactory implements StorableFileFactoryInterface
     }
 
     /**
-     * @param AbstractStorableFile $file
-     * @return AbstractStorableFile
+     * @param StorableFileInterface|UploadedMarkableInterface $file
+     * @return StorableFileInterface
      */
-    protected function getReturnPreparedFile(AbstractStorableFile $file)
+    protected function getReturnPreparedFile(StorableFileInterface $file)
     {
-        if ($this->markNextUploaded) {
+        if ($this->markNextUploaded && $file instanceof UploadedMarkableInterface) {
             $file->setUploaded();
             $this->markNextUploaded = false;
         }

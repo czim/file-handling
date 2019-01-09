@@ -2,8 +2,9 @@
 namespace Czim\FileHandling\Storage\File;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
+use Czim\FileHandling\Contracts\Storage\UploadedMarkableInterface;
 
-abstract class AbstractStorableFile implements StorableFileInterface
+abstract class AbstractStorableFile implements StorableFileInterface, UploadedMarkableInterface
 {
 
     /**
