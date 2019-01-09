@@ -95,18 +95,9 @@ class StorableFileFactory implements StorableFileFactoryInterface
             $data = new RawContent($data);
         }
 
-        switch ($this->interpreter->interpret($data)) {
-
-            case ContentTypes::URI:
-                return $this->makeFromUrl($data->content(), $name, $mimeType);
-
-            case ContentTypes::DATAURI:
-                return $this->makeFromDataUri($data, $name, $mimeType);
-
-            case ContentTypes::RAW:
-            default:
-                return $this->makeFromRawData($data, $name, $mimeType);
         }
+
+        return $this->interpretFromRawContent($data, $name, $mimeType);
     }
 
     /**
@@ -271,6 +262,32 @@ class StorableFileFactory implements StorableFileFactoryInterface
         $file->setMimeType($mimeType);
 
         return $this->getReturnPreparedFile($file);
+    }
+
+    /**
+     * Interprets given raw content as a storable file.
+     *
+     * @param RawContentInterface $data
+     * @param string|null         $name
+     * @param string|null         $mimeType
+     * @return StorableFileInterface
+     * @throws CouldNotReadDataException
+     * @throws CouldNotRetrieveRemoteFileException
+     */
+    protected function interpretFromRawContent(RawContentInterface $data, $name, $mimeType)
+    {
+        switch ($this->interpreter->interpret($data)) {
+
+            case ContentTypes::URI:
+                return $this->makeFromUrl($data->content(), $name, $mimeType);
+
+            case ContentTypes::DATAURI:
+                return $this->makeFromDataUri($data, $name, $mimeType);
+
+            case ContentTypes::RAW:
+            default:
+                return $this->makeFromRawData($data, $name, $mimeType);
+        }
     }
 
     /**
