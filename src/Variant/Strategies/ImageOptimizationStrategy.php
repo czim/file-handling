@@ -4,7 +4,7 @@ namespace Czim\FileHandling\Variant\Strategies;
 use Czim\FileHandling\Support\Image\Optimizer;
 use SplFileInfo;
 
-class ImageOptimizeStrategy extends AbstractImageStrategy
+class ImageOptimizationStrategy extends AbstractImageStrategy
 {
 
     /**
