@@ -116,15 +116,22 @@ class OrientationFixer
         }
         // @codeCoverageIgnoreEnd
 
-        try {
-            $exif = exif_read_data($path);
-            // @codeCoverageIgnoreStart
-        } catch (ErrorException $e) {
-            if ($this->quiet) {
-                return $image;
+        if ($this->quiet) {
+
+            try {
+                $exif = @exif_read_data($path);
+
+                // @codeCoverageIgnoreStart
+            } catch (ErrorException $e) {
+                if ($this->quiet) {
+                    return $image;
+                }
+                throw $e;
+                // @codeCoverageIgnoreEnd
             }
-            throw $e;
-            // @codeCoverageIgnoreEnd
+
+        } else {
+            $exif = exif_read_data($path);
         }
 
         if ( ! isset($exif['Orientation']) || $exif['Orientation'] == static::ORIENTATION_TOPLEFT) {
