@@ -164,6 +164,9 @@ class VariantProcessor implements VariantProcessorInterface
         $file->setMimeType($source->mimeType());
         $file->setData($path);
 
+        // Mark the file as uploaded, so the temporary source file may get deleted after processing.
+        $file->setUploaded(true);
+
         return $file;
     }
 
