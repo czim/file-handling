@@ -40,7 +40,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
     protected function setDerivedFileProperties()
     {
         if ( ! $this->file || ! file_exists($this->file->getRealPath())) {
-            throw new RuntimeException("Local file not found at {$this->file->getPath()}");
+            throw new RuntimeException("Local file not found at '{$this->file->getPath()}'");
         }
 
         $this->size = $this->file->getSize();
