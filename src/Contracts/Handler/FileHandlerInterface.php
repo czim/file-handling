@@ -2,7 +2,6 @@
 namespace Czim\FileHandling\Contracts\Handler;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
-use Czim\FileHandling\Contracts\Storage\StoredFileInterface;
 use Czim\FileHandling\Contracts\Storage\TargetInterface;
 
 interface FileHandlerInterface
@@ -14,7 +13,7 @@ interface FileHandlerInterface
      * @param StorableFileInterface $source
      * @param TargetInterface $target
      * @param array $options
-     * @return StoredFileInterface[]    keyed by variant name
+     * @return ProcessResultInterface
      */
     public function process(StorableFileInterface $source, TargetInterface $target, array $options = []);
 
@@ -25,7 +24,7 @@ interface FileHandlerInterface
      * @param TargetInterface       $target
      * @param string                $variant
      * @param array                 $options
-     * @return StoredFileInterface
+     * @return ProcessResultInterface
      */
     public function processVariant(StorableFileInterface $source, TargetInterface $target, $variant, array $options = []);
 

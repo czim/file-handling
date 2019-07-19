@@ -2,9 +2,9 @@
 namespace Czim\FileHandling\Handler;
 
 use Czim\FileHandling\Contracts\Handler\FileHandlerInterface;
+use Czim\FileHandling\Contracts\Handler\ProcessResultInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 use Czim\FileHandling\Contracts\Storage\StorageInterface;
-use Czim\FileHandling\Contracts\Storage\StoredFileInterface;
 use Czim\FileHandling\Contracts\Storage\TargetInterface;
 use Czim\FileHandling\Contracts\Variant\VariantProcessorInterface;
 
@@ -56,7 +56,7 @@ class FileHandler implements FileHandlerInterface
      * @param StorableFileInterface $source
      * @param TargetInterface $target
      * @param array $options
-     * @return StoredFileInterface[]    keyed by variant name (or 'original')
+     * @return ProcessResultInterface
      */
     public function process(StorableFileInterface $source, TargetInterface $target, array $options = [])
     {
@@ -64,14 +64,22 @@ class FileHandler implements FileHandlerInterface
             static::ORIGINAL => $this->storage->store($source, $target->original()),
         ];
 
+        $temporary = [];
+
         if (array_key_exists(static::CONFIG_VARIANTS, $options)) {
             foreach ($options[ static::CONFIG_VARIANTS ] as $variant => $variantOptions) {
 
-                $stored[ $variant ] = $this->processVariant($source, $target, $variant, $variantOptions);
+                $result = $this->processVariant($source, $target, $variant, $variantOptions);
+
+                $stored = array_merge($stored, $result->storedFiles());
+
+                foreach ($result->temporaryFiles() as $temporaryFile) {
+                    $temporary[] = $temporaryFile;
+                }
             }
         }
 
-        return $stored;
+        return new ProcessResult($stored, $temporary);
     }
 
     /**
@@ -81,13 +89,20 @@ class FileHandler implements FileHandlerInterface
      * @param TargetInterface       $target
      * @param string                $variant
      * @param array                 $options
-     * @return StoredFileInterface
+     * @return ProcessResultInterface
      */
     public function processVariant(StorableFileInterface $source, TargetInterface $target, $variant, array $options = [])
     {
+        $this->processor->clearTemporaryFiles();
+
         $storableVariant = $this->processor->process($source, $variant, $options);
 
-        return $this->storage->store($storableVariant, $target->variant($variant));
+        $stored = $this->storage->store($storableVariant, $target->variant($variant));
+
+        return new ProcessResult(
+            [ $variant => $stored ],
+            $this->processor->getTemporaryFiles()
+        );
     }
 
     /**
