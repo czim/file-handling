@@ -1,6 +1,8 @@
 <?php
 namespace Czim\FileHandling\Contracts\Storage;
 
+use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
+
 interface StorableFileInterface
 {
 
@@ -18,6 +20,13 @@ interface StorableFileInterface
      * @return bool
      */
     public function copy($path);
+
+    /**
+     * Deletes the storable file (if possible and allowed).
+     *
+     * @throws StorableFileCouldNotBeDeletedException
+     */
+    public function delete();
 
     /**
      * Returns (local) path to file, if possible.

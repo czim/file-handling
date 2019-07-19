@@ -1,6 +1,7 @@
 <?php
 namespace Czim\FileHandling\Storage\File;
 
+use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 use RuntimeException;
 use SplFileInfo;
 use UnexpectedValueException;
@@ -65,6 +66,28 @@ class SplFileInfoStorableFile extends AbstractStorableFile
     public function copy($path)
     {
         return copy($this->path(), $path);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function delete()
+    {
+        try {
+            $success = unlink($this->path());
+
+        } catch (\Exception $e) {
+
+            throw new StorableFileCouldNotBeDeletedException(
+                "Failed to unlink '{$this->path()}'",
+                $e->getCode(),
+                $e
+            );
+        }
+
+        if ( ! $success) {
+            throw new StorableFileCouldNotBeDeletedException("Failed to unlink '{$this->path()}'");
+        }
     }
 
     /**

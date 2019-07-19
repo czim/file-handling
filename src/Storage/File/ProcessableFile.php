@@ -2,6 +2,7 @@
 namespace Czim\FileHandling\Storage\File;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
+use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 use RuntimeException;
 use SplFileInfo;
 
@@ -72,6 +73,28 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
     public function copy($path)
     {
         return copy($this->path(), $path);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function delete()
+    {
+        try {
+            $success = unlink($this->path());
+
+        } catch (\Exception $e) {
+
+            throw new StorableFileCouldNotBeDeletedException(
+                "Failed to unlink '{$this->path()}'",
+                $e->getCode(),
+                $e
+            );
+        }
+
+        if ( ! $success) {
+            throw new StorableFileCouldNotBeDeletedException("Failed to unlink '{$this->path()}'");
+        }
     }
 
     /**

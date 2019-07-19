@@ -75,6 +75,14 @@ class DecoratorStoredFile implements StoredFileInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function delete()
+    {
+        return $this->file->delete();
+    }
+
+    /**
      * Returns (local) path to file, if possible.
      *
      * @return string|null
