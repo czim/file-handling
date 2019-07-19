@@ -162,6 +162,43 @@ class VariantProcessorTest extends TestCase
         static::assertEquals('text/plain', $variant->mimeType());
     }
 
+    /**
+     * @test
+     */
+    function it_tracks_and_clears_temporary_files_created_while_processing()
+    {
+        $fileFactory     = $this->getMockFileFactory();
+        $strategyFactory = $this->getMockStrategyFactory();
+
+        $processor = new VariantProcessor($fileFactory, $strategyFactory);
+
+        // Prepare mock source file
+        vfsStream::newFile('file')->at($this->vfsRoot)->setContent('dummy contents');
+        $tmpPath = $this->vfsRoot->url() . '/file';
+
+        $target = $this->makeMockTargetStorableFile();
+        $source = $this->makeMockSourceStorableFile($tmpPath);
+
+        $fileFactory->shouldReceive('uploaded')->once()->andReturnSelf();
+        $fileFactory->shouldReceive('makeFromLocalPath')->once()->andReturn($target);
+
+        // Prepare mock strategy
+        $mockStrategy = $this->makeMockVariantStrategy();
+        $strategyFactory->shouldReceive('make')->with('test-strategy')->once()->andReturn($mockStrategy);
+
+
+        static::assertCount(0, $processor->getTemporaryFiles());
+
+        $processor->process($source, 'variant', [ 'test-strategy' => ['test' => 'a'] ]);
+
+        static::assertCount(1, $processor->getTemporaryFiles());
+        static::assertInstanceOf(StorableFileInterface::class, $processor->getTemporaryFiles()[0]);
+
+
+        $processor->clearTemporaryFiles();
+
+        static::assertCount(0, $processor->getTemporaryFiles());
+    }
 
 
     // ------------------------------------------------------------------------------

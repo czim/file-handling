@@ -16,4 +16,18 @@ interface VariantProcessorInterface
      */
     public function process(StorableFileInterface $source, $variant, array $strategies);
 
+    /**
+     * Returns list of temporary files created while processing.
+     *
+     * @return StorableFileInterface[]
+     */
+    public function getTemporaryFiles();
+
+    /**
+     * Purges memory of temporary files.
+     *
+     * Note that this does not delete the files, just the processor's history of them.
+     */
+    public function clearTemporaryFiles();
+
 }
