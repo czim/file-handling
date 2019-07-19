@@ -1,6 +1,7 @@
 <?php
 namespace Czim\FileHandling\Test\Unit\Storage\File;
 
+use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 use Czim\FileHandling\Storage\File\SplFileInfoStorableFile;
 use Czim\FileHandling\Test\TestCase;
 use org\bovigo\vfs\vfsStream;
@@ -103,11 +104,66 @@ class SplFileInfoStorableFileTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    function it_deletes_its_file()
+    {
+        // We cannot mock this with vfs, since the getRealPath() method on SplFileInfo is used.
+
+        $deletablePath = $this->getDeletableLocalPath();
+
+        copy($this->getExampleLocalPath(), $deletablePath);
+
+        static::assertTrue(file_exists($deletablePath), 'Deletable file setup failed');
+
+
+        $file = new SplFileInfoStorableFile();
+        $file->setData(new SplFileInfo($this->getDeletableLocalPath()));
+
+        $file->delete();
+
+        static::assertFalse(file_exists($deletablePath), 'File was not deleted');
+    }
+
+    /**
+     * @test
+     */
+    function it_throws_an_exception_attempting_to_delete_a_nonexistent_path()
+    {
+        // We cannot mock this with vfs, since the getRealPath() method on SplFileInfo is used.
+
+        $deletablePath = $this->getDeletableLocalPath();
+
+        copy($this->getExampleLocalPath(), $deletablePath);
+
+        static::assertTrue(file_exists($deletablePath), 'Deletable file setup failed');
+
+        $file = new SplFileInfoStorableFile();
+        $file->setData(new SplFileInfo($this->getDeletableLocalPath()));
+
+        // Delete the file so the delete call fails.
+        unlink($deletablePath);
+
+        $this->expectException(StorableFileCouldNotBeDeletedException::class);
+
+        $file->delete();
+    }
+
+
+    /**
      * @return string
      */
     protected function getExampleLocalPath()
     {
         return realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDeletableLocalPath()
+    {
+        return realpath(dirname(__DIR__) . '/../../../') . 'deletable.txt';
     }
 
 }

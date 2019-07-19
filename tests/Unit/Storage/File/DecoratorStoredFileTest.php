@@ -23,6 +23,7 @@ class DecoratorStoredFileTest extends TestCase
         $mock->shouldReceive('path')->once()->with()->andReturn('test/path');
         $mock->shouldReceive('size')->once()->with()->andReturn(100);
         $mock->shouldReceive('copy')->once()->with('/tmp/testing.txt')->andReturn(true);
+        $mock->shouldReceive('delete')->once();
 
         $file = new DecoratorStoredFile($mock);
 
@@ -34,6 +35,7 @@ class DecoratorStoredFileTest extends TestCase
         static::assertEquals('test/path', $file->path());
         static::assertEquals(100, $file->size());
         static::assertEquals(true, $file->copy('/tmp/testing.txt'));
+        $file->delete();
     }
 
     /**
