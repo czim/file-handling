@@ -2,6 +2,11 @@
 
 ## 1.*
 
+### [1.1.1] - 2019-07-19
+
+- Added `getTemporaryFiles()` and `clearTemporaryFiles()` to the VariantProcessor.
+- No longer marks copies as 'uploaded'. (So.. that feature didn't last long :))
+
 ### [1.1.0] - 2019-07-19
 
 - Added `delete()` to the StorableFileInterface and implementations. If you're upgrading, make sure to check your own implementations of this interface.
@@ -43,6 +48,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[1.1.1]: https://github.com/czim/file-handling/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/czim/file-handling/compare/1.0.4...1.1.0
 [1.0.4]: https://github.com/czim/file-handling/compare/1.0.3...1.0.4
 [1.0.3]: https://github.com/czim/file-handling/compare/1.0.2...1.0.3
