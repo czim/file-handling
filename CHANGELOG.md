@@ -2,16 +2,13 @@
 
 ## 1.*
 
-### [1.1.1] - 2019-07-19
+### [1.1.2] - 2019-07-19
 
+- FileHandler now returns a `ProcessResult` object for `process()` and `processSingleVariant()`. The result containts both the array of stored files as well as a list of temporary files created while processing.
 - Added `getTemporaryFiles()` and `clearTemporaryFiles()` to the VariantProcessor.
-- No longer marks copies as 'uploaded'. (So.. that feature didn't last long :))
-
-### [1.1.0] - 2019-07-19
-
+- No longer marks copies as 'uploaded'.
 - Added `delete()` to the StorableFileInterface and implementations. If you're upgrading, make sure to check your own implementations of this interface.
 - Made exif errors silent (using the dreaded @) for now, *if* quiet mode is enabled.
-- Temporary file copies created when processing variants are marked as 'uploaded' now, to aid dependents performing cleanup.
 
 ### [1.0.4] - 2019-01-09
 
@@ -48,6 +45,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[1.1.2]: https://github.com/czim/file-handling/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/czim/file-handling/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/czim/file-handling/compare/1.0.4...1.1.0
 [1.0.4]: https://github.com/czim/file-handling/compare/1.0.3...1.0.4
