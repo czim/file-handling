@@ -2,6 +2,12 @@
 
 ## 1.*
 
+### [1.1.0] - 2019-07-19
+
+- Added `delete()` to the StorableFileInterface and implementations. If you're upgrading, make sure to check your own implementations of this interface.
+- Made exif errors silent (using the dreaded @) for now, *if* quiet mode is enabled.
+- Temporary file copies created when processing variants are marked as 'uploaded' now, to aid dependents performing cleanup.
+
 ### [1.0.4] - 2019-01-09
 
 Improved the `StorableFileFactory`: now accepts StorableFile instances and better handles raw content.
@@ -37,6 +43,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[1.1.0]: https://github.com/czim/file-handling/compare/1.0.4...1.1.0
 [1.0.4]: https://github.com/czim/file-handling/compare/1.0.3...1.0.4
 [1.0.3]: https://github.com/czim/file-handling/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/czim/file-handling/compare/1.0.1...1.0.2
