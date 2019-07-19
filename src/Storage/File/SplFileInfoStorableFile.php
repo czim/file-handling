@@ -86,7 +86,9 @@ class SplFileInfoStorableFile extends AbstractStorableFile
         }
 
         if ( ! $success) {
+            // @codeCoverageIgnoreStart
             throw new StorableFileCouldNotBeDeletedException("Failed to unlink '{$this->path()}'");
+            // @codeCoverageIgnoreEnd
         }
     }
 

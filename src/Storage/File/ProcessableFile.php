@@ -93,7 +93,9 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
         }
 
         if ( ! $success) {
+            // @codeCoverageIgnoreStart
             throw new StorableFileCouldNotBeDeletedException("Failed to unlink '{$this->path()}'");
+            // @codeCoverageIgnoreEnd
         }
     }
 
