@@ -2,6 +2,10 @@
 
 ## 1.*
 
+### [1.1.3] - 2019-07-21
+
+Improved error handling in UrlDownloader.
+
 ### [1.1.2] - 2019-07-19
 
 - FileHandler now returns a `ProcessResult` object for `process()` and `processSingleVariant()`. The result containts both the array of stored files as well as a list of temporary files created while processing.
@@ -45,6 +49,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[1.1.3]: https://github.com/czim/file-handling/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/czim/file-handling/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/czim/file-handling/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/czim/file-handling/compare/1.0.4...1.1.0
