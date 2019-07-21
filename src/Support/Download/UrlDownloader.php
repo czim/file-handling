@@ -64,6 +64,8 @@ class UrlDownloader implements UrlDownloaderInterface
      */
     protected function downloadToTempLocalPath($url, $localPath)
     {
+        $curlError = 'unknown error';
+
         try {
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -71,19 +73,24 @@ class UrlDownloader implements UrlDownloaderInterface
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             $rawFile = curl_exec($ch);
-            curl_close($ch);
 
-            if (false === $rawFile) {
-                throw new CouldNotRetrieveRemoteFileException(
-                    "curl_exec failed while downloading '{$url}': " . curl_error($ch)
-                );
+            if ($rawFile === false) {
+                $curlError = curl_error($ch);
             }
+
+            curl_close($ch);
 
         } catch (Exception $e) {
             throw new CouldNotRetrieveRemoteFileException(
-                "Failed to download file content from '{$url}': ",
+                "Failed to download file content from '{$url}': {$e->getMessage()}",
                 $e->getCode(),
                 $e
+            );
+        }
+
+        if (false === $rawFile) {
+            throw new CouldNotRetrieveRemoteFileException(
+                "curl_exec failed while downloading '{$url}': " . $curlError
             );
         }
 
