@@ -52,4 +52,60 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
         return ! $this->options['quiet'];
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function shouldBeApplied()
+    {
+        if ( ! parent::shouldBeApplied()) {
+            return false;
+        }
+
+        return $this->doesFileExtensionSupportExif($this->file->extension());
+    }
+
+    /**
+     * @param string $extension
+     * @return bool
+     */
+    protected function doesFileExtensionSupportExif($extension)
+    {
+        return in_array(strtolower($extension), [
+
+            // Standard formats
+            'jpg',
+            'jpeg',
+            'tiff',
+            'wav',
+
+            // Raw camera formats
+            '3fr',
+            'ari',
+            'cap',
+            'cr2',
+            'crw',
+            'dat',
+            'dcf',
+            'dcr',
+            'dcs',
+            'dng',
+            'eip',
+            'erf',
+            'k25',
+            'kdc',
+            'lfp',
+            'ndf',
+            'nef',
+            'nrw',
+            'nef',
+            'pxn',
+            'r3d',
+            'raf',
+            'raw',
+            'rdc',
+            'rw2',
+            'rwz',
+        ]);
+    }
+
 }
