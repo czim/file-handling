@@ -2,6 +2,7 @@
 namespace Czim\FileHandling\Test\Unit\Variant\Strategies;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
+use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 use Czim\FileHandling\Support\Image\Resizer;
 use Czim\FileHandling\Test\TestCase;
 use Czim\FileHandling\Variant\Strategies\ImageResizeStrategy;
@@ -12,16 +13,17 @@ class ImageResizeStrategyTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException
      */
     function it_should_throw_an_exception_if_it_is_applied_to_a_non_image()
     {
-        /** @var Mockery\MockInterface|Resizer $resizer */
+        $this->expectException(VariantStrategyShouldNotBeAppliedException::class);
+
+        /** @var Mockery\Mock|Mockery\MockInterface|Resizer $resizer */
         $resizer = Mockery::mock(Resizer::class);
 
         $strategy = new ImageResizeStrategy($resizer);
 
-        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        /** @var Mockery\Mock|Mockery\MockInterface|ProcessableFileInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
         $file->shouldReceive('mimeType')->andReturn('text/plain');
 
@@ -33,10 +35,10 @@ class ImageResizeStrategyTest extends TestCase
      */
     function it_rotates_an_image()
     {
-        /** @var Mockery\MockInterface|Resizer $resizer */
+        /** @var Mockery\Mock|Mockery\MockInterface|Resizer $resizer */
         $resizer = Mockery::mock(Resizer::class);
 
-        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        /** @var Mockery\Mock|Mockery\MockInterface|ProcessableFileInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
         $file->shouldReceive('mimeType')->andReturn('image/jpeg');
         $file->shouldReceive('path')->andReturn('tmp/test.jpg');

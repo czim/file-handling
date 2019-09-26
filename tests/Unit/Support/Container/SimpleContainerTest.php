@@ -1,6 +1,7 @@
 <?php
 namespace Czim\FileHandling\Test\Unit\Support\Container;
 
+use Czim\FileHandling\Exceptions\Container\NotFoundException;
 use Czim\FileHandling\Support\Container\SimpleContainer;
 use Czim\FileHandling\Test\TestCase;
 
@@ -46,10 +47,11 @@ class SimpleContainerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Czim\FileHandling\Exceptions\Container\NotFoundException
      */
     function it_throws_an_exception_if_a_binding_could_not_be_found()
     {
+        $this->expectException(NotFoundException::class);
+
         $container = new SimpleContainer;
 
         $container->get('test');

@@ -2,26 +2,30 @@
 namespace Czim\FileHandling\Test\Unit\Variant\Strategies;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
+use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 use Czim\FileHandling\Test\TestCase;
 use Czim\FileHandling\Variant\Strategies\ImageWatermarkStrategy;
+use ErrorException;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\PointInterface;
 use Mockery;
+use RuntimeException;
 
 class ImageWatermarkStrategyTest extends TestCase
 {
 
     /**
      * @test
-     * @expectedException \Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException
      */
     function it_should_throw_an_exception_if_it_is_applied_to_a_non_image()
     {
+        $this->expectException(VariantStrategyShouldNotBeAppliedException::class);
+
         $strategy = new ImageWatermarkStrategy($this->getMockImagine());
 
-        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        /** @var Mockery\MockInterface|ProcessableFileInterface|Mockery\Mock|Mockery\MockInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
         $file->shouldReceive('mimeType')->andReturn('text/plain');
 
@@ -48,7 +52,7 @@ class ImageWatermarkStrategyTest extends TestCase
 
         $image->shouldReceive('save')->once()->andReturnSelf();
 
-        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        /** @var Mockery\MockInterface|ProcessableFileInterface|Mockery\Mock|Mockery\MockInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
         $file->shouldReceive('mimeType')->andReturn('image/jpeg');
         $file->shouldReceive('path')->andReturn('tmp/test.jpg');
@@ -83,7 +87,7 @@ class ImageWatermarkStrategyTest extends TestCase
 
         $image->shouldReceive('save')->once()->andReturnSelf();
 
-        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        /** @var Mockery\MockInterface|ProcessableFileInterface|Mockery\Mock|Mockery\MockInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
         $file->shouldReceive('mimeType')->andReturn('image/jpeg');
         $file->shouldReceive('path')->andReturn('tmp/test.jpg');
@@ -119,7 +123,7 @@ class ImageWatermarkStrategyTest extends TestCase
 
         $image->shouldReceive('save')->once()->andReturnSelf();
 
-        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        /** @var Mockery\MockInterface|ProcessableFileInterface|Mockery\Mock|Mockery\MockInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
         $file->shouldReceive('mimeType')->andReturn('image/jpeg');
         $file->shouldReceive('path')->andReturn('tmp/test.jpg');
@@ -155,7 +159,7 @@ class ImageWatermarkStrategyTest extends TestCase
 
         $image->shouldReceive('save')->once()->andReturnSelf();
 
-        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        /** @var Mockery\MockInterface|ProcessableFileInterface|Mockery\Mock|Mockery\MockInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
         $file->shouldReceive('mimeType')->andReturn('image/jpeg');
         $file->shouldReceive('path')->andReturn('tmp/test.jpg');
@@ -191,7 +195,7 @@ class ImageWatermarkStrategyTest extends TestCase
 
         $image->shouldReceive('save')->once()->andReturnSelf();
 
-        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        /** @var Mockery\MockInterface|ProcessableFileInterface|Mockery\Mock|Mockery\MockInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
         $file->shouldReceive('mimeType')->andReturn('image/jpeg');
         $file->shouldReceive('path')->andReturn('tmp/test.jpg');
@@ -234,20 +238,21 @@ class ImageWatermarkStrategyTest extends TestCase
 
     /**
      * @test
-     * @expectedException \RuntimeException
      */
     function it_throws_a_runtime_exception_if_watermark_image_could_not_be_found()
     {
+        $this->expectException(RuntimeException::class);
+
         $imagine = $this->getMockImagine();
         $image   = $this->getMockImage();
 
         $imagine->shouldReceive('open')->once()->with('tmp/test.jpg')->andReturn($image);
-        $imagine->shouldReceive('open')->once()->with('tmp/mark.png')->andThrow(\ErrorException::class);
+        $imagine->shouldReceive('open')->once()->with('tmp/mark.png')->andThrow(ErrorException::class);
 
         $image->shouldReceive('paste')->never();
         $image->shouldReceive('save')->never();
 
-        /** @var Mockery\MockInterface|ProcessableFileInterface $file */
+        /** @var Mockery\MockInterface|ProcessableFileInterface|Mockery\Mock|Mockery\MockInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
         $file->shouldReceive('mimeType')->andReturn('image/jpeg');
         $file->shouldReceive('path')->andReturn('tmp/test.jpg');
@@ -264,28 +269,31 @@ class ImageWatermarkStrategyTest extends TestCase
 
 
     /**
-     * @return Mockery\MockInterface|ImagineInterface
+     * @return Mockery\Mock|Mockery\MockInterface|ImagineInterface
      */
     protected function getMockImagine()
     {
+        /** @var ImagineInterface|Mockery\Mock|Mockery\MockInterface $mock */
         return Mockery::mock(ImagineInterface::class);
     }
 
     /**
-     * @return Mockery\MockInterface|ImageInterface
+     * @return Mockery\Mock|Mockery\MockInterface|ImageInterface
      */
     protected function getMockImage()
     {
+        /** @var ImageInterface|Mockery\Mock|Mockery\MockInterface $mock */
         $mock =  Mockery::mock(ImageInterface::class);
         $mock->shouldReceive('getSize')->once()->andReturn($this->getMockSize(600, 400));
         return $mock;
     }
 
     /**
-     * @return Mockery\MockInterface|ImageInterface
+     * @return Mockery\Mock|Mockery\MockInterface|ImageInterface
      */
     protected function getMockImageForWatermark()
     {
+        /** @var ImageInterface|Mockery\Mock|Mockery\MockInterface $mock */
         $mock = Mockery::mock(ImageInterface::class);
         $mock->shouldReceive('getSize')->once()->andReturn($this->getMockSize(100, 100));
         return $mock;
@@ -294,10 +302,11 @@ class ImageWatermarkStrategyTest extends TestCase
     /**
      * @param int $width
      * @param int $height
-     * @return Mockery\MockInterface
+     * @return Mockery\Mock|Mockery\MockInterface
      */
-    protected function getMockSize($width, $height)
+    protected function getMockSize(int $width, int $height)
     {
+        /** @var BoxInterface|Mockery\Mock|Mockery\MockInterface $mock */
         $mock = Mockery::mock(BoxInterface::class);
         $mock->shouldReceive('getWidth')->andReturn($width);
         $mock->shouldReceive('getHeight')->andReturn($height);
@@ -310,7 +319,7 @@ class ImageWatermarkStrategyTest extends TestCase
      * @param int $y
      * @return bool
      */
-    protected function comparePosition($position, $x, $y)
+    protected function comparePosition($position, int $x, int $y): bool
     {
         if ( ! ($position instanceof PointInterface)) {
             return $position;

@@ -15,12 +15,12 @@ class OrientationFixerTest extends TestCase
     const UNROTATED_IMAGE_PATH = __DIR__ . '/../../../resources/unrotated.jpg';
     const IMAGE_COPY_PATH      = __DIR__ . '/../../../resources/tmp.jpg';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cleanupTempFile();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
 
@@ -210,7 +210,7 @@ class OrientationFixerTest extends TestCase
      * @param int|false $rotated
      * @return SplFileInfo
      */
-    protected function makeSourceFile($rotated = OrientationFixer::ORIENTATION_RIGHTTOP)
+    protected function makeSourceFile($rotated = OrientationFixer::ORIENTATION_RIGHTTOP): SplFileInfo
     {
         if ( ! $rotated) {
             $original = realpath(static::UNROTATED_IMAGE_PATH);
@@ -229,8 +229,9 @@ class OrientationFixerTest extends TestCase
      * @param bool      $expectsSave
      * @return ImageInterface|Mockery\MockInterface
      */
-    protected function getMockImage($expectsChange = OrientationFixer::ORIENTATION_RIGHTTOP, $expectsSave = false)
+    protected function getMockImage($expectsChange = OrientationFixer::ORIENTATION_RIGHTTOP, bool $expectsSave = false)
     {
+        /** @var Mockery\MockInterface|Mockery\Mock|ImageInterface $image */
         $image = Mockery::mock(ImageInterface::class);
 
         if ($expectsChange) {
@@ -286,18 +287,16 @@ class OrientationFixerTest extends TestCase
      * @param ImageInterface $image
      * @return Mockery\MockInterface|ImagineInterface
      */
-    protected function getMockImageProcessor($image)
+    protected function getMockImageProcessor(ImageInterface $image)
     {
+        /** @var Mockery\Mock|Mockery\MockInterface|ImagineInterface $imageProcessor */
         $imageProcessor = Mockery::mock(ImagineInterface::class);
         $imageProcessor->shouldReceive('open')->once()->andReturn($image);
 
         return $imageProcessor;
     }
 
-    /**
-     * Cleans up the temporary image file.
-     */
-    protected function cleanupTempFile()
+    protected function cleanupTempFile(): void
     {
         if (file_exists(realpath(static::IMAGE_COPY_PATH))) {
             unlink(realpath(static::IMAGE_COPY_PATH));

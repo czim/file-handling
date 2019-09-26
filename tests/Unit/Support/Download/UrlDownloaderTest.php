@@ -2,6 +2,7 @@
 namespace Czim\FileHandling\Test\Unit\Support\Download;
 
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
+use Czim\FileHandling\Exceptions\CouldNotRetrieveRemoteFileException;
 use Czim\FileHandling\Support\Download\UrlDownloader;
 use Czim\FileHandling\Test\TestCase;
 use Exception;
@@ -17,7 +18,7 @@ class UrlDownloaderTest extends TestCase
      */
     protected $vfsRoot;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -29,7 +30,7 @@ class UrlDownloaderTest extends TestCase
      */
     function it_downloads_a_file_from_a_url()
     {
-        /** @var UrlDownloader|Mockery\MockInterface $downloader */
+        /** @var UrlDownloader|Mockery\MockInterface|Mockery\Mock $downloader */
         $downloader = Mockery::mock(
                 UrlDownloader::class . '[downloadToTempLocalPath,makeLocalTemporaryPath]',
                 [ $this->getMockHelper() ]
@@ -54,7 +55,7 @@ class UrlDownloaderTest extends TestCase
     {
         $helper = $this->getMockHelper();
 
-        /** @var UrlDownloader|Mockery\MockInterface $downloader */
+        /** @var UrlDownloader|Mockery\MockInterface|Mockery\Mock $downloader */
         $downloader = Mockery::mock(
                 UrlDownloader::class . '[downloadToTempLocalPath,makeLocalTemporaryPath]',
                 [ $helper ]
@@ -80,13 +81,14 @@ class UrlDownloaderTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Czim\FileHandling\Exceptions\CouldNotRetrieveRemoteFileException
      */
     function it_throws_an_exception_if_it_cannot_guess_an_extension_for_an_extensionless_file()
     {
+        $this->expectException(CouldNotRetrieveRemoteFileException::class);
+
         $helper = $this->getMockHelper();
 
-        /** @var UrlDownloader|Mockery\MockInterface $downloader */
+        /** @var UrlDownloader|Mockery\MockInterface|Mockery\Mock $downloader */
         $downloader = Mockery::mock(
             UrlDownloader::class . '[downloadToTempLocalPath,makeLocalTemporaryPath]',
             [ $helper ]
@@ -110,7 +112,7 @@ class UrlDownloaderTest extends TestCase
 
 
     /**
-     * @return Mockery\MockInterface|MimeTypeHelperInterface
+     * @return Mockery\Mock|Mockery\MockInterface|MimeTypeHelperInterface
      */
     protected function getMockHelper()
     {

@@ -55,18 +55,12 @@ class UploadedContentInterpreterTest extends TestCase
     }
 
 
-    /**
-     * @return string
-     */
-    protected function getExampleDataUri()
+    protected function getExampleDataUri(): string
     {
         return 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     }
 
-    /**
-     * @return string
-     */
-    protected function getExampleRawContent()
+    protected function getExampleRawContent(): string
     {
         return 'Could be the contents of a text file, or something else, you never know.';
     }

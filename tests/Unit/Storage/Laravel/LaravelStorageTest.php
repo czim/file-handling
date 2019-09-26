@@ -3,6 +3,7 @@ namespace Czim\FileHandling\Storage\Laravel;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 use Czim\FileHandling\Contracts\Storage\StoredFileInterface;
+use Czim\FileHandling\Exceptions\FileStorageException;
 use Czim\FileHandling\Test\TestCase;
 use Mockery;
 
@@ -74,10 +75,11 @@ class LaravelStorageTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Czim\FileHandling\Exceptions\FileStorageException
      */
     function it_throws_an_exception_if_it_fails_to_store_a_file()
     {
+        $this->expectException(FileStorageException::class);
+
         $files = $this->getMockLaravelFilesystem();
         $files->shouldReceive('put')->once()->with('relative/path/test.txt', 'contents')->andReturn(false);
 
@@ -106,7 +108,7 @@ class LaravelStorageTest extends TestCase
 
 
     /**
-     * @return Mockery\MockInterface|\Illuminate\Contracts\Filesystem\Filesystem
+     * @return Mockery\Mock|Mockery\MockInterface|\Illuminate\Contracts\Filesystem\Filesystem
      */
     protected function getMockLaravelFilesystem()
     {
@@ -114,7 +116,7 @@ class LaravelStorageTest extends TestCase
     }
 
     /**
-     * @return Mockery\MockInterface|StorableFileInterface
+     * @return Mockery\Mock|Mockery\MockInterface|StorableFileInterface
      */
     protected function getMockStorableFile()
     {

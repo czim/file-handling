@@ -6,6 +6,8 @@ use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
 use Czim\FileHandling\Contracts\Support\RawContentInterface;
 use Czim\FileHandling\Contracts\Support\UrlDownloaderInterface;
 use Czim\FileHandling\Enums\ContentTypes;
+use Czim\FileHandling\Exceptions\CouldNotReadDataException;
+use Czim\FileHandling\Exceptions\CouldNotRetrieveRemoteFileException;
 use Czim\FileHandling\Storage\File\RawStorableFile;
 use Czim\FileHandling\Storage\File\SplFileInfoStorableFile;
 use Czim\FileHandling\Storage\File\StorableFileFactory;
@@ -15,6 +17,7 @@ use ErrorException;
 use Mockery;
 use SplFileInfo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use UnexpectedValueException;
 
 /**
  * Class StorableFileFactoryTest
@@ -140,10 +143,11 @@ class StorableFileFactoryTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Czim\FileHandling\Exceptions\CouldNotRetrieveRemoteFileException
      */
     function it_throws_an_exception_if_url_could_not_be_downloaded_from()
     {
+        $this->expectException(CouldNotRetrieveRemoteFileException::class);
+
         $downloader = $this->getMockDownloader();
 
         $downloader->shouldReceive('download')
@@ -283,10 +287,11 @@ class StorableFileFactoryTest extends TestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_any_data_is_not_a_string()
     {
+        $this->expectException(UnexpectedValueException::class);
+
         $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
         $factory->makeFromAny(['not', 'a string']);
@@ -294,10 +299,11 @@ class StorableFileFactoryTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Czim\FileHandling\Exceptions\CouldNotReadDataException
      */
     function it_throws_an_exception_if_data_uri_cannot_be_interpreted()
     {
+        $this->expectException(CouldNotReadDataException::class);
+
         $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
         $factory->makeFromDataUri('_data://invalid/mimetype,base32brokencontent', 'name.txt');
@@ -305,10 +311,11 @@ class StorableFileFactoryTest extends TestCase
 
 
     /**
-     * @return Mockery\MockInterface|MimeTypeHelperInterface
+     * @return Mockery\Mock|Mockery\MockInterface|MimeTypeHelperInterface
      */
     protected function getMockMimeTypeHelper()
     {
+        /** @var Mockery\Mock|Mockery\MockInterface|MimeTypeHelperInterface $mock */
         $mock = Mockery::mock(MimeTypeHelperInterface::class);
 
         $mock->shouldReceive('guessMimeTypeForPath')->andReturn('application/xml');
@@ -318,7 +325,7 @@ class StorableFileFactoryTest extends TestCase
     }
 
     /**
-     * @return Mockery\MockInterface|ContentInterpreterInterface
+     * @return Mockery\Mock|Mockery\MockInterface|ContentInterpreterInterface
      */
     protected function getMockInterpreter()
     {
@@ -326,41 +333,29 @@ class StorableFileFactoryTest extends TestCase
     }
 
     /**
-     * @return Mockery\MockInterface|UrlDownloaderInterface
+     * @return Mockery\Mock|Mockery\MockInterface|UrlDownloaderInterface
      */
     protected function getMockDownloader()
     {
         return Mockery::mock(UrlDownloaderInterface::class);
     }
 
-    /**
-     * @return string
-     */
-    protected function getExampleLocalPath()
+    protected function getExampleLocalPath(): string
     {
         return realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
     }
 
-    /**
-     * @return string
-     */
-    protected function getExampleDataUri()
+    protected function getExampleDataUri(): string
     {
         return 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     }
 
-    /**
-     * @return string
-     */
-    protected function getExampleRawData()
+    protected function getExampleRawData(): string
     {
         return file_get_contents($this->getExampleLocalPath());
     }
 
-    /**
-     * @return string
-     */
-    protected function getExampleSimpleRawData()
+    protected function getExampleSimpleRawData(): string
     {
         return 'some raw data that is just a line of text';
     }

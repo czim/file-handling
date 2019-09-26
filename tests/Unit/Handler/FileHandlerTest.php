@@ -14,7 +14,7 @@ use Mockery;
 class FileHandlerTest extends TestCase
 {
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
     }
@@ -272,7 +272,7 @@ class FileHandlerTest extends TestCase
 
 
     /**
-     * @return Mockery\MockInterface|StorageInterface
+     * @return Mockery\Mock|Mockery\MockInterface|StorageInterface
      */
     protected function getMockStorage()
     {
@@ -280,7 +280,7 @@ class FileHandlerTest extends TestCase
     }
 
     /**
-     * @return Mockery\MockInterface|VariantProcessorInterface
+     * @return Mockery\Mock|Mockery\MockInterface|VariantProcessorInterface
      */
     protected function getMockVariantProcessor()
     {
@@ -288,7 +288,7 @@ class FileHandlerTest extends TestCase
     }
 
     /**
-     * @return Mockery\MockInterface|TargetInterface
+     * @return Mockery\Mock|Mockery\MockInterface|TargetInterface
      */
     protected function getMockTarget()
     {
@@ -296,7 +296,7 @@ class FileHandlerTest extends TestCase
     }
 
     /**
-     * @return Mockery\MockInterface|StorableFileInterface
+     * @return Mockery\Mock|Mockery\MockInterface|StorableFileInterface
      */
     protected function getMockStorableFile()
     {
@@ -304,7 +304,7 @@ class FileHandlerTest extends TestCase
     }
 
     /**
-     * @return Mockery\MockInterface|StoredFileInterface
+     * @return Mockery\Mock|Mockery\MockInterface|StoredFileInterface
      */
     protected function getMockStoredFile()
     {

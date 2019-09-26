@@ -5,6 +5,7 @@ use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 use Czim\FileHandling\Storage\File\ProcessableFile;
 use Czim\FileHandling\Test\TestCase;
 use org\bovigo\vfs\vfsStream;
+use RuntimeException;
 use SplFileInfo;
 
 class ProcessableFileTest extends TestCase
@@ -41,10 +42,11 @@ class ProcessableFileTest extends TestCase
 
     /**
      * @test
-     * @expectedException \RuntimeException
      */
     function it_throws_an_exception_if_the_referenced_path_is_not_found()
     {
+        $this->expectException(RuntimeException::class);
+
         $file = new ProcessableFile;
 
         $fileInfo = new SplFileInfo('/no/file/exists/here');
@@ -65,7 +67,7 @@ class ProcessableFileTest extends TestCase
 
         static::assertEquals($fileInfo->getSize(), $file->size());
     }
-    
+
     /**
      * @test
      */
@@ -144,18 +146,13 @@ class ProcessableFileTest extends TestCase
         $file->delete();
     }
 
-    /**
-     * @return string
-     */
-    protected function getExampleLocalPath()
+
+    protected function getExampleLocalPath(): string
     {
         return realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
     }
 
-    /**
-     * @return string
-     */
-    protected function getDeletableLocalPath()
+    protected function getDeletableLocalPath(): string
     {
         return realpath(dirname(__DIR__) . '/../../../') . 'deletable.txt';
     }

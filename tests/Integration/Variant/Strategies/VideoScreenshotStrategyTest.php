@@ -2,6 +2,7 @@
 namespace Czim\FileHandling\Test\Integration\Variant\Strategies;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
+use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 use Czim\FileHandling\Storage\File\ProcessableFile;
 use Czim\FileHandling\Test\TestCase;
 use Czim\FileHandling\Variant\Strategies\VideoScreenshotStrategy;
@@ -11,7 +12,7 @@ class VideoScreenshotStrategyTest extends TestCase
 {
     const MOVIE_TEST_FILE = 'tests/resources/video.mov';
 
-    public function setUp()
+    public function setUp(): void
     {
         if ( ! file_exists('/usr/local/bin/ffmpeg')) {
             static::markTestSkipped('FFMpeg binary not available');
@@ -20,10 +21,11 @@ class VideoScreenshotStrategyTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException
      */
     function it_should_throw_an_exception_if_it_is_applied_to_a_non_video()
     {
+        $this->expectException(VariantStrategyShouldNotBeAppliedException::class);
+
         $strategy = new VideoScreenshotStrategy;
 
         /** @var Mockery\MockInterface|ProcessableFileInterface $file */
@@ -125,10 +127,8 @@ class VideoScreenshotStrategyTest extends TestCase
         }
     }
 
-    /**
-     * @return string
-     */
-    protected function getExampleLocalPath()
+
+    protected function getExampleLocalPath(): string
     {
         return realpath(dirname(__DIR__) . '/../../../' . static::MOVIE_TEST_FILE);
     }

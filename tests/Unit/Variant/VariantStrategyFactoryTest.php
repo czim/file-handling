@@ -6,6 +6,7 @@ use Czim\FileHandling\Test\TestCase;
 use Czim\FileHandling\Variant\VariantStrategyFactory;
 use Mockery;
 use Psr\Container\ContainerInterface;
+use RuntimeException;
 
 class VariantStrategyFactoryTest extends TestCase
 {
@@ -65,10 +66,11 @@ class VariantStrategyFactoryTest extends TestCase
 
     /**
      * @test
-     * @expectedException \RuntimeException
      */
     function it_throws_an_exception_if_the_container_cannot_resolve_a_binding()
     {
+        $this->expectException(RuntimeException::class);
+
         $factory = new VariantStrategyFactory($this->getMockContainer());
 
         $factory->make(VariantStrategyFactoryTest::class);
@@ -76,10 +78,11 @@ class VariantStrategyFactoryTest extends TestCase
 
     /**
      * @test
-     * @expectedException \RuntimeException
      */
     function it_throws_an_exception_if_the_instantiated_class_is_not_a_variant_strategy()
     {
+        $this->expectException(RuntimeException::class);
+
         $this->bindings[VariantStrategyFactoryTest::class] = new VariantStrategyFactoryTest;
 
         $factory = new VariantStrategyFactory($this->getMockContainer());
@@ -89,20 +92,22 @@ class VariantStrategyFactoryTest extends TestCase
 
     /**
      * @test
-     * @expectedException \RuntimeException
      */
     function it_throws_an_exception_if_the_strategy_class_does_not_exist()
     {
+        $this->expectException(RuntimeException::class);
+
         $factory = new VariantStrategyFactory($this->getMockContainer());
 
         $factory->make(DoesNotExist::class);
     }
 
     /**
-     * @return Mockery\MockInterface|ContainerInterface
+     * @return Mockery\Mock|Mockery\MockInterface|ContainerInterface
      */
     protected function getMockContainer()
     {
+        /** @var Mockery\Mock|Mockery\MockInterface|ContainerInterface $container */
         $container = Mockery::mock(ContainerInterface::class);
 
         $container->shouldReceive('has')->andReturnUsing(function ($id) {

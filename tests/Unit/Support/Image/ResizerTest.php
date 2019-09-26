@@ -18,12 +18,12 @@ class ResizerTest extends TestCase
     const IMAGE_COPY_PATH = __DIR__ . '/../../../resources/tmp.gif';
 
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cleanupTempFile();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
 
@@ -265,10 +265,7 @@ class ResizerTest extends TestCase
     //      Helpers
     // ------------------------------------------------------------------------------
 
-    /**
-     * @return SplFileInfo
-     */
-    protected function makeSourceFile()
+    protected function makeSourceFile(): SplFileInfo
     {
         $original = realpath(__DIR__ . '/../../../resources/empty.gif');
         $copy     = static::IMAGE_COPY_PATH;
@@ -285,8 +282,13 @@ class ResizerTest extends TestCase
      * @param BoxInterface   $expectedCropBox
      * @return Mockery\MockInterface|ImageInterface
      */
-    protected function getMockImage($originalSize, $expectedResize, $expectedCropPoint = null, $expectedCropBox = null)
+    protected function getMockImage(
+        BoxInterface $originalSize,
+        BoxInterface $expectedResize,
+        PointInterface $expectedCropPoint = null,
+        BoxInterface $expectedCropBox = null)
     {
+        /** @var ImageInterface|Mockery\Mock|Mockery\MockInterface $image */
         $image = Mockery::mock(ImageInterface::class);
 
         $resizeComparison = function ($resize) use ($expectedResize) {
@@ -335,8 +337,9 @@ class ResizerTest extends TestCase
      * @param ImageInterface $image
      * @return Mockery\MockInterface|ImagineInterface
      */
-    protected function getMockImageProcessor($image)
+    protected function getMockImageProcessor(ImageInterface $image)
     {
+        /** @var ImagineInterface|Mockery\Mock|Mockery\MockInterface $imageProcessor */
         $imageProcessor = Mockery::mock(ImagineInterface::class);
         $imageProcessor->shouldReceive('open')->once()->andReturn($image);
 
@@ -344,13 +347,11 @@ class ResizerTest extends TestCase
     }
 
     /**
-     * Helper method to build an options array.
-     *
-     * @param string $value
-     * @param array  $convertOptions
+     * @param string|callable $value
+     * @param array           $convertOptions
      * @return array
      */
-    protected function buildMockOptions($value, $convertOptions = [])
+    protected function buildMockOptions($value, array $convertOptions = []): array
     {
         return [
             'dimensions'     => $value,
@@ -358,10 +359,7 @@ class ResizerTest extends TestCase
         ];
     }
 
-    /**
-     * Cleans up the temporary image file.
-     */
-    protected function cleanupTempFile()
+    protected function cleanupTempFile(): void
     {
         if (file_exists(realpath(static::IMAGE_COPY_PATH))) {
             unlink(realpath(static::IMAGE_COPY_PATH));

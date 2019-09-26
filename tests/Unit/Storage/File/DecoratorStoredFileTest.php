@@ -53,7 +53,7 @@ class DecoratorStoredFileTest extends TestCase
 
 
     /**
-     * @return Mockery\MockInterface|StorableFileInterface
+     * @return Mockery\Mock|Mockery\MockInterface|StorableFileInterface
      */
     protected function getMockStorableFile()
     {

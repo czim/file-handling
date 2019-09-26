@@ -5,7 +5,9 @@ use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 use Czim\FileHandling\Storage\File\SplFileInfoStorableFile;
 use Czim\FileHandling\Test\TestCase;
 use org\bovigo\vfs\vfsStream;
+use RuntimeException;
 use SplFileInfo;
+use UnexpectedValueException;
 
 /**
  * Class SplFileInfoStorableFileTest
@@ -34,10 +36,11 @@ class SplFileInfoStorableFileTest extends TestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
      */
     function it_throws_an_exception_if_non_fileinfo_data_is_given()
     {
+        $this->expectException(UnexpectedValueException::class);
+
         $file = new SplFileInfoStorableFile;
 
         $file->setData('not a fileinfo instance');
@@ -45,10 +48,11 @@ class SplFileInfoStorableFileTest extends TestCase
 
     /**
      * @test
-     * @expectedException \RuntimeException
      */
     function it_throws_an_exception_if_the_referenced_path_is_not_found()
     {
+        $this->expectException(RuntimeException::class);
+
         $file = new SplFileInfoStorableFile;
 
         $fileInfo = new SplFileInfo('/no/file/exists/here');
@@ -69,7 +73,7 @@ class SplFileInfoStorableFileTest extends TestCase
 
         static::assertEquals($fileInfo->getSize(), $file->size());
     }
-    
+
     /**
      * @test
      */
@@ -150,18 +154,12 @@ class SplFileInfoStorableFileTest extends TestCase
     }
 
 
-    /**
-     * @return string
-     */
-    protected function getExampleLocalPath()
+    protected function getExampleLocalPath(): string
     {
         return realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
     }
 
-    /**
-     * @return string
-     */
-    protected function getDeletableLocalPath()
+    protected function getDeletableLocalPath(): string
     {
         return realpath(dirname(__DIR__) . '/../../../') . 'deletable.txt';
     }
