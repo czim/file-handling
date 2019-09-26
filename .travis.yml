@@ -8,7 +8,7 @@ php:
 install: composer install
 
 before_install:
-  - sudo add-apt-repository -y ppa:mc3man/trusty-media
+  - sudo add-apt-repository -y ppa:jonathonf/ffmpeg-4
   - sudo apt-get -y -q update
   - sudo apt-get -y -q install ffmpeg
   - sudo ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
