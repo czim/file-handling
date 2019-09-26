@@ -61,7 +61,8 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
             return false;
         }
 
-        return $this->doesFileExtensionSupportExif($this->file->extension());
+        return  empty($this->file->extension())
+            ||  $this->doesFileExtensionSupportExif($this->file->extension());
     }
 
     /**
