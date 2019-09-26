@@ -2,6 +2,10 @@
 
 ## 1.*
 
+### [1.1.4] - 2019-09-26
+
+Added check for file extension for image auto-orient strategy to avoid trying to read EXIF data from formats that do not support it.
+
 ### [1.1.3] - 2019-07-21
 
 Improved error handling in UrlDownloader.
@@ -49,6 +53,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[1.1.4]: https://github.com/czim/file-handling/compare/1.1.3...1.1.4
 [1.1.3]: https://github.com/czim/file-handling/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/czim/file-handling/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/czim/file-handling/compare/1.1.0...1.1.1
