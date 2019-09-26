@@ -38,6 +38,7 @@ class ImageAutoOrientStrategyTest extends TestCase
 
         /** @var Mockery\MockInterface|ProcessableFileInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
+        $file->shouldReceive('extension')->andReturn('jpg');
         $file->shouldReceive('mimeType')->andReturn('image/jpeg');
         $file->shouldReceive('path')->andReturn('tmp/test.jpg');
 
@@ -58,6 +59,7 @@ class ImageAutoOrientStrategyTest extends TestCase
 
         /** @var Mockery\MockInterface|ProcessableFileInterface $file */
         $file = Mockery::mock(ProcessableFileInterface::class);
+        $file->shouldReceive('extension')->andReturn('jpg');
         $file->shouldReceive('mimeType')->andReturn('image/jpeg');
         $file->shouldReceive('path')->andReturn('tmp/test.jpg');
 
