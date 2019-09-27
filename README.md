@@ -151,6 +151,32 @@ Included strategies for image manipulation:
     `watermark` (string): full path to the watermark image.  
     The watermark should be a PNG (transparent) image for best results. 
 
+- `ImageOptimizationStrategy` Optimizes images to decreate their file size.
+
+    This strategy requires installation of [spatie/image-optimizer](https://github.com/spatie/image-optimizer).
+    
+    In order for it to work, you'll need to install a few image optimizers as well:
+    - `jpegoptim`
+    - `optipng`
+    - `pngquant`
+    - `svgo`
+    - `gifsicle`
+   
+    Installation example for Ubuntu:
+
+    ```bash
+    sudo apt-get install jpegoptim optipng pngquant gifsicle
+    sudo npm install -g svgo
+    ```
+
+    Installation example for MacOS, using [Homebrew](https://brew.sh):
+
+    ```bash
+    brew install jpegoptim optipng pngquant svgo gifsicle
+    ```
+
+
+
 #### Video Strategies
 
 Included strategies for video manipulation:
