@@ -2,6 +2,10 @@
 
 ## 1.*
 
+### [1.1.5] - 2019-09-27
+
+Added [kyranb](https://github.com/czim/file-handling/commits?author=kyranb)'s ImageOptimizationStrategy.
+
 ### [1.1.4] - 2019-09-26
 
 Added check for file extension for image auto-orient strategy to avoid trying to read EXIF data from formats that do not support it.
