@@ -1,8 +1,8 @@
 {
-    "name": "czim/file-handling",
+    "name": "sibche/file-handling",
     "description": "File Handling Helper",
     "keywords": [ "file", "uploads", "storage", "s3" ],
-    "homepage": "https://github.com/czim",
+    "homepage": "https://github.com/sibche",
     "require": {
         "php": ">=5.5.9",
         "imagine/imagine": "^0.7",

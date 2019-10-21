@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Support\Download;
 
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
@@ -28,6 +29,7 @@ class UrlDownloader implements UrlDownloaderInterface
      * Downloads from a URL and returns locally stored temporary file.
      *
      * @param string $url
+     *
      * @return string
      * @throws CouldNotRetrieveRemoteFileException
      */
@@ -59,6 +61,7 @@ class UrlDownloader implements UrlDownloaderInterface
      *
      * @param string $url
      * @param string $localPath
+     *
      * @throws CouldNotRetrieveRemoteFileException
      * @codeCoverageIgnore
      */
@@ -67,12 +70,21 @@ class UrlDownloader implements UrlDownloaderInterface
         $curlError = 'unknown error';
 
         try {
+            $fileStream = fopen($localPath, 'w');
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_HEADER, 0);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_FILE, $fileStream);
+
+
             $rawFile = curl_exec($ch);
+
+            die($rawFile);
+
+            curl_close($ch);
+            fclose($fp);
 
             if ($rawFile === false) {
                 $curlError = curl_error($ch);
@@ -112,6 +124,7 @@ class UrlDownloader implements UrlDownloaderInterface
     /**
      * @param string $path
      * @param string $name
+     *
      * @return string
      * @throws CouldNotRetrieveRemoteFileException
      */
@@ -146,6 +159,7 @@ class UrlDownloader implements UrlDownloaderInterface
      *
      * @param string $path
      * @param string $newName
+     *
      * @return string
      * @throws CouldNotRetrieveRemoteFileException
      */
@@ -163,7 +177,7 @@ class UrlDownloader implements UrlDownloaderInterface
         }
 
         // @codeCoverageIgnoreStart
-        if ( ! $success) {
+        if (!$success) {
             throw new CouldNotRetrieveRemoteFileException("Failed to rename '{$path}' to '{$newName}'");
         }
         // @codeCoverageIgnoreEnd
@@ -175,6 +189,7 @@ class UrlDownloader implements UrlDownloaderInterface
      * Normalizes URL for safe cURL use.
      *
      * @param string $url
+     *
      * @return string
      */
     protected function normalizeUrl($url)

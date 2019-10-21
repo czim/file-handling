@@ -1,12 +1,14 @@
 <?php
+
 namespace Czim\FileHandling\Storage\File;
 
+use Czim\FileHandling\Contracts\Storage\StreamableFileInterface;
 use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 use RuntimeException;
 use SplFileInfo;
 use UnexpectedValueException;
 
-class SplFileInfoStorableFile extends AbstractStorableFile
+class SplFileInfoStorableFile extends AbstractStorableFile implements StreamableFileInterface
 {
 
     /**
@@ -19,11 +21,12 @@ class SplFileInfoStorableFile extends AbstractStorableFile
      * Initializes the storable file with mixed data.
      *
      * @param mixed $data
+     *
      * @return $this
      */
     public function setData($data)
     {
-        if ( ! ($data instanceof SplFileInfo)) {
+        if (!($data instanceof SplFileInfo)) {
             throw new UnexpectedValueException('Expected SplFileInfo instance');
         }
 
@@ -39,7 +42,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
      */
     protected function setDerivedFileProperties()
     {
-        if ( ! $this->file || ! file_exists($this->file->getRealPath())) {
+        if (!$this->file || !file_exists($this->file->getRealPath())) {
             throw new RuntimeException("Local file not found at '{$this->file->getPath()}'");
         }
 
@@ -85,7 +88,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
             );
         }
 
-        if ( ! $success) {
+        if (!$success) {
             // @codeCoverageIgnoreStart
             throw new StorableFileCouldNotBeDeletedException("Failed to unlink '{$this->path()}'");
             // @codeCoverageIgnoreEnd
@@ -100,4 +103,11 @@ class SplFileInfoStorableFile extends AbstractStorableFile
         return $this->file->getRealPath();
     }
 
+    public function stream($function)
+    {
+        $stream = fopen($this->file->getRealPath(), 'r+');
+        $output = $function($stream);
+        fclose($stream);
+        return $output;
+    }
 }

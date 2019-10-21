@@ -2,11 +2,12 @@
 namespace Czim\FileHandling\Storage\File;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
+use Czim\FileHandling\Contracts\Storage\StreamableFileInterface;
 use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 use RuntimeException;
 use SplFileInfo;
 
-class ProcessableFile extends AbstractStorableFile implements ProcessableFileInterface
+class ProcessableFile extends AbstractStorableFile implements ProcessableFileInterface,StreamableFileInterface
 {
 
     /**
@@ -107,4 +108,11 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
         return $this->file->getRealPath();
     }
 
+    public function stream($function)
+    {
+        $stream = fopen($this->file->getRealPath(), 'r+');
+        $output = $function($stream);
+        fclose($stream);
+        return $output;
+    }
 }
