@@ -81,10 +81,7 @@ class UrlDownloader implements UrlDownloaderInterface
 
             $rawFile = curl_exec($ch);
 
-            die($rawFile);
-
-            curl_close($ch);
-            fclose($fp);
+            fclose($fileStream);
 
             if ($rawFile === false) {
                 $curlError = curl_error($ch);
@@ -103,20 +100,6 @@ class UrlDownloader implements UrlDownloaderInterface
         if (false === $rawFile) {
             throw new CouldNotRetrieveRemoteFileException(
                 "curl_exec failed while downloading '{$url}': " . $curlError
-            );
-        }
-
-        try {
-            if (false === file_put_contents($localPath, $rawFile)) {
-                throw new CouldNotRetrieveRemoteFileException('file_put_contents call failed');
-            }
-
-        } catch (Exception $e) {
-
-            throw new CouldNotRetrieveRemoteFileException(
-                'file_put_contents call threw an exception',
-                $e->getCode(),
-                $e
             );
         }
     }
