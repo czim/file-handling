@@ -108,9 +108,11 @@ class LaravelStorage implements StorageInterface
     {
         if ($file instanceof StreamableFileInterface) {
             $file->stream(function ($stream) use ($file, $path) {
-                if (!$this->filesystem->writeStream($path, $stream)) {
-                    throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}'");
+                if ($this->filesystem->exists($path)) {
+                    $this->filesystem->delete($path);
                 }
+                if (!$this->filesystem->writeStream($path, $stream))
+                    throw new FileStorageException("Failed to store streamable '{$file->name()}' to '{$path}'");
             });
         } else {
             if (!$this->filesystem->put($path, $file->content())) {
