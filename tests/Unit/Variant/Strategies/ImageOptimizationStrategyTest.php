@@ -2,6 +2,7 @@
 namespace Czim\FileHandling\Test\Unit\Variant\Strategies;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
+use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 use Czim\FileHandling\Support\Image\Optimizer;
 use Czim\FileHandling\Test\TestCase;
 use Czim\FileHandling\Variant\Strategies\ImageOptimizationStrategy;
@@ -12,10 +13,11 @@ class ImageOptimizationStrategyTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException
      */
     function it_should_throw_an_exception_if_it_is_applied_to_a_non_image()
     {
+        $this->expectException(VariantStrategyShouldNotBeAppliedException::class);
+
         /** @var Mockery\MockInterface|Optimizer $optimizer */
         $optimizer = Mockery::mock(Optimizer::class);
 
