@@ -6,6 +6,7 @@ use finfo;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * Class MimeTypeHelper
@@ -28,6 +29,11 @@ class MimeTypeHelper implements MimeTypeHelperInterface
      */
     public function guessMimeTypeForPath($path)
     {
+        if (class_exists(MimeTypes::class)) {
+            return (new MimeTypes())->guessMimeType($path);
+        }
+
+        // Deprecated, but kept as backwards compatibility fallback for now.
         return MimeTypeGuesser::getInstance()->guess($path);
     }
 
