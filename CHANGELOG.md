@@ -2,6 +2,10 @@
 
 ## 1.*
 
+### [1.2.1] - 2019-11-12
+
+Fixed deprecation warnings for use of MimeTypeGuesser.
+
 ### [1.2.0] - 2019-11-12
 
 Updated Imagine dependency version, to `^1.2`.
@@ -61,7 +65,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
-
+[1.2.1]: https://github.com/czim/file-handling/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/czim/file-handling/compare/1.1.5...1.2.0
 [1.1.5]: https://github.com/czim/file-handling/compare/1.1.4...1.1.5
 [1.1.4]: https://github.com/czim/file-handling/compare/1.1.3...1.1.4
