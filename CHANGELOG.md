@@ -2,6 +2,11 @@
 
 ## 1.*
 
+### [1.3.0] - 2020-03-19
+
+Added support for Symfony 5 (and so Laravel 7).
+Added support for newer illuminate contracts (for testing).
+
 ### [1.2.1] - 2019-11-12
 
 Fixed deprecation warnings for use of MimeTypeGuesser.
@@ -36,26 +41,26 @@ Improved the `StorableFileFactory`: now accepts StorableFile instances and bette
 
 ### [1.0.3] - 2018-10-29
 
-Fixed resizer to allow use of either `convertOptions` or `convert_options` in configuration options. 
+Fixed resizer to allow use of either `convertOptions` or `convert_options` in configuration options.
 
 
 ### [1.0.2] - 2018-08-02
 
-Tweaked the downloader fix for better support. 
+Tweaked the downloader fix for better support.
 
 
 ### [1.0.1] - 2018-06-21
 
-Fixed issue where downloader failed to work with URLs that contained spaces. 
+Fixed issue where downloader failed to work with URLs that contained spaces.
 
 
 ### [1.0.0] - 2018-05-13
 
-Much improved path handling and flexibility.  
+Much improved path handling and flexibility.
 There are *many* breaking changes here!
 Please take care when updating, this will likely affect any code relying on this package.
 
-- `Target` added to allow more flexible original and variant path handling.  
+- `Target` added to allow more flexible original and variant path handling.
     See for instance [czim/laravel-paperclip](https://github.com/czim/laravel-paperclip) for a target that interpolates placeholders.
 - Changed `FileHandlerInterface`:
     - Altered signatures for `process()`, `processVariant()`, `delete()` and `deleteVariant()` to expected `TargetInterface` instead of string path.
@@ -65,6 +70,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[1.3.0]: https://github.com/czim/file-handling/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/czim/file-handling/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/czim/file-handling/compare/1.1.5...1.2.0
 [1.1.5]: https://github.com/czim/file-handling/compare/1.1.4...1.1.5
