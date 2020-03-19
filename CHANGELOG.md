@@ -2,7 +2,7 @@
 
 ## 1.*
 
-### [1.3.0] - 2020-03-19
+### [1.3.1] - 2020-03-19
 
 Added support for Symfony 5 (and so Laravel 7).
 Added support for newer illuminate contracts (for testing).
@@ -70,7 +70,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
-[1.3.0]: https://github.com/czim/file-handling/compare/1.2.1...1.3.0
+[1.3.1]: https://github.com/czim/file-handling/compare/1.2.1...1.3.1
 [1.2.1]: https://github.com/czim/file-handling/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/czim/file-handling/compare/1.1.5...1.2.0
 [1.1.5]: https://github.com/czim/file-handling/compare/1.1.4...1.1.5
