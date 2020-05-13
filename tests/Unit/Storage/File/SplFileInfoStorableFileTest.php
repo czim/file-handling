@@ -90,6 +90,58 @@ class SplFileInfoStorableFileTest extends TestCase
     /**
      * @test
      */
+    function it_opens_a_stream_for_reading()
+    {
+        $file = new SplFileInfoStorableFile;
+
+        $fileInfo = new SplFileInfo($this->getExampleLocalPath());
+
+        $file->setData($fileInfo);
+
+        $resource = $file->openStream();
+
+        static::assertIsResource($resource);
+        static::assertEquals(file_get_contents($fileInfo->getRealPath()), fread($resource, 4096));
+
+        fclose($resource);
+    }
+
+    /**
+     * @test
+     */
+    function it_closes_an_open_stream()
+    {
+        $file = new SplFileInfoStorableFile;
+
+        $fileInfo = new SplFileInfo($this->getExampleLocalPath());
+
+        $file->setData($fileInfo);
+
+        $resource = $file->openStream();
+
+        static::assertIsResource($resource);
+
+        $file->closeStream($resource);
+    }
+
+    /**
+     * @test
+     * @doesNotPerformAssertions
+     */
+    function it_silently_ignores_null_when_closing_a_stream()
+    {
+        $file = new SplFileInfoStorableFile;
+
+        $fileInfo = new SplFileInfo($this->getExampleLocalPath());
+
+        $file->setData($fileInfo);
+
+        $file->closeStream(null);
+    }
+
+    /**
+     * @test
+     */
     function it_creates_a_copy()
     {
         $root = vfsStream::setup('tmp');

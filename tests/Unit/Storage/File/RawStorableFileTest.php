@@ -93,6 +93,27 @@ class RawStorableFileTest extends TestCase
     /**
      * @test
      */
+    function it_is_not_streamable()
+    {
+        $file = new RawStorableFile();
+
+        static::assertNull($file->openStream());
+    }
+
+    /**
+     * @test
+     * @doesNotPerformAssertions
+     */
+    function it_silently_ignores_closing_a_stream()
+    {
+        $file = new RawStorableFile();
+
+        $file->closeStream(null);
+    }
+
+    /**
+     * @test
+     */
     function it_creates_a_copy()
     {
         $root = vfsStream::setup('tmp');

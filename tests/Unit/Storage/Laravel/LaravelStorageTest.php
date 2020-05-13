@@ -55,13 +55,16 @@ class LaravelStorageTest extends TestCase
     /**
      * @test
      */
-    function it_stores_a_file()
+    function it_stores_a_file_without_streaming()
     {
         $files = $this->getMockLaravelFilesystem();
         $files->shouldReceive('put')->once()->with('relative/path/test.txt', 'contents')->andReturn(true);
+        $files->shouldReceive('writeStream')->never();
 
         $file = $this->getMockStorableFile();
         $file->shouldReceive('name')->andReturn('test.txt');
+        $file->shouldReceive('openStream')->once()->andReturn(null);
+        $file->shouldReceive('closeStream')->never();
         $file->shouldReceive('content')->andReturn('contents');
 
         $storage = new LaravelStorage($files, true, 'http://testing');
@@ -76,6 +79,34 @@ class LaravelStorageTest extends TestCase
     /**
      * @test
      */
+    function it_stores_a_file_with_streaming()
+    {
+        $stream = fopen(realpath(__DIR__ . '/../../../resources/test.txt'), 'r');
+
+        $files = $this->getMockLaravelFilesystem();
+        $files->shouldReceive('put')->never();
+        $files->shouldReceive('writeStream')->once()->with('relative/path/test.txt', $stream)->andReturn(true);
+
+        $file = $this->getMockStorableFile();
+        $file->shouldReceive('name')->andReturn('test.txt');
+        $file->shouldReceive('openStream')->once()->andReturn($stream);
+        $file->shouldReceive('closeStream')->once()->with($stream);
+        $file->shouldReceive('content')->never();
+
+        $storage = new LaravelStorage($files, true, 'http://testing');
+
+        $stored = $storage->store($file, 'relative/path/test.txt');
+
+        fclose($stream);
+
+        static::assertInstanceOf(StoredFileInterface::class, $stored);
+        static::assertEquals('test.txt', $stored->name());
+        static::assertEquals('http://testing/relative/path/test.txt', $stored->url());
+    }
+
+    /**
+     * @test
+     */
     function it_throws_an_exception_if_it_fails_to_store_a_file()
     {
         $this->expectException(FileStorageException::class);
@@ -85,6 +116,7 @@ class LaravelStorageTest extends TestCase
 
         $file = $this->getMockStorableFile();
         $file->shouldReceive('name')->andReturn('test.txt');
+        $file->shouldReceive('openStream')->once()->andReturn(null);
         $file->shouldReceive('content')->andReturn('contents');
 
         $storage = new LaravelStorage($files, true, 'http://testing');

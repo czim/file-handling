@@ -17,6 +17,8 @@ class DecoratorStoredFileTest extends TestCase
     {
         $mock = $this->getMockStorableFile();
         $mock->shouldReceive('content')->once()->with()->andReturn('content');
+        $mock->shouldReceive('openStream')->once()->with()->andReturn(null);
+        $mock->shouldReceive('closeStream')->once()->with(null);
         $mock->shouldReceive('extension')->once()->with()->andReturn('gif');
         $mock->shouldReceive('isUploaded')->once()->with()->andReturn(false);
         $mock->shouldReceive('name')->once()->with()->andReturn('test.gif');
@@ -29,6 +31,8 @@ class DecoratorStoredFileTest extends TestCase
         $file = new DecoratorStoredFile($mock);
 
         static::assertEquals('content', $file->content());
+        static::assertNull($file->openStream());
+        $file->closeStream(null);
         static::assertEquals('gif', $file->extension());
         static::assertFalse($file->isUploaded());
         static::assertEquals('test/type', $file->mimeType());
