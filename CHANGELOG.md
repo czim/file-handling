@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.*
+
+### [2.0.0] - 2020-05-13
+
+All code updated to make use of PHP 7.1+ typehinting and return types.
+This is quite the breaking change as all of the interfaces.
+Now requires PHP 7.1+.
+
+Added the `openStream()` and `closeStream()` methods to the StorableFileInterface.
+For (some) storable file instances, this may help to set up more memory-friendly content handling.
+For locally stored files, you can get a `resource` object this way, just as you would if you `fopen()`'d a file directly.
+
+
 ## 1.*
 
 ### [1.3.1] - 2020-03-19
