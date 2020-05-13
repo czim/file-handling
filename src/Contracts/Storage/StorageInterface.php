@@ -10,7 +10,7 @@ interface StorageInterface
      * @param string $path
      * @return bool
      */
-    public function exists($path);
+    public function exists(string $path): bool;
 
     /**
      * Returns a public URL to the stored file.
@@ -18,7 +18,7 @@ interface StorageInterface
      * @param string $path
      * @return string
      */
-    public function url($path);
+    public function url(string $path): string;
 
     /**
      * Returns the file from storage.
@@ -26,7 +26,7 @@ interface StorageInterface
      * @param string $path
      * @return StoredFileInterface
      */
-    public function get($path);
+    public function get(string $path): StoredFileInterface;
 
     /**
      * Stores a file.
@@ -35,7 +35,7 @@ interface StorageInterface
      * @param string                $path   where the file should be stored, including filename
      * @return StoredFileInterface
      */
-    public function store(StorableFileInterface $file, $path);
+    public function store(StorableFileInterface $file, string $path): StoredFileInterface;
 
     /**
      * Deletes a stored media file.
@@ -43,6 +43,6 @@ interface StorageInterface
      * @param string $path
      * @return bool
      */
-    public function delete($path);
 
+    public function delete(string $path): bool;
 }

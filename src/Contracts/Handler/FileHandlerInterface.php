@@ -15,7 +15,7 @@ interface FileHandlerInterface
      * @param array $options
      * @return ProcessResultInterface
      */
-    public function process(StorableFileInterface $source, TargetInterface $target, array $options = []);
+    public function process(StorableFileInterface $source, TargetInterface $target, array $options = []): ProcessResultInterface;
 
     /**
      * Processes and stores a single variant for a storable file.
@@ -26,7 +26,7 @@ interface FileHandlerInterface
      * @param array                 $options
      * @return ProcessResultInterface
      */
-    public function processVariant(StorableFileInterface $source, TargetInterface $target, $variant, array $options = []);
+    public function processVariant(StorableFileInterface $source, TargetInterface $target, $variant, array $options = []): ProcessResultInterface;
 
     /**
      * Returns the URLs keyed by the variant keys requested.
@@ -35,7 +35,7 @@ interface FileHandlerInterface
      * @param string[]        $variants     keys for variants to include
      * @return string[]
      */
-    public function variantUrlsForTarget(TargetInterface $target, array $variants = []);
+    public function variantUrlsForTarget(TargetInterface $target, array $variants = []): array;
 
     /**
      * Deletes a file and all indicated variants.
@@ -44,7 +44,7 @@ interface FileHandlerInterface
      * @param string[]        $variants     variant keys
      * @return bool
      */
-    public function delete(TargetInterface $target, array $variants = []);
+    public function delete(TargetInterface $target, array $variants = []): bool;
 
     /**
      * Deletes a single variant.
@@ -53,6 +53,6 @@ interface FileHandlerInterface
      * @param string          $variant      'original' refers to the original file
      * @return bool
      */
-    public function deleteVariant(TargetInterface $target, $variant);
 
+    public function deleteVariant(TargetInterface $target, string $variant): bool;
 }

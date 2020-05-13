@@ -39,9 +39,9 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
      * Sets the configuration for the factory.
      *
      * @param array $config
-     * @return $this
+     * @return $this|VariantStrategyFactoryInterface
      */
-    public function setConfig(array $config)
+    public function setConfig(array $config): VariantStrategyFactoryInterface
     {
         $this->config = $config;
 
@@ -55,7 +55,7 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
      * @param array  $options   options for the strategy
      * @return VariantStrategyInterface
      */
-    public function make($strategy, array $options = [])
+    public function make(string $strategy, array $options = []): VariantStrategyInterface
     {
         $instance = $this->instantiateClass(
             $this->resolveStrategyClassName($strategy)
@@ -65,14 +65,13 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
             throw new RuntimeException("Variant strategy created for '{$strategy}' is of incorrect type");
         }
 
-        return $instance->setOptions($options);
+        $instance->setOptions($options);
+
+        return $instance;
     }
 
-    /**
-     * @param string $strategy
-     * @return string
-     */
-    protected function resolveStrategyClassName($strategy)
+
+    protected function resolveStrategyClassName(string $strategy): string
     {
         if (    array_key_exists(static::CONFIG_ALIASES, $this->config)
             &&  array_key_exists($strategy, $this->config[ static::CONFIG_ALIASES ])
@@ -91,9 +90,9 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
 
     /**
      * @param string $class
-     * @return object
+     * @return mixed
      */
-    protected function instantiateClass($class)
+    protected function instantiateClass(string $class)
     {
         return $this->container->get($class);
     }

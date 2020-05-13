@@ -19,9 +19,8 @@ class SplFileInfoStorableFile extends AbstractStorableFile
      * Initializes the storable file with mixed data.
      *
      * @param mixed $data
-     * @return $this
      */
-    public function setData($data)
+    public function setData($data): void
     {
         if ( ! ($data instanceof SplFileInfo)) {
             throw new UnexpectedValueException('Expected SplFileInfo instance');
@@ -30,14 +29,12 @@ class SplFileInfoStorableFile extends AbstractStorableFile
         $this->file = $data;
 
         $this->setDerivedFileProperties();
-
-        return $this;
     }
 
     /**
      * Sets properties based on the given data.
      */
-    protected function setDerivedFileProperties()
+    protected function setDerivedFileProperties(): void
     {
         if ( ! $this->file || ! file_exists($this->file->getRealPath())) {
             throw new RuntimeException("Local file not found at '{$this->file->getPath()}'");
@@ -55,7 +52,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
      *
      * @return string
      */
-    public function content()
+    public function content(): string
     {
         return file_get_contents($this->file->getRealPath());
     }
@@ -63,7 +60,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
     /**
      * {@inheritdoc}
      */
-    public function copy($path)
+    public function copy(string $path): bool
     {
         return copy($this->path(), $path);
     }
@@ -71,7 +68,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
     /**
      * {@inheritDoc}
      */
-    public function delete()
+    public function delete(): void
     {
         try {
             $success = unlink($this->path());
@@ -95,7 +92,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
     /**
      * {@inheritdoc}
      */
-    public function path()
+    public function path(): string
     {
         return $this->file->getRealPath();
     }

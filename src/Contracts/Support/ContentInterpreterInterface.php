@@ -10,6 +10,6 @@ interface ContentInterpreterInterface
      * @param RawContentInterface $content
      * @return string
      */
-    public function interpret(RawContentInterface $content);
 
+    public function interpret(RawContentInterface $content): string;
 }

@@ -51,7 +51,7 @@ class Target implements TargetInterface, TargetSetupInterface
      * @param string      $path
      * @param string|null $variantPath      use :variant as a placeholder
      */
-    public function __construct($path, $variantPath = null)
+    public function __construct(string $path, ?string $variantPath = null)
     {
         $this->originalPath = $path;
         $this->variantPath  = $variantPath;
@@ -60,48 +60,36 @@ class Target implements TargetInterface, TargetSetupInterface
 
     /**
      * @param string[] $filenames
-     * @return $this
      */
-    public function setVariantFilenames(array $filenames)
+    public function setVariantFilenames(array $filenames): void
     {
         $this->variantFileNames = $filenames;
-
-        return $this;
     }
 
     /**
      * @param string[] $extensions
-     * @return $this
      */
-    public function setVariantExtensions(array $extensions)
+    public function setVariantExtensions(array $extensions): void
     {
         $this->variantExtensions = $extensions;
-
-        return $this;
     }
 
     /**
      * @param string $variant
      * @param string $filename
-     * @return $this
      */
-    public function setVariantFilename($variant, $filename)
+    public function setVariantFilename(string $variant, string $filename): void
     {
         $this->variantFileNames[ $variant ] = $filename;
-
-        return $this;
     }
 
     /**
      * @param string $variant
      * @param string $extension
-     * @return $this
      */
-    public function setVariantExtension($variant, $extension)
+    public function setVariantExtension(string $variant, string $extension): void
     {
         $this->variantExtensions[ $variant ] = $extension;
-
-        return $this;
     }
 
 
@@ -110,7 +98,7 @@ class Target implements TargetInterface, TargetSetupInterface
      *
      * @return string
      */
-    public function original()
+    public function original(): string
     {
         return $this->originalPath;
     }
@@ -121,7 +109,7 @@ class Target implements TargetInterface, TargetSetupInterface
      * @param string $variant
      * @return string
      */
-    public function variant($variant)
+    public function variant(string $variant): string
     {
         $variantPath = $this->getVariantPathWithPlaceholder();
 
@@ -142,7 +130,7 @@ class Target implements TargetInterface, TargetSetupInterface
     /**
      * @return string
      */
-    protected function getVariantPathWithPlaceholder()
+    protected function getVariantPathWithPlaceholder(): string
     {
         if ($this->variantPath) {
             return $this->variantPath;
@@ -162,7 +150,7 @@ class Target implements TargetInterface, TargetSetupInterface
      * @param string $replacement
      * @return string
      */
-    protected function replaceLastLevelDirectory($dirname, $replacement)
+    protected function replaceLastLevelDirectory(string $dirname, string $replacement): string
     {
         $segments = explode(DIRECTORY_SEPARATOR, $dirname);
 
@@ -182,7 +170,7 @@ class Target implements TargetInterface, TargetSetupInterface
      * @param string $extension
      * @return string
      */
-    protected function replaceExtension($path, $extension)
+    protected function replaceExtension(string $path, string $extension): string
     {
         return pathinfo($path, PATHINFO_DIRNAME)
              . DIRECTORY_SEPARATOR
@@ -195,7 +183,7 @@ class Target implements TargetInterface, TargetSetupInterface
      * @param string $filename
      * @return string
      */
-    protected function replaceFileName($path, $filename)
+    protected function replaceFileName(string $path, string $filename): string
     {
         return pathinfo($path, PATHINFO_DIRNAME)
             . DIRECTORY_SEPARATOR

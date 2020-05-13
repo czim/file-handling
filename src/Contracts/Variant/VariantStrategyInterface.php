@@ -11,17 +11,16 @@ interface VariantStrategyInterface
      * Applies strategy to a file.
      *
      * @param ProcessableFileInterface $file
-     * @return ProcessableFileInterface|false
+     * @return ProcessableFileInterface|null
      * @throws VariantStrategyShouldNotBeAppliedException
      */
-    public function apply(ProcessableFileInterface $file);
+    public function apply(ProcessableFileInterface $file): ?ProcessableFileInterface;
 
     /**
      * Sets the options
      *
      * @param array $options
-     * @return $this
      */
-    public function setOptions(array $options);
 
+    public function setOptions(array $options): void;
 }

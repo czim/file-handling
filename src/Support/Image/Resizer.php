@@ -38,7 +38,7 @@ class Resizer implements ImageResizerInterface
      * @param array       $options
      * @return bool
      */
-    public function resize(SplFileInfo $file, array $options)
+    public function resize(SplFileInfo $file, array $options): bool
     {
         $filePath = $file->getRealPath();
 
@@ -73,7 +73,7 @@ class Resizer implements ImageResizerInterface
      * @param array $options
      * @return array
      */
-    protected function getConvertOptions(array $options)
+    protected function getConvertOptions(array $options): array
     {
         if ($this->arrHas($options, 'convertOptions')) {
             return $this->arrGet($options, 'convertOptions', []);
@@ -92,7 +92,7 @@ class Resizer implements ImageResizerInterface
      *
      * @return array
      */
-    protected function parseOptionDimensions(array $options)
+    protected function parseOptionDimensions(array $options): array
     {
         $sourceDimensions = $this->arrGet($options, 'dimensions');
 
@@ -154,7 +154,7 @@ class Resizer implements ImageResizerInterface
      * @param string         $height    new height
      * @return ImageInterface
      */
-    protected function resizeAuto(ImageInterface $image, $width, $height)
+    protected function resizeAuto(ImageInterface $image, string $width, string $height): ImageInterface
     {
         $size = $image->getSize();
         $originalWidth = $size->getWidth();
@@ -184,10 +184,10 @@ class Resizer implements ImageResizerInterface
      *
      * @param ImageInterface $image
      * @param string         $width     new width
-     * @param string         $height    new height
+     * @param string|null    $height    new height
      * @return ImageInterface
      */
-    protected function resizeLandscape(ImageInterface $image, $width, $height)
+    protected function resizeLandscape(ImageInterface $image, string $width, ?string $height): ImageInterface
     {
         // @codeCoverageIgnoreStart
         if (empty($width)) {
@@ -212,11 +212,11 @@ class Resizer implements ImageResizerInterface
      * Resize an image as a portrait (height fixed).
      *
      * @param ImageInterface $image
-     * @param string         $width     new width
+     * @param string|null    $width     new width
      * @param string         $height    new height
      * @return ImageInterface
      */
-    protected function resizePortrait(ImageInterface $image, $width, $height)
+    protected function resizePortrait(ImageInterface $image, ?string $width, string $height): ImageInterface
     {
         // @codeCoverageIgnoreStart
         if (empty($height)) {
@@ -245,7 +245,7 @@ class Resizer implements ImageResizerInterface
      * @param string         $height    new height
      * @return ImageInterface
      */
-    protected function resizeCrop(ImageInterface $image, $width, $height)
+    protected function resizeCrop(ImageInterface $image, string $width, string $height): ImageInterface
     {
         list($optimalWidth, $optimalHeight) = $this->getOptimalCrop($image->getSize(), $width, $height);
 
@@ -265,7 +265,7 @@ class Resizer implements ImageResizerInterface
      * @param string         $height    new height
      * @return ImageInterface
      */
-    protected function resizeExact(ImageInterface $image, $width, $height)
+    protected function resizeExact(ImageInterface $image, string $width, string $height): ImageInterface
     {
         return $image->resize(new Box($width, $height));
     }
@@ -277,7 +277,7 @@ class Resizer implements ImageResizerInterface
      * @param callable    $callable
      * @return ImageInterface
      */
-    protected function resizeCustom(SplFileInfo $file, callable $callable)
+    protected function resizeCustom(SplFileInfo $file, callable $callable): ImageInterface
     {
         return call_user_func_array($callable, [$file, $this->imagine]);
     }
@@ -287,17 +287,14 @@ class Resizer implements ImageResizerInterface
      *
      * @param ImageInterface $image
      * @param int            $newHeight - The image's new height.
-     *
      * @return int
      */
-    private function getSizeByFixedHeight(ImageInterface $image, $newHeight)
+    private function getSizeByFixedHeight(ImageInterface $image, int $newHeight): int
     {
         $box   = $image->getSize();
         $ratio = $box->getWidth() / $box->getHeight();
 
-        $newWidth = $newHeight * $ratio;
-
-        return $newWidth;
+        return (int) $newHeight * $ratio;
     }
 
     /**
@@ -305,17 +302,14 @@ class Resizer implements ImageResizerInterface
      *
      * @param ImageInterface $image
      * @param int            $newWidth - The image's new width.
-     *
      * @return int
      */
-    private function getSizeByFixedWidth(ImageInterface $image, $newWidth)
+    private function getSizeByFixedWidth(ImageInterface $image, int $newWidth): int
     {
         $box   = $image->getSize();
         $ratio = $box->getHeight() / $box->getWidth();
 
-        $newHeight = $newWidth * $ratio;
-
-        return $newHeight;
+        return (int) $newWidth * $ratio;
     }
 
     /**
@@ -325,10 +319,9 @@ class Resizer implements ImageResizerInterface
      * @param BoxInterface $size    current size.
      * @param string       $width   new width.
      * @param string       $height  new height.
-     *
      * @return array
      */
-    protected function getOptimalCrop(BoxInterface $size, $width, $height)
+    protected function getOptimalCrop(BoxInterface $size, string $width, string $height): array
     {
         $heightRatio = $size->getHeight() / $height;
         $widthRatio  = $size->getWidth() / $width;
@@ -353,7 +346,7 @@ class Resizer implements ImageResizerInterface
      * @param null|mixed $default
      * @return mixed|null
      */
-    protected function arrGet(array $array, $key, $default = null)
+    protected function arrGet(array $array, string $key, $default = null)
     {
         // @codeCoverageIgnoreStart
         if ( ! $this->arrHas($array, $key)) {
@@ -364,12 +357,7 @@ class Resizer implements ImageResizerInterface
         return $array[ $key ];
     }
 
-    /**
-     * @param array  $array
-     * @param string $key
-     * @return bool
-     */
-    protected function arrHas(array $array, $key)
+    protected function arrHas(array $array, string $key): bool
     {
         return array_key_exists($key, $array);
     }

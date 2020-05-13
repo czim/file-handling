@@ -20,7 +20,7 @@ class UploadedContentInterpreter implements ContentInterpreterInterface
      * @return string
      * @see ContentTypes
      */
-    public function interpret(RawContentInterface $content)
+    public function interpret(RawContentInterface $content): string
     {
         // Treat any string longer than 2048 characters as full data
         if (    $content->size() <= static::FULL_DATA_THRESHOLD
@@ -29,8 +29,10 @@ class UploadedContentInterpreter implements ContentInterpreterInterface
             return ContentTypes::URI;
         }
 
+        $chunk = $content->chunk(0, static::DATAURI_TEST_CHUNK);
+
         // Detect data uri
-        if (preg_match(static::DATAURI_REGEX, $content->chunk(0, static::DATAURI_TEST_CHUNK))) {
+        if ($chunk !== null && preg_match(static::DATAURI_REGEX, $chunk)) {
             return ContentTypes::DATAURI;
         }
 

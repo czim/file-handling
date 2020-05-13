@@ -5,11 +5,9 @@ abstract class AbstractVideoStrategy extends AbstractVariantStrategy
 {
 
     /**
-     * Returns whether the variant strategy should be applied.
-     *
-     * @return bool
+     * {@inheritDoc}
      */
-    protected function shouldBeApplied()
+    protected function shouldBeApplied(): bool
     {
         return 'video/' == substr($this->file->mimeType(), 0, 6);
     }

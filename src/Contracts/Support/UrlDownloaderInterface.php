@@ -10,6 +10,6 @@ interface UrlDownloaderInterface
      * @param string $url
      * @return string
      */
-    public function download($url);
 
+    public function download(string $url): string;
 }

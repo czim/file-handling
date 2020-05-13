@@ -27,7 +27,7 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
      *
      * @return bool|null
      */
-    protected function perform()
+    protected function perform(): ?bool
     {
         if ($this->isQuietModeDisabled()) {
             $this->fixer->disableQuietMode();
@@ -43,7 +43,7 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
      *
      * @return bool
      */
-    protected function isQuietModeDisabled()
+    protected function isQuietModeDisabled(): bool
     {
         if ( ! array_key_exists('quiet', $this->options)) {
             return false;
@@ -55,7 +55,7 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
     /**
      * {@inheritDoc}
      */
-    protected function shouldBeApplied()
+    protected function shouldBeApplied(): bool
     {
         if ( ! parent::shouldBeApplied()) {
             return false;
@@ -65,11 +65,7 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
             ||  $this->doesFileExtensionSupportExif($this->file->extension());
     }
 
-    /**
-     * @param string $extension
-     * @return bool
-     */
-    protected function doesFileExtensionSupportExif($extension)
+    protected function doesFileExtensionSupportExif(string $extension): bool
     {
         return in_array(strtolower($extension), [
 

@@ -10,9 +10,9 @@ interface StorableFileFactoryInterface
     /**
      * Marks the next storable file instance as having been locally uploaded.
      *
-     * @return $this
+     * @return $this|StorableFileFactoryInterface
      */
-    public function uploaded();
+    public function uploaded(): StorableFileFactoryInterface;
 
     /**
      * Makes a storable file instance from an unknown source type.
@@ -22,7 +22,7 @@ interface StorableFileFactoryInterface
      * @param string|null $mimeType
      * @return StorableFileInterface
      */
-    public function makeFromAny($data, $name = null, $mimeType = null);
+    public function makeFromAny($data, ?string $name = null, ?string $mimeType = null): StorableFileInterface;
 
     /**
      * Makes a storable file instance from an SplFileInfo instance.
@@ -32,7 +32,7 @@ interface StorableFileFactoryInterface
      * @param string|null $mimeType
      * @return StorableFileInterface
      */
-    public function makeFromFileInfo(SplFileInfo $data, $name = null, $mimeType = null);
+    public function makeFromFileInfo(SplFileInfo $data, ?string $name = null, ?string $mimeType = null): StorableFileInterface;
 
     /**
      * Makes a normalized storable file instance from a local file path.
@@ -42,7 +42,7 @@ interface StorableFileFactoryInterface
      * @param string|null $mimeType
      * @return StorableFileInterface
      */
-    public function makeFromLocalPath($path, $name = null, $mimeType = null);
+    public function makeFromLocalPath(string $path, ?string $name = null, ?string $mimeType = null): StorableFileInterface;
 
     /**
      * Makes a normalized storable file instance from a URI.
@@ -52,7 +52,7 @@ interface StorableFileFactoryInterface
      * @param string|null $mimeType
      * @return StorableFileInterface
      */
-    public function makeFromUrl($url, $name = null, $mimeType = null);
+    public function makeFromUrl(string $url, ?string $name = null, ?string $mimeType = null): StorableFileInterface;
 
     /**
      * Makes a normalized storable file instance from a data URI.
@@ -62,7 +62,7 @@ interface StorableFileFactoryInterface
      * @param string|null                $mimeType
      * @return StorableFileInterface
      */
-    public function makeFromDataUri($data, $name = null, $mimeType = null);
+    public function makeFromDataUri($data, ?string $name = null, ?string $mimeType = null): StorableFileInterface;
 
     /**
      * Makes a normalized storable file instance from raw content data.
@@ -72,6 +72,6 @@ interface StorableFileFactoryInterface
      * @param string|null                $mimeType
      * @return StorableFileInterface
      */
-    public function makeFromRawData($data, $name = null, $mimeType = null);
 
+    public function makeFromRawData($data, ?string $name = null, ?string $mimeType = null): StorableFileInterface;
 }

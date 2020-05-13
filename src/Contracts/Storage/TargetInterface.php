@@ -9,7 +9,7 @@ interface TargetInterface
      *
      * @return string
      */
-    public function original();
+    public function original(): string;
 
     /**
      * Returns the (relative) target path for a variant by name.
@@ -17,6 +17,6 @@ interface TargetInterface
      * @param string $variant
      * @return string
      */
-    public function variant($variant);
 
+    public function variant(string $variant): string;
 }

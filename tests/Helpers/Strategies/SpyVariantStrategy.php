@@ -33,10 +33,10 @@ class SpyVariantStrategy implements VariantStrategyInterface
      * Applies strategy to a file.
      *
      * @param ProcessableFileInterface $file
-     * @return ProcessableFileInterface|false
+     * @return ProcessableFileInterface|null
      * @throws VariantStrategyShouldNotBeAppliedException
      */
-    public function apply(ProcessableFileInterface $file)
+    public function apply(ProcessableFileInterface $file): ?ProcessableFileInterface
     {
         if ( ! $this->shouldApply) {
             throw new VariantStrategyShouldNotBeAppliedException;
@@ -45,23 +45,15 @@ class SpyVariantStrategy implements VariantStrategyInterface
         $this->applied = true;
 
         if ( ! $this->applySuccessfully) {
-            return false;
+            return null;
         }
 
         return $file;
     }
 
-    /**
-     * Sets the options
-     *
-     * @param array $options
-     * @return $this
-     */
-    public function setOptions(array $options)
+    public function setOptions(array $options): void
     {
         $this->optionsSet = true;
-
-        return $this;
     }
 
 }

@@ -10,7 +10,7 @@ interface MimeTypeHelperInterface
      * @param string $path
      * @return string
      */
-    public function guessMimeTypeForPath($path);
+    public function guessMimeTypeForPath(string $path): string;
 
     /**
      * Returns the mime type for given raw file content.
@@ -18,7 +18,7 @@ interface MimeTypeHelperInterface
      * @param string $content
      * @return string
      */
-    public function guessMimeTypeForContent($content);
+    public function guessMimeTypeForContent(string $content): string;
 
     /**
      * Returns extension for file contents at a given local path.
@@ -28,7 +28,7 @@ interface MimeTypeHelperInterface
      * @param string $path
      * @return string
      */
-    public function guessExtensionForPath($path);
+    public function guessExtensionForPath(string $path): string;
 
     /**
      * Returns extension for a given mime type.
@@ -38,6 +38,6 @@ interface MimeTypeHelperInterface
      * @param string $type
      * @return string
      */
-    public function guessExtensionForMimeType($type);
 
+    public function guessExtensionForMimeType(string $type): string;
 }

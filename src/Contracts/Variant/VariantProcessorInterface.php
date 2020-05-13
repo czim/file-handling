@@ -14,20 +14,20 @@ interface VariantProcessorInterface
      * @param array[]               $strategies     associative, ordered set of strategies to apply
      * @return StorableFileInterface
      */
-    public function process(StorableFileInterface $source, $variant, array $strategies);
+    public function process(StorableFileInterface $source, string $variant, array $strategies): StorableFileInterface;
 
     /**
      * Returns list of temporary files created while processing.
      *
      * @return StorableFileInterface[]
      */
-    public function getTemporaryFiles();
+    public function getTemporaryFiles(): array;
 
     /**
      * Purges memory of temporary files.
      *
      * Note that this does not delete the files, just the processor's history of them.
      */
-    public function clearTemporaryFiles();
 
+    public function clearTemporaryFiles(): void;
 }

@@ -9,6 +9,6 @@ interface UploadedMarkableInterface
      *
      * @param bool $uploaded
      */
-    public function setUploaded($uploaded = true);
 
+    public function setUploaded(bool $uploaded = true): void;
 }

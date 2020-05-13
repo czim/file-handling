@@ -17,45 +17,23 @@ class RawContent implements RawContentInterface
      */
     protected $content;
 
-
-    /**
-     * @param string $content
-     */
-    public function __construct($content)
+    public function __construct(string $content)
     {
         $this->content = $content;
     }
 
 
-    /**
-     * Sets the content.
-     *
-     * @param string $content
-     * @return $this
-     */
-    public function setContent($content)
+    public function setContent(string $content): void
     {
         $this->content = $content;
-
-        return $this;
     }
 
-    /**
-     * Returns full content.
-     *
-     * @return string
-     */
-    public function content()
+    public function content(): string
     {
         return $this->content;
     }
 
-    /**
-     * Returns size of content.
-     *
-     * @return int
-     */
-    public function size()
+    public function size(): int
     {
         return strlen($this->content);
     }
@@ -63,11 +41,12 @@ class RawContent implements RawContentInterface
     /**
      * @param int $start
      * @param int $length
-     * @return bool|string
+     * @return string|null
      */
-    public function chunk($start = 0, $length = 512)
+    public function chunk(int $start = 0, int $length = 512): ?string
     {
-        return substr($this->content, $start, max(1, $length));
+        $chunk = substr($this->content, $start, max(1, $length));
+        return $chunk === false ? null : $chunk;
     }
 
 }

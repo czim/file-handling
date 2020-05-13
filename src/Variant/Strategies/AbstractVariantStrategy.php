@@ -26,10 +26,10 @@ abstract class AbstractVariantStrategy implements VariantStrategyInterface
      * Applies strategy to a file.
      *
      * @param ProcessableFileInterface $file
-     * @return ProcessableFileInterface|false
+     * @return ProcessableFileInterface|null
      * @throws VariantStrategyShouldNotBeAppliedException
      */
-    public function apply(ProcessableFileInterface $file)
+    public function apply(ProcessableFileInterface $file): ?ProcessableFileInterface
     {
         $this->file = $file;
 
@@ -39,20 +39,12 @@ abstract class AbstractVariantStrategy implements VariantStrategyInterface
 
         $result = $this->perform();
 
-        return ($result || null === $result) ? $this->file : false;
+        return ($result || null === $result) ? $this->file : null;
     }
 
-    /**
-     * Sets the options
-     *
-     * @param array $options
-     * @return $this
-     */
-    public function setOptions(array $options)
+    public function setOptions(array $options): void
     {
         $this->options = $options;
-
-        return $this;
     }
 
     /**
@@ -63,7 +55,7 @@ abstract class AbstractVariantStrategy implements VariantStrategyInterface
      * @return bool
      * @codeCoverageIgnore
      */
-    protected function shouldBeApplied()
+    protected function shouldBeApplied(): bool
     {
         return true;
     }
@@ -71,8 +63,8 @@ abstract class AbstractVariantStrategy implements VariantStrategyInterface
     /**
      * Performs manipulation of the file.
      *
-     * @return bool|null|void
+     * @return bool|null
      */
-    abstract protected function perform();
 
+    abstract protected function perform(): ?bool;
 }

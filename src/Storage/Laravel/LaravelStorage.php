@@ -52,7 +52,7 @@ class LaravelStorage implements StorageInterface
      * @param string $path
      * @return bool
      */
-    public function exists($path)
+    public function exists(string $path): bool
     {
         return $this->filesystem->exists($path);
     }
@@ -63,7 +63,7 @@ class LaravelStorage implements StorageInterface
      * @param string $path
      * @return string
      */
-    public function url($path)
+    public function url(string $path): string
     {
         return $this->prefixBaseUrl($path);
     }
@@ -76,7 +76,7 @@ class LaravelStorage implements StorageInterface
      * @param string $path
      * @return StoredFileInterface
      */
-    public function get($path)
+    public function get(string $path): StoredFileInterface
     {
         $raw = new RawStorableFile;
 
@@ -97,7 +97,7 @@ class LaravelStorage implements StorageInterface
      * @return StoredFileInterface
      * @throws FileStorageException
      */
-    public function store(StorableFileInterface $file, $path)
+    public function store(StorableFileInterface $file, string $path): StoredFileInterface
     {
         if ( ! $this->filesystem->put($path, $file->content())) {
             throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}'");
@@ -115,7 +115,7 @@ class LaravelStorage implements StorageInterface
      * @param string $path
      * @return bool
      */
-    public function delete($path)
+    public function delete(string $path): bool
     {
         return $this->filesystem->delete($path);
     }
@@ -124,7 +124,7 @@ class LaravelStorage implements StorageInterface
      * @param string $path
      * @return string
      */
-    protected function prefixBaseUrl($path)
+    protected function prefixBaseUrl(string $path): string
     {
         return $this->baseUrl . '/' . ltrim($path, '/');
     }

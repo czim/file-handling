@@ -11,14 +11,14 @@ interface VariantStrategyFactoryInterface
      * @param array  $options   options for the strategy
      * @return VariantStrategyInterface
      */
-    public function make($strategy, array $options = []);
+    public function make(string $strategy, array $options = []): VariantStrategyInterface;
 
     /**
      * Sets the configuration for the factory.
      *
      * @param array $config
-     * @return $this
+     * @return $this|VariantStrategyFactoryInterface
      */
-    public function setConfig(array $config);
 
+    public function setConfig(array $config): VariantStrategyFactoryInterface;
 }

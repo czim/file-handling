@@ -12,14 +12,14 @@ interface ProcessResultInterface
      *
      * @return StoredFileInterface[]    keyed by variant name (or 'original')
      */
-    public function storedFiles();
+    public function storedFiles(): array;
 
     /**
      * Returns a list of temporary files created while processing.
      *
      * @return StoredFileInterface[]
      */
-    public function temporaryFiles();
 
 
+    public function temporaryFiles(): array;
 }

@@ -58,7 +58,7 @@ class FileHandler implements FileHandlerInterface
      * @param array $options
      * @return ProcessResultInterface
      */
-    public function process(StorableFileInterface $source, TargetInterface $target, array $options = [])
+    public function process(StorableFileInterface $source, TargetInterface $target, array $options = []): ProcessResultInterface
     {
         $stored = [
             static::ORIGINAL => $this->storage->store($source, $target->original()),
@@ -91,7 +91,7 @@ class FileHandler implements FileHandlerInterface
      * @param array                 $options
      * @return ProcessResultInterface
      */
-    public function processVariant(StorableFileInterface $source, TargetInterface $target, $variant, array $options = [])
+    public function processVariant(StorableFileInterface $source, TargetInterface $target, $variant, array $options = []): ProcessResultInterface
     {
         $this->processor->clearTemporaryFiles();
 
@@ -112,7 +112,7 @@ class FileHandler implements FileHandlerInterface
      * @param string[]        $variants     keys for variants to include
      * @return string[]
      */
-    public function variantUrlsForTarget(TargetInterface $target, array $variants = [])
+    public function variantUrlsForTarget(TargetInterface $target, array $variants = []): array
     {
         $urls = [
             static::ORIGINAL => $this->storage->url($target->original()),
@@ -136,7 +136,7 @@ class FileHandler implements FileHandlerInterface
      * @param string[]        $variants     variant keys
      * @return bool
      */
-    public function delete(TargetInterface $target, array $variants = [])
+    public function delete(TargetInterface $target, array $variants = []): bool
     {
         $success = true;
 
@@ -160,7 +160,7 @@ class FileHandler implements FileHandlerInterface
      * @param string          $variant      'original' refers to the original file
      * @return bool
      */
-    public function deleteVariant(TargetInterface $target, $variant)
+    public function deleteVariant(TargetInterface $target, string $variant): bool
     {
         if ($variant == static::ORIGINAL) {
             $path = $target->original();

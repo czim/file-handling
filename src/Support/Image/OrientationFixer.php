@@ -44,30 +44,17 @@ class OrientationFixer
     }
 
 
-    /**
-     * @return $this
-     */
-    public function enableQuietMode()
+    public function enableQuietMode(): void
     {
         $this->quiet = true;
-
-        return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function disableQuietMode()
+    public function disableQuietMode(): void
     {
         $this->quiet = false;
-
-        return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isQuiet()
+    public function isQuiet(): bool
     {
         return $this->quiet;
     }
@@ -81,7 +68,7 @@ class OrientationFixer
      * @return bool
      * @throws ErrorException
      */
-    public function fixFile(SplFileInfo $file)
+    public function fixFile(SplFileInfo $file): bool
     {
         $filePath = $file->getRealPath();
 
@@ -108,7 +95,7 @@ class OrientationFixer
      * @return ImageInterface $image
      * @throws ErrorException
      */
-    public function fixImage($path, ImageInterface $image)
+    public function fixImage(string $path, ImageInterface $image): ImageInterface
     {
         // @codeCoverageIgnoreStart
         if ( ! function_exists('exif_read_data')) {

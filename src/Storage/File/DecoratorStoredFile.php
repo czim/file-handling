@@ -20,7 +20,7 @@ class DecoratorStoredFile implements StoredFileInterface
     /**
      * @var string
      */
-    protected $url;
+    protected $url = '';
 
     /**
      * @param StorableFileInterface $file
@@ -34,13 +34,10 @@ class DecoratorStoredFile implements StoredFileInterface
      * Sets the full public URL to the file.
      *
      * @param string $url
-     * @return $this
      */
-    public function setUrl($url)
+    public function setUrl(string $url): void
     {
         $this->url = $url;
-
-        return $this;
     }
 
     /**
@@ -48,7 +45,7 @@ class DecoratorStoredFile implements StoredFileInterface
      *
      * @return string
      */
-    public function url()
+    public function url(): string
     {
         return $this->url;
     }
@@ -58,7 +55,7 @@ class DecoratorStoredFile implements StoredFileInterface
      *
      * @return string
      */
-    public function content()
+    public function content(): string
     {
         return $this->file->content();
     }
@@ -69,7 +66,7 @@ class DecoratorStoredFile implements StoredFileInterface
      * @param string $path
      * @return bool
      */
-    public function copy($path)
+    public function copy(string $path): bool
     {
         return $this->file->copy($path);
     }
@@ -77,9 +74,9 @@ class DecoratorStoredFile implements StoredFileInterface
     /**
      * {@inheritDoc}
      */
-    public function delete()
+    public function delete(): void
     {
-        return $this->file->delete();
+        $this->file->delete();
     }
 
     /**
@@ -87,7 +84,7 @@ class DecoratorStoredFile implements StoredFileInterface
      *
      * @return string|null
      */
-    public function path()
+    public function path(): ?string
     {
         return $this->file->path();
     }
@@ -97,7 +94,7 @@ class DecoratorStoredFile implements StoredFileInterface
      *
      * @return string|null
      */
-    public function mimeType()
+    public function mimeType(): ?string
     {
         return $this->file->mimeType();
     }
@@ -105,9 +102,9 @@ class DecoratorStoredFile implements StoredFileInterface
     /**
      * Returns the (storage) name for the file.
      *
-     * @return string
+     * @return string|null
      */
-    public function name()
+    public function name(): ?string
     {
         return $this->file->name();
     }
@@ -117,7 +114,7 @@ class DecoratorStoredFile implements StoredFileInterface
      *
      * @return string|null
      */
-    public function extension()
+    public function extension(): ?string
     {
         return $this->file->extension();
     }
@@ -125,9 +122,9 @@ class DecoratorStoredFile implements StoredFileInterface
     /**
      * Returns the size of the file in bytes.
      *
-     * @return int
+     * @return int|null
      */
-    public function size()
+    public function size(): ?int
     {
         return $this->file->size();
     }
@@ -137,7 +134,7 @@ class DecoratorStoredFile implements StoredFileInterface
      *
      * @return bool
      */
-    public function isUploaded()
+    public function isUploaded(): bool
     {
         return $this->file->isUploaded();
     }

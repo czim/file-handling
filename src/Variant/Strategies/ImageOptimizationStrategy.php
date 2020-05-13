@@ -25,9 +25,9 @@ class ImageOptimizationStrategy extends AbstractImageStrategy
     /**
      * Performs manipulation of the file.
      *
-     * @return bool
+     * @return bool|null
      */
-    protected function perform()
+    protected function perform(): ?bool
     {
         $spl = new SplFileInfo($this->file->path());
 

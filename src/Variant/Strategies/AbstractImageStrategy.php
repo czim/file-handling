@@ -9,7 +9,7 @@ abstract class AbstractImageStrategy extends AbstractVariantStrategy
      *
      * @return bool
      */
-    protected function shouldBeApplied()
+    protected function shouldBeApplied(): bool
     {
         return 'image/' == substr($this->file->mimeType(), 0, 6);
     }

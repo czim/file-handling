@@ -11,9 +11,9 @@ class VideoScreenshotStrategy extends AbstractVideoStrategy
     /**
      * Performs manipulation of the file.
      *
-     * @return bool|null|void
+     * @return bool|null
      */
-    protected function perform()
+    protected function perform(): ?bool
     {
         $path = $this->file->path();
 
@@ -50,12 +50,11 @@ class VideoScreenshotStrategy extends AbstractVideoStrategy
         $this->file->setName($imageName);
         $this->file->setMimeType('image/jpeg');
         $this->file->setData($imagePath);
+
+        return null;
     }
 
-    /**
-     * @return int|null
-     */
-    protected function getSecondsConfigValue()
+    protected function getSecondsConfigValue(): ?int
     {
         if (array_key_exists('seconds', $this->options)) {
             return $this->options['seconds'];
@@ -64,10 +63,7 @@ class VideoScreenshotStrategy extends AbstractVideoStrategy
         return null;
     }
 
-    /**
-     * @return int|null
-     */
-    protected function getPercentageConfigValue()
+    protected function getPercentageConfigValue(): ?int
     {
         if (array_key_exists('percentage', $this->options)) {
             return $this->options['percentage'];
@@ -76,10 +72,7 @@ class VideoScreenshotStrategy extends AbstractVideoStrategy
         return null;
     }
 
-    /**
-     * @return string
-     */
-    protected function getFfpmegBinaryPath()
+    protected function getFfpmegBinaryPath(): string
     {
         if (array_key_exists('ffmpeg', $this->options)) {
             return $this->options['ffmpeg'];
@@ -90,10 +83,7 @@ class VideoScreenshotStrategy extends AbstractVideoStrategy
         // @codeCoverageIgnoreEnd
     }
 
-    /**
-     * @return string
-     */
-    protected function getFfprobeBinaryPath()
+    protected function getFfprobeBinaryPath(): string
     {
         if (array_key_exists('ffprobe', $this->options)) {
             return $this->options['ffprobe'];

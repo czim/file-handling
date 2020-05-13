@@ -33,7 +33,7 @@ class Optimizer
      * @param array       $options
      * @return bool
      */
-    public function optimize(SplFileInfo $file, array $options)
+    public function optimize(SplFileInfo $file, array $options): bool
     {
         $options  = $this->arrayGet($options, 'convertOptions', []);
         $filePath = $file->getRealPath();

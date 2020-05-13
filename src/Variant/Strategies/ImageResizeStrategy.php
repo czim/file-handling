@@ -27,7 +27,7 @@ class ImageResizeStrategy extends AbstractImageStrategy
      *
      * @return bool|null
      */
-    protected function perform()
+    protected function perform(): ?bool
     {
         $spl = new SplFileInfo($this->file->path());
 

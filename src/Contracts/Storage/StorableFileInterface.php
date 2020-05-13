@@ -11,7 +11,7 @@ interface StorableFileInterface
      *
      * @return string
      */
-    public function content();
+    public function content(): string;
 
     /**
      * Writes a copy to a given (local) file path;
@@ -19,55 +19,55 @@ interface StorableFileInterface
      * @param string $path
      * @return bool
      */
-    public function copy($path);
+    public function copy(string $path): bool;
 
     /**
      * Deletes the storable file (if possible and allowed).
      *
      * @throws StorableFileCouldNotBeDeletedException
      */
-    public function delete();
+    public function delete(): void;
 
     /**
      * Returns (local) path to file, if possible.
      *
      * @return string|null
      */
-    public function path();
+    public function path(): ?string;
 
     /**
      * Returns the content type of the file.
      *
      * @return string|null
      */
-    public function mimeType();
+    public function mimeType(): ?string;
 
     /**
      * Returns the (storage) name for the file.
      *
-     * @return string
+     * @return string|null
      */
-    public function name();
+    public function name(): ?string;
 
     /**
      * Returns the extension for the file.
      *
      * @return string|null
      */
-    public function extension();
+    public function extension(): ?string;
 
     /**
      * Returns the size of the file in bytes.
      *
-     * @return int
+     * @return int|null
      */
-    public function size();
+    public function size(): ?int;
 
     /**
      * Returns whether the file was marked as uploaded.
      *
      * @return bool
      */
-    public function isUploaded();
 
+    public function isUploaded(): bool;
 }

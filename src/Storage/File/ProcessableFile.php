@@ -26,9 +26,8 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
      * Initializes the storable file with mixed data.
      *
      * @param mixed $data
-     * @return $this
      */
-    public function setData($data)
+    public function setData($data): void
     {
         if ($data instanceof SplFileInfo) {
             $this->file = $data;
@@ -37,14 +36,12 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
         }
 
         $this->setDerivedFileProperties();
-
-        return $this;
     }
 
     /**
      * Sets properties based on the given data.
      */
-    protected function setDerivedFileProperties()
+    protected function setDerivedFileProperties(): void
     {
         if ( ! $this->file || ! file_exists($this->file->getRealPath())) {
             throw new RuntimeException("Local file not found at {$this->file->getPath()}");
@@ -62,15 +59,15 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
      *
      * @return string
      */
-    public function content()
+    public function content(): string
     {
-        return file_get_contents($this->file->getRealPath());
+        return file_get_contents($this->file->getRealPath()) ?: '';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function copy($path)
+    public function copy(string $path): bool
     {
         return copy($this->path(), $path);
     }
@@ -78,7 +75,7 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
     /**
      * {@inheritDoc}
      */
-    public function delete()
+    public function delete(): void
     {
         try {
             $success = unlink($this->path());
@@ -102,9 +99,9 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
     /**
      * {@inheritdoc}
      */
-    public function path()
+    public function path(): string
     {
-        return $this->file->getRealPath();
+        return $this->file->getRealPath() ?: '';
     }
 
 }

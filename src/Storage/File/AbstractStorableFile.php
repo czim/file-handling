@@ -1,11 +1,12 @@
 <?php
 namespace Czim\FileHandling\Storage\File;
 
+use Czim\FileHandling\Contracts\Storage\DataSettableInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 use Czim\FileHandling\Contracts\Storage\UploadedMarkableInterface;
 use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 
-abstract class AbstractStorableFile implements StorableFileInterface, UploadedMarkableInterface
+abstract class AbstractStorableFile implements StorableFileInterface, DataSettableInterface, UploadedMarkableInterface
 {
 
     /**
@@ -30,27 +31,19 @@ abstract class AbstractStorableFile implements StorableFileInterface, UploadedMa
 
 
     /**
-     * Initializes the storable file with mixed data.
-     *
-     * @param mixed $data
-     * @return $this
-     */
-    abstract public function setData($data);
-
-    /**
      * Writes a copy to a given (local) file path;
      *
      * @param string $path
      * @return bool
      */
-    abstract public function copy($path);
+    abstract public function copy(string $path): bool;
 
     /**
      * Deletes the storable file (if possible and allowed).
      *
      * @throws StorableFileCouldNotBeDeletedException
      */
-    public function delete()
+    public function delete(): void
     {
         throw new StorableFileCouldNotBeDeletedException(
             "File of type '" . get_class($this) . "' may not be deleted"
@@ -61,26 +54,20 @@ abstract class AbstractStorableFile implements StorableFileInterface, UploadedMa
      * Sets the mime type for the file.
      *
      * @param string $type
-     * @return $this
      */
-    public function setMimeType($type)
+    public function setMimeType(string $type): void
     {
         $this->mimeType = $type;
-
-        return $this;
     }
 
     /**
      * Sets the name for the file.
      *
      * @param string $name
-     * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -88,7 +75,7 @@ abstract class AbstractStorableFile implements StorableFileInterface, UploadedMa
      *
      * @param bool $uploaded
      */
-    public function setUploaded($uploaded = true)
+    public function setUploaded(bool $uploaded = true): void
     {
         $this->uploaded = (bool) $uploaded;
     }
@@ -98,7 +85,7 @@ abstract class AbstractStorableFile implements StorableFileInterface, UploadedMa
      *
      * @return string|null
      */
-    public function mimeType()
+    public function mimeType(): ?string
     {
         return $this->mimeType;
     }
@@ -106,9 +93,9 @@ abstract class AbstractStorableFile implements StorableFileInterface, UploadedMa
     /**
      * Returns the (storage) name for the file.
      *
-     * @return string
+     * @return string|null
      */
-    public function name()
+    public function name(): ?string
     {
         return $this->name;
     }
@@ -118,7 +105,7 @@ abstract class AbstractStorableFile implements StorableFileInterface, UploadedMa
      *
      * @return string|null
      */
-    public function extension()
+    public function extension(): ?string
     {
         if (null === $this->name) {
             return null;
@@ -130,9 +117,9 @@ abstract class AbstractStorableFile implements StorableFileInterface, UploadedMa
     /**
      * Returns the size of the file in bytes.
      *
-     * @return int
+     * @return int|null
      */
-    public function size()
+    public function size(): ?int
     {
         return $this->size;
     }
@@ -142,7 +129,7 @@ abstract class AbstractStorableFile implements StorableFileInterface, UploadedMa
      *
      * @return bool
      */
-    public function isUploaded()
+    public function isUploaded(): bool
     {
         return $this->uploaded;
     }
@@ -152,7 +139,7 @@ abstract class AbstractStorableFile implements StorableFileInterface, UploadedMa
      *
      * @return string|null
      */
-    public function path()
+    public function path(): ?string
     {
         return null;
     }

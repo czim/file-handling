@@ -31,7 +31,7 @@ class ProcessResult implements ProcessResultInterface
      *
      * @return StoredFileInterface[]    keyed by variant name (or 'original')
      */
-    public function storedFiles()
+    public function storedFiles(): array
     {
         return $this->storedFiles;
     }
@@ -41,7 +41,7 @@ class ProcessResult implements ProcessResultInterface
      *
      * @return StoredFileInterface[]
      */
-    public function temporaryFiles()
+    public function temporaryFiles(): array
     {
         return $this->temporaryFiles;
     }

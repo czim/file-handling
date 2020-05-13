@@ -13,6 +13,6 @@ interface ImageResizerInterface
      * @param array       $options
      * @return bool
      */
-    public function resize(SplFileInfo $file, array $options);
 
+    public function resize(SplFileInfo $file, array $options): bool;
 }

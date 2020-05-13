@@ -31,7 +31,7 @@ class UrlDownloader implements UrlDownloaderInterface
      * @return string
      * @throws CouldNotRetrieveRemoteFileException
      */
-    public function download($url)
+    public function download(string $url): string
     {
         $localPath = $this->makeLocalTemporaryPath();
 
@@ -62,7 +62,7 @@ class UrlDownloader implements UrlDownloaderInterface
      * @throws CouldNotRetrieveRemoteFileException
      * @codeCoverageIgnore
      */
-    protected function downloadToTempLocalPath($url, $localPath)
+    protected function downloadToTempLocalPath(string $url, string $localPath): void
     {
         $curlError = 'unknown error';
 
@@ -115,7 +115,7 @@ class UrlDownloader implements UrlDownloaderInterface
      * @return string
      * @throws CouldNotRetrieveRemoteFileException
      */
-    protected function renameLocalTemporaryFileWithAddedExtension($path, $name)
+    protected function renameLocalTemporaryFileWithAddedExtension(string $path, string $name): string
     {
         try {
             $extension = $this->mimeTypeHelper->guessExtensionForPath($path);
@@ -136,7 +136,7 @@ class UrlDownloader implements UrlDownloaderInterface
      * @return string
      * @codeCoverageIgnore
      */
-    protected function makeLocalTemporaryPath()
+    protected function makeLocalTemporaryPath(): string
     {
         return sys_get_temp_dir() . '/' . uniqid('filehandling-download-');
     }
@@ -149,7 +149,7 @@ class UrlDownloader implements UrlDownloaderInterface
      * @return string
      * @throws CouldNotRetrieveRemoteFileException
      */
-    protected function renameFile($path, $newName)
+    protected function renameFile(string $path, string $newName): string
     {
         $newPath = pathinfo($path, PATHINFO_DIRNAME) . '/' . $newName;
 
@@ -177,7 +177,7 @@ class UrlDownloader implements UrlDownloaderInterface
      * @param string $url
      * @return string
      */
-    protected function normalizeUrl($url)
+    protected function normalizeUrl(string $url): string
     {
         return str_replace(' ', '%20', $url);
     }

@@ -28,9 +28,9 @@ class SimpleContainer implements ContainerInterface
     /**
      * @param string   $id
      * @param callable $callable
-     * @return $this
+     * @return $this|ContainerInterface
      */
-    public function registerCallable($id, callable $callable)
+    public function registerCallable(string $id, callable $callable): ContainerInterface
     {
         $this->bindings[ $id ]  = $callable;
         $this->callables[ $id ] = true;
@@ -43,7 +43,7 @@ class SimpleContainer implements ContainerInterface
      * @param mixed $instance
      * @return $this
      */
-    public function registerInstance($id, $instance)
+    public function registerInstance(string $id, $instance): ContainerInterface
     {
         $this->bindings[ $id ]  = $instance;
         $this->callables[ $id ] = false;

@@ -62,9 +62,8 @@ class VariantProcessor implements VariantProcessorInterface
      * Sets configuration for the processor.
      *
      * @param array $config
-     * @return $this
      */
-    public function setConfig(array $config)
+    public function setConfig(array $config): void
     {
         $this->config = $config;
 
@@ -73,8 +72,6 @@ class VariantProcessor implements VariantProcessorInterface
                 $config[ static::CONFIG_VARIANT_FACTORY ]
             );
         }
-
-        return $this;
     }
 
     /**
@@ -82,7 +79,7 @@ class VariantProcessor implements VariantProcessorInterface
      *
      * @return StorableFileInterface[]
      */
-    public function getTemporaryFiles()
+    public function getTemporaryFiles(): array
     {
         return $this->temporaryFiles;
     }
@@ -92,7 +89,7 @@ class VariantProcessor implements VariantProcessorInterface
      *
      * Note that this does not delete the files, just the processor's history of them.
      */
-    public function clearTemporaryFiles()
+    public function clearTemporaryFiles(): void
     {
         $this->temporaryFiles = [];
     }
@@ -107,13 +104,13 @@ class VariantProcessor implements VariantProcessorInterface
      * @throws VariantStrategyNotAppliedException
      * @throws CouldNotProcessDataException
      */
-    public function process(StorableFileInterface $source, $variant, array $strategies)
+    public function process(StorableFileInterface $source, string $variant, array $strategies): StorableFileInterface
     {
         $file = $this->makeTemporaryCopy($source);
 
         foreach ($strategies as $strategy => $options) {
-
-            $instance = $this->strategyFactory->make($strategy)->setOptions($options);
+            $instance = $this->strategyFactory->make($strategy);
+            $instance->setOptions($options);
 
             // The file returned by the strategy step may have altered the path,
             // name, extension and/or mime type of the file being processed.
@@ -133,7 +130,7 @@ class VariantProcessor implements VariantProcessorInterface
                 continue;
             }
 
-            if (false === $newFile) {
+            if ($newFile === null) {
                 throw new VariantStrategyNotAppliedException(
                     "Failed to apply '{$strategy}' to '{$source->path()}'"
                 );
@@ -150,7 +147,7 @@ class VariantProcessor implements VariantProcessorInterface
      *
      * @return bool
      */
-    protected function shouldThrowExceptionForUnappliedStrategy()
+    protected function shouldThrowExceptionForUnappliedStrategy(): bool
     {
         if ( ! array_key_exists(static::CONFIG_FORCE_APPLY, $this->config)) {
             return false;
@@ -166,7 +163,7 @@ class VariantProcessor implements VariantProcessorInterface
      * @return ProcessableFileInterface
      * @throws CouldNotProcessDataException
      */
-    protected function makeTemporaryCopy(StorableFileInterface $source)
+    protected function makeTemporaryCopy(StorableFileInterface $source): ProcessableFileInterface
     {
         $path = $this->makeLocalTemporaryPath($source->extension());
 
@@ -196,17 +193,13 @@ class VariantProcessor implements VariantProcessorInterface
         return $file;
     }
 
-    /**
-     * @param string $extension
-     * @return string
-     */
-    protected function makeLocalTemporaryPath($extension = null)
+    protected function makeLocalTemporaryPath(?string $extension = null): string
     {
         return sys_get_temp_dir() . '/' . uniqid('filehandling-variant-')
              . ($extension ? ".{$extension}" : null);
     }
 
-    protected function rememberTemporaryFile(StorableFileInterface $file)
+    protected function rememberTemporaryFile(StorableFileInterface $file): void
     {
         $this->temporaryFiles[] = $file;
     }

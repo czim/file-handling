@@ -28,7 +28,7 @@ class MimeTypeHelper implements MimeTypeHelperInterface
      * @param string $path
      * @return string
      */
-    public function guessMimeTypeForPath($path)
+    public function guessMimeTypeForPath(string $path): string
     {
         if (class_exists(MimeTypes::class)) {
             return (new MimeTypes())->guessMimeType($path);
@@ -44,7 +44,7 @@ class MimeTypeHelper implements MimeTypeHelperInterface
      * @param string $content
      * @return string
      */
-    public function guessMimeTypeForContent($content)
+    public function guessMimeTypeForContent(string $content): string
     {
         $finfo = new finfo(FILEINFO_MIME);
 
@@ -62,7 +62,7 @@ class MimeTypeHelper implements MimeTypeHelperInterface
      * @param string $path
      * @return string
      */
-    public function guessExtensionForPath($path)
+    public function guessExtensionForPath(string $path): string
     {
         return $this->guessExtensionForMimeType(
             $this->guessMimeTypeForPath($path)
@@ -77,7 +77,7 @@ class MimeTypeHelper implements MimeTypeHelperInterface
      * @param string $type
      * @return string
      */
-    public function guessExtensionForMimeType($type)
+    public function guessExtensionForMimeType(string $type): string
     {
         if (class_exists(MimeTypes::class)) {
             $extensions = (new MimeTypes())->getExtensions($type);

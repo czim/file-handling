@@ -1,29 +1,19 @@
 <?php
 namespace Czim\FileHandling\Contracts\Storage;
 
-interface ProcessableFileInterface extends StorableFileInterface
+interface ProcessableFileInterface extends StorableFileInterface, DataSettableInterface
 {
-
-    /**
-     * @param \SplFileInfo|string $data     file or path
-     * @return $this
-     */
-    public function setData($data);
-
     /**
      * Sets a new mime type for the processed file.
      *
      * @param string $mimeType
-     * @return $this
      */
-    public function setMimeType($mimeType);
+    public function setMimeType(string $mimeType): void;
 
     /**
      * Sets a new name for the processed file.
      *
      * @param string $name
-     * @return $this
      */
-    public function setName($name);
-
+    public function setName(string $name): void;
 }

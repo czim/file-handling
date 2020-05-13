@@ -28,7 +28,7 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
      *
      * @return bool|null
      */
-    protected function perform()
+    protected function perform(): ?bool
     {
         $image = $this->imagine->open($this->file->path());
 
@@ -85,16 +85,13 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
         return true;
     }
 
-    /**
-     * @return ImageInterface|bool
-     */
-    protected function getWatermarkImage()
+    protected function getWatermarkImage(): ?ImageInterface
     {
         // Get image to embed as watermark
         $watermarkPath = $this->getWatermarkImagePath();
 
         if ( ! $watermarkPath) {
-            return false;
+            return null;
         }
 
         try {
@@ -106,10 +103,7 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
         }
     }
 
-    /**
-     * @return string
-     */
-    protected function getWatermarkPosition()
+    protected function getWatermarkPosition(): string
     {
         if (array_key_exists('position', $this->options)) {
             return $this->options['position'];
@@ -118,16 +112,13 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
         return 'bottom-right';
     }
 
-    /**
-     * @return string|false
-     */
-    protected function getWatermarkImagePath()
+    protected function getWatermarkImagePath(): ?string
     {
         if (array_key_exists('watermark', $this->options)) {
             return $this->options['watermark'];
         }
 
-        return false;
+        return null;
     }
 
 }

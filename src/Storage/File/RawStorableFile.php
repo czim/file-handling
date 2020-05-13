@@ -16,19 +16,15 @@ class RawStorableFile extends AbstractStorableFile
      * Initializes the storable file with mixed data.
      *
      * @param mixed $data
-     * @return $this
      */
-    public function setData($data)
+    public function setData($data): void
     {
         if ( ! is_string($data)) {
             throw new UnexpectedValueException('Expected string with file content');
         }
 
         $this->content = $data;
-
-        $this->size = strlen($data);
-
-        return $this;
+        $this->size    = strlen($data);
     }
 
     /**
@@ -36,7 +32,7 @@ class RawStorableFile extends AbstractStorableFile
      *
      * @return string
      */
-    public function content()
+    public function content(): string
     {
         return $this->content;
     }
@@ -44,7 +40,7 @@ class RawStorableFile extends AbstractStorableFile
     /**
      * {@inheritdoc}
      */
-    public function copy($path)
+    public function copy(string $path): bool
     {
         return (bool) file_put_contents($path, $this->content());
     }
