@@ -61,6 +61,22 @@ class DecoratorStoredFile implements StoredFileInterface
     }
 
     /**
+     * @return resource|null
+     */
+    public function openStream()
+    {
+        return $this->file->openStream();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function closeStream($resource): void
+    {
+        $this->file->closeStream($resource);
+    }
+
+    /**
      * Writes a copy to a (local) path.
      *
      * @param string $path

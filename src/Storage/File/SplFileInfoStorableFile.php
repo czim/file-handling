@@ -5,6 +5,7 @@ namespace Czim\FileHandling\Storage\File;
 use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 use RuntimeException;
 use SplFileInfo;
+use Throwable;
 use UnexpectedValueException;
 
 class SplFileInfoStorableFile extends AbstractStorableFile
@@ -55,6 +56,40 @@ class SplFileInfoStorableFile extends AbstractStorableFile
     public function content(): string
     {
         return file_get_contents($this->file->getRealPath());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function openStream()
+    {
+        $resource = fopen($this->file->getRealPath(), 'r');
+
+        if ($resource === false) {
+            throw new UnexpectedValueException("Failed to open file for reading at '{$this->file->getRealPath()}'");
+        }
+
+        return $resource;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function closeStream($resource): void
+    {
+        if ($resource === null) {
+            return;
+        }
+
+        try {
+            fclose($resource);
+        } catch (Throwable $exception) {
+            throw new UnexpectedValueException(
+                "Failed to close resource for file '{$this->file->getRealPath()}'",
+                $exception->getCode(),
+                $exception
+            );
+        }
     }
 
     /**

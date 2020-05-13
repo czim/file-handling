@@ -31,12 +31,19 @@ abstract class AbstractStorableFile implements StorableFileInterface, DataSettab
 
 
     /**
-     * Writes a copy to a given (local) file path;
-     *
-     * @param string $path
-     * @return bool
+     * {@inheritDoc}
      */
-    abstract public function copy(string $path): bool;
+    public function openStream()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function closeStream($resource): void
+    {
+    }
 
     /**
      * Deletes the storable file (if possible and allowed).

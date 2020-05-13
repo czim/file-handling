@@ -14,6 +14,26 @@ interface StorableFileInterface
     public function content(): string;
 
     /**
+     * Returns the source as a (read-only) resource, if possible.
+     *
+     * Not all storable files should be expected to support this.
+     * Where not available, StorableFileInterface::content() should be used as a fallback.
+     *
+     * Warning: when calling this method, a stream is opened, but it is not automatically closed!
+     * Clients of this method must close the stream when they are done with it, by calling closeStream().
+     *
+     * @return resource|null
+     */
+    public function openStream();
+
+    /**
+     * Closes a stream previously opened.
+     *
+     * @param resource|null $resource   stream resource handle previously given by openStream().
+     */
+    public function closeStream($resource): void;
+
+    /**
      * Writes a copy to a given (local) file path;
      *
      * @param string $path
