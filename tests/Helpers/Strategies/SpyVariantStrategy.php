@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Helpers\Strategies;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
@@ -7,7 +8,6 @@ use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 
 class SpyVariantStrategy implements VariantStrategyInterface
 {
-
     /**
      * @var bool
      */
@@ -55,5 +55,4 @@ class SpyVariantStrategy implements VariantStrategyInterface
     {
         $this->optionsSet = true;
     }
-
 }

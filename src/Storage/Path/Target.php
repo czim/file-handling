@@ -190,5 +190,4 @@ class Target implements TargetInterface, TargetSetupInterface
             . $filename
             . '.' . pathinfo($path, PATHINFO_EXTENSION);
     }
-
 }

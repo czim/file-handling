@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Handler;
 
 use Czim\FileHandling\Contracts\Handler\FileHandlerInterface;
@@ -10,7 +11,6 @@ use Czim\FileHandling\Contracts\Variant\VariantProcessorInterface;
 
 class FileHandler implements FileHandlerInterface
 {
-
     /**
      * The name of the original image 'variant'.
      *
@@ -175,5 +175,4 @@ class FileHandler implements FileHandlerInterface
 
         return $this->storage->delete($path);
     }
-
 }

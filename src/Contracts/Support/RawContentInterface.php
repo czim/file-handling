@@ -1,9 +1,9 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Support;
 
 interface RawContentInterface
 {
-
     /**
      * Sets the content.
      *
@@ -30,6 +30,5 @@ interface RawContentInterface
      * @param int $length
      * @return string|null
      */
-
     public function chunk(int $start = 0, int $length = 512): ?string;
 }

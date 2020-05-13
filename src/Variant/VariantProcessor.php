@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Variant;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
@@ -118,9 +119,7 @@ class VariantProcessor implements VariantProcessorInterface
 
             try {
                 $newFile = $instance->apply($file);
-
             } catch (VariantStrategyShouldNotBeAppliedException $e) {
-
                 if ($this->shouldThrowExceptionForUnappliedStrategy()) {
                     throw new VariantStrategyNotAppliedException(
                         "Strategy '{$strategy}' not applied to '{$source->path()}'"
@@ -169,7 +168,6 @@ class VariantProcessor implements VariantProcessorInterface
 
         try {
             $success = $source->copy($path);
-
             // @codeCoverageIgnoreStart
         } catch (Exception $e) {
             throw new CouldNotProcessDataException("Failed to make variant copy to '{$path}'", $e->getCode(), $e);
@@ -203,5 +201,4 @@ class VariantProcessor implements VariantProcessorInterface
     {
         $this->temporaryFiles[] = $file;
     }
-
 }

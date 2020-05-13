@@ -1,9 +1,9 @@
 <?php
+
 namespace Czim\FileHandling\Variant\Strategies;
 
 abstract class AbstractVideoStrategy extends AbstractVariantStrategy
 {
-
     /**
      * {@inheritDoc}
      */
@@ -11,5 +11,4 @@ abstract class AbstractVideoStrategy extends AbstractVariantStrategy
     {
         return 'video/' == substr($this->file->mimeType(), 0, 6);
     }
-
 }

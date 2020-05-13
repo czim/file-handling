@@ -1,11 +1,11 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Variant;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
 
 interface VariantProcessorInterface
 {
-
     /**
      * Returns a processed variant for a given source file.
      *
@@ -28,6 +28,5 @@ interface VariantProcessorInterface
      *
      * Note that this does not delete the files, just the processor's history of them.
      */
-
     public function clearTemporaryFiles(): void;
 }

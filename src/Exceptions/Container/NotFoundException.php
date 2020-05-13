@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Exceptions\Container;
 
 use Psr\Container\NotFoundExceptionInterface;

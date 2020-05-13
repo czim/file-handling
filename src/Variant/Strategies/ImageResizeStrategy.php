@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Variant\Strategies;
 
 use Czim\FileHandling\Support\Image\Resizer;
@@ -6,7 +7,6 @@ use SplFileInfo;
 
 class ImageResizeStrategy extends AbstractImageStrategy
 {
-
     /**
      * @var Resizer
      */
@@ -33,5 +33,4 @@ class ImageResizeStrategy extends AbstractImageStrategy
 
         return (bool) $this->resizer->resize($spl, $this->options);
     }
-
 }

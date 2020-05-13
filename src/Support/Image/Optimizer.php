@@ -1,22 +1,18 @@
 <?php
+
 namespace Czim\FileHandling\Support\Image;
 
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 use SplFileInfo;
 
-/**
- * Class Optimizer
- *
- */
 class Optimizer
 {
-
     /**
      * @var $optimizerChain
      */
     protected $optimizerChain;
 
-    
+
     /**
      * @param OptimizerChainFactory $optimizer
      */
@@ -24,7 +20,7 @@ class Optimizer
     {
         $this->optimizerChain = $optimizerChain::create();
     }
-    
+
 
     /**
      * Optimize an image using given options.
@@ -63,5 +59,4 @@ class Optimizer
 
         return $array[ $key ];
     }
-
 }

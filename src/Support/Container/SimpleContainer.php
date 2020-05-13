@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Support\Container;
 
 use Czim\FileHandling\Exceptions\Container\NotFoundException;
@@ -14,7 +15,6 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class SimpleContainer implements ContainerInterface
 {
-
     /**
      * @var array
      */
@@ -89,5 +89,4 @@ class SimpleContainer implements ContainerInterface
     {
         return array_key_exists($id, $this->bindings);
     }
-
 }

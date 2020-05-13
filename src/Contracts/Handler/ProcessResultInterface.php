@@ -6,7 +6,6 @@ use Czim\FileHandling\Contracts\Storage\StoredFileInterface;
 
 interface ProcessResultInterface
 {
-
     /**
      * Returns the files stored as a result of processing.
      *
@@ -19,7 +18,5 @@ interface ProcessResultInterface
      *
      * @return StoredFileInterface[]
      */
-
-
     public function temporaryFiles(): array;
 }

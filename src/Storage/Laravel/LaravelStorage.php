@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Storage\Laravel;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
@@ -11,7 +12,6 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 
 class LaravelStorage implements StorageInterface
 {
-
     /**
      * @var Filesystem
      */
@@ -45,7 +45,7 @@ class LaravelStorage implements StorageInterface
         $this->isLocal    = $isLocal;
         $this->baseUrl    = trim($baseUrl ?: '', '/');
     }
-    
+
     /**
      * Returns whether a stored file exists.
      *
@@ -128,5 +128,4 @@ class LaravelStorage implements StorageInterface
     {
         return $this->baseUrl . '/' . ltrim($path, '/');
     }
-    
 }

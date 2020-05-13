@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Variant\Strategies;
 
 use Czim\FileHandling\Support\Image\Optimizer;
@@ -6,7 +7,6 @@ use SplFileInfo;
 
 class ImageOptimizationStrategy extends AbstractImageStrategy
 {
-
     /**
      * @var imageOptimizer
      */
@@ -33,5 +33,4 @@ class ImageOptimizationStrategy extends AbstractImageStrategy
 
         return (bool) $this->optimizer->optimize($spl, $this->options);
     }
-
 }

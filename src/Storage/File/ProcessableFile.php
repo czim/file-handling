@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Storage\File;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
@@ -8,7 +9,6 @@ use SplFileInfo;
 
 class ProcessableFile extends AbstractStorableFile implements ProcessableFileInterface
 {
-
     /**
      * Local path to file.
      *
@@ -79,9 +79,7 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
     {
         try {
             $success = unlink($this->path());
-
         } catch (\Exception $e) {
-
             throw new StorableFileCouldNotBeDeletedException(
                 "Failed to unlink '{$this->path()}'",
                 $e->getCode(),
@@ -103,5 +101,4 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
     {
         return $this->file->getRealPath() ?: '';
     }
-
 }

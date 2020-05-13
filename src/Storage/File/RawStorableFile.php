@@ -1,11 +1,11 @@
 <?php
+
 namespace Czim\FileHandling\Storage\File;
 
 use UnexpectedValueException;
 
 class RawStorableFile extends AbstractStorableFile
 {
-
     /**
      * @var string
      */
@@ -44,5 +44,4 @@ class RawStorableFile extends AbstractStorableFile
     {
         return (bool) file_put_contents($path, $this->content());
     }
-
 }

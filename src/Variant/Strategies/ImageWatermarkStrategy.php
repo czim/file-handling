@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Variant\Strategies;
 
 use Imagine\Image\ImageInterface;
@@ -36,16 +37,13 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
             return false;
         }
 
-
         $imageSize     = $image->getSize();
         $watermarkSize = $watermark->getSize();
 
         // Calculate the placement of the watermark (we're aiming for the bottom right corner here).
 
-
         // Place the image in the correct position
         switch ($this->getWatermarkPosition()) {
-
             case 'top-left':
                 $position = new \Imagine\Image\Point(0, 0);
                 break;
@@ -96,9 +94,7 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
 
         try {
             return $this->imagine->open($watermarkPath);
-
         } catch (\Exception $e) {
-
             throw new RuntimeException("Could not find or open watermark image at '{$watermarkPath}'", $e->getCode(), $e);
         }
     }
@@ -120,5 +116,4 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
 
         return null;
     }
-
 }

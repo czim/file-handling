@@ -1,6 +1,7 @@
 <?php
 namespace Czim\FileHandling\Test\Unit\Support\Content;
 
+
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileFactoryInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
@@ -17,7 +18,6 @@ use org\bovigo\vfs\vfsStreamDirectory;
 
 class VariantProcessorTest extends TestCase
 {
-
     /**
      * @var vfsStreamDirectory
      */
@@ -292,5 +292,4 @@ class VariantProcessorTest extends TestCase
     {
         return Mockery::mock(VariantStrategyFactoryInterface::class);
     }
-
 }

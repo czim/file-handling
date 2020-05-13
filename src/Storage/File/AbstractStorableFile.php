@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Storage\File;
 
 use Czim\FileHandling\Contracts\Storage\DataSettableInterface;
@@ -8,7 +9,6 @@ use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 
 abstract class AbstractStorableFile implements StorableFileInterface, DataSettableInterface, UploadedMarkableInterface
 {
-
     /**
      * @var string|null
      */
@@ -143,5 +143,4 @@ abstract class AbstractStorableFile implements StorableFileInterface, DataSettab
     {
         return null;
     }
-
 }

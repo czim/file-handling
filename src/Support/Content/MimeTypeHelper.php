@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Support\Content;
 
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
@@ -10,8 +11,6 @@ use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
- * Class MimeTypeHelper
- *
  * @codeCoverageIgnore
  */
 class MimeTypeHelper implements MimeTypeHelperInterface

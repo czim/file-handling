@@ -1,9 +1,9 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Storage;
 
 interface StoredFileInterface extends StorableFileInterface
 {
-
     /**
      * Sets the full public URL to the file.
      *
@@ -16,6 +16,5 @@ interface StoredFileInterface extends StorableFileInterface
      *
      * @return string
      */
-
     public function url(): string;
 }

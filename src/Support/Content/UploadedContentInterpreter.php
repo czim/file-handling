@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Support\Content;
 
 use Czim\FileHandling\Contracts\Support\ContentInterpreterInterface;
@@ -8,7 +9,6 @@ use Czim\FileHandling\Enums\ContentTypes;
 class UploadedContentInterpreter implements ContentInterpreterInterface
 {
     const FULL_DATA_THRESHOLD = 2048;
-
     const DATAURI_REGEX      = '#^data:[-\w]+/[-\w\+\.]+;base64#';
     const DATAURI_TEST_CHUNK = 100;
 
@@ -38,5 +38,4 @@ class UploadedContentInterpreter implements ContentInterpreterInterface
 
         return ContentTypes::RAW;
     }
-    
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Support\Image;
 
 use ErrorException;
@@ -107,7 +108,6 @@ class OrientationFixer
 
             try {
                 $exif = @exif_read_data($path);
-
                 // @codeCoverageIgnoreStart
             } catch (ErrorException $e) {
                 if ($this->quiet) {
@@ -158,5 +158,4 @@ class OrientationFixer
 
         return $image->strip();
     }
-
 }

@@ -1,9 +1,9 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Storage;
 
 interface TargetSetupInterface
 {
-
     /**
      * @param string[] $filenames
      */
@@ -24,6 +24,5 @@ interface TargetSetupInterface
      * @param string $variant
      * @param string $extension
      */
-
     public function setVariantExtension(string $variant, string $extension): void;
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Variant;
 
 use Czim\FileHandling\Contracts\Variant\VariantStrategyFactoryInterface;
@@ -73,8 +74,9 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
 
     protected function resolveStrategyClassName(string $strategy): string
     {
-        if (    array_key_exists(static::CONFIG_ALIASES, $this->config)
-            &&  array_key_exists($strategy, $this->config[ static::CONFIG_ALIASES ])
+        if (
+            array_key_exists(static::CONFIG_ALIASES, $this->config)
+            && array_key_exists($strategy, $this->config[ static::CONFIG_ALIASES ])
         ) {
             $strategyClass = $this->config[ static::CONFIG_ALIASES ][ $strategy ];
         } else {
@@ -96,5 +98,4 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
     {
         return $this->container->get($class);
     }
-
 }

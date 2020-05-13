@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Support\Download;
 
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
@@ -8,7 +9,6 @@ use Exception;
 
 class UrlDownloader implements UrlDownloaderInterface
 {
-
     /**
      * @var MimeTypeHelperInterface
      */
@@ -79,7 +79,6 @@ class UrlDownloader implements UrlDownloaderInterface
             }
 
             curl_close($ch);
-
         } catch (Exception $e) {
             throw new CouldNotRetrieveRemoteFileException(
                 "Failed to download file content from '{$url}': {$e->getMessage()}",
@@ -98,9 +97,7 @@ class UrlDownloader implements UrlDownloaderInterface
             if (false === file_put_contents($localPath, $rawFile)) {
                 throw new CouldNotRetrieveRemoteFileException('file_put_contents call failed');
             }
-
         } catch (Exception $e) {
-
             throw new CouldNotRetrieveRemoteFileException(
                 'file_put_contents call threw an exception',
                 $e->getCode(),
@@ -119,9 +116,7 @@ class UrlDownloader implements UrlDownloaderInterface
     {
         try {
             $extension = $this->mimeTypeHelper->guessExtensionForPath($path);
-
         } catch (Exception $e) {
-
             throw new CouldNotRetrieveRemoteFileException(
                 "Failed to fill in extension for local file: {$path}",
                 $e->getCode(),
@@ -155,7 +150,6 @@ class UrlDownloader implements UrlDownloaderInterface
 
         try {
             $success = rename($path, $newPath);
-
             // @codeCoverageIgnoreStart
         } catch (\Exception $e) {
             throw new CouldNotRetrieveRemoteFileException("Failed to rename '{$path}' to '{$newName}'", $e->getCode(), $e);
@@ -181,5 +175,4 @@ class UrlDownloader implements UrlDownloaderInterface
     {
         return str_replace(' ', '%20', $url);
     }
-
 }

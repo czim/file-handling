@@ -1,9 +1,9 @@
 <?php
+
 namespace Czim\FileHandling\Variant\Strategies;
 
 abstract class AbstractImageStrategy extends AbstractVariantStrategy
 {
-
     /**
      * Returns whether the variant strategy should be applied.
      *
@@ -13,5 +13,4 @@ abstract class AbstractImageStrategy extends AbstractVariantStrategy
     {
         return 'image/' == substr($this->file->mimeType(), 0, 6);
     }
-
 }

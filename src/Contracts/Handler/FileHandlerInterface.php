@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Handler;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
@@ -6,7 +7,6 @@ use Czim\FileHandling\Contracts\Storage\TargetInterface;
 
 interface FileHandlerInterface
 {
-
     /**
      * Processes and stores a storable file.
      *
@@ -53,6 +53,5 @@ interface FileHandlerInterface
      * @param string          $variant      'original' refers to the original file
      * @return bool
      */
-
     public function deleteVariant(TargetInterface $target, string $variant): bool;
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Variant;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
@@ -6,7 +7,6 @@ use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 
 interface VariantStrategyInterface
 {
-
     /**
      * Applies strategy to a file.
      *
@@ -21,6 +21,5 @@ interface VariantStrategyInterface
      *
      * @param array $options
      */
-
     public function setOptions(array $options): void;
 }

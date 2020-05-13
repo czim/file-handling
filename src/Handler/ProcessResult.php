@@ -7,7 +7,6 @@ use Czim\FileHandling\Contracts\Storage\StoredFileInterface;
 
 class ProcessResult implements ProcessResultInterface
 {
-
     /**
      * @var StoredFileInterface[]    keyed by variant name (or 'original')
      */
@@ -45,5 +44,4 @@ class ProcessResult implements ProcessResultInterface
     {
         return $this->temporaryFiles;
     }
-
 }

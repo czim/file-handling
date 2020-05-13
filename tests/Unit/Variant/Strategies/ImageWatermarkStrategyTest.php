@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Variant\Strategies;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
@@ -15,7 +16,6 @@ use RuntimeException;
 
 class ImageWatermarkStrategyTest extends TestCase
 {
-
     /**
      * @test
      */
@@ -325,7 +325,7 @@ class ImageWatermarkStrategyTest extends TestCase
             return $position;
         }
 
-        return $position->getX() == $x && $position->getY() == $y;
+        return $position->getX() == $x
+            && $position->getY() == $y;
     }
-
 }

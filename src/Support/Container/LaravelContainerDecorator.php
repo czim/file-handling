@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Support\Container;
 
 use Illuminate\Contracts\Container\Container;
@@ -20,7 +21,6 @@ use ReflectionException;
  */
 class LaravelContainerDecorator implements ContainerInterface
 {
-
     /**
      * @var Container
      */
@@ -90,5 +90,4 @@ class LaravelContainerDecorator implements ContainerInterface
             return false;
         }
     }
-
 }

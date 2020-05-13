@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Support\Content;
 
 use Czim\FileHandling\Contracts\Support\RawContentInterface;
@@ -11,7 +12,6 @@ use Czim\FileHandling\Contracts\Support\RawContentInterface;
  */
 class RawContent implements RawContentInterface
 {
-
     /**
      * @var string
      */
@@ -48,5 +48,4 @@ class RawContent implements RawContentInterface
         $chunk = substr($this->content, $start, max(1, $length));
         return $chunk === false ? null : $chunk;
     }
-
 }

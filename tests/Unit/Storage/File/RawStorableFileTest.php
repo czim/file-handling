@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Storage\File;
 
 use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
@@ -9,7 +10,6 @@ use UnexpectedValueException;
 
 class RawStorableFileTest extends TestCase
 {
-
     // ------------------------------------------------------------------------------
     //      Abstract
     // ------------------------------------------------------------------------------
@@ -163,5 +163,4 @@ class RawStorableFileTest extends TestCase
 
         static::assertEquals(15, $file->size());
     }
-
 }

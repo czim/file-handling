@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Enums;
 
 use MyCLabs\Enum\Enum;

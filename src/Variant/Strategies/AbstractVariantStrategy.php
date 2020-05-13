@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Variant\Strategies;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
@@ -7,7 +8,6 @@ use Czim\FileHandling\Exceptions\VariantStrategyShouldNotBeAppliedException;
 
 abstract class AbstractVariantStrategy implements VariantStrategyInterface
 {
-
     /**
      * The file to be manipulated.
      *
@@ -65,6 +65,5 @@ abstract class AbstractVariantStrategy implements VariantStrategyInterface
      *
      * @return bool|null
      */
-
     abstract protected function perform(): ?bool;
 }

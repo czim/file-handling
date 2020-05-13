@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Storage\Path;
 
 use Czim\FileHandling\Storage\Path\Target;
@@ -6,7 +7,6 @@ use Czim\FileHandling\Test\TestCase;
 
 class TargetTest extends TestCase
 {
-
     /**
      * @test
      */
@@ -101,5 +101,4 @@ class TargetTest extends TestCase
 
         static::assertEquals('tmp/testing/test/alternative.me', $target->variant('test'));
     }
-
 }

@@ -1,9 +1,9 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Storage;
 
 interface StorageInterface
 {
-
     /**
      * Returns whether a stored file exists.
      *
@@ -43,6 +43,5 @@ interface StorageInterface
      * @param string $path
      * @return bool
      */
-
     public function delete(string $path): bool;
 }

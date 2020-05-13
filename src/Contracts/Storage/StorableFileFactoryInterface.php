@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Storage;
 
 use Czim\FileHandling\Contracts\Support\RawContentInterface;
@@ -6,7 +7,6 @@ use SplFileInfo;
 
 interface StorableFileFactoryInterface
 {
-
     /**
      * Marks the next storable file instance as having been locally uploaded.
      *
@@ -72,6 +72,5 @@ interface StorableFileFactoryInterface
      * @param string|null                $mimeType
      * @return StorableFileInterface
      */
-
     public function makeFromRawData($data, ?string $name = null, ?string $mimeType = null): StorableFileInterface;
 }

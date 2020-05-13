@@ -1,9 +1,9 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Support;
 
 interface MimeTypeHelperInterface
 {
-
     /**
      * Returns the mime type for a given local path.
      *
@@ -38,6 +38,5 @@ interface MimeTypeHelperInterface
      * @param string $type
      * @return string
      */
-
     public function guessExtensionForMimeType(string $type): string;
 }

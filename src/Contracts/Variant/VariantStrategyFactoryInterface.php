@@ -1,9 +1,9 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Variant;
 
 interface VariantStrategyFactoryInterface
 {
-
     /**
      * Returns strategy instance.
      *
@@ -19,6 +19,5 @@ interface VariantStrategyFactoryInterface
      * @param array $config
      * @return $this|VariantStrategyFactoryInterface
      */
-
     public function setConfig(array $config): VariantStrategyFactoryInterface;
 }

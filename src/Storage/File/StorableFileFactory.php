@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Storage\File;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileFactoryInterface;
@@ -18,7 +19,6 @@ use UnexpectedValueException;
 
 class StorableFileFactory implements StorableFileFactoryInterface
 {
-
     /**
      * @var MimeTypeHelperInterface
      */
@@ -167,9 +167,7 @@ class StorableFileFactory implements StorableFileFactoryInterface
     {
         try {
             $localPath = $this->downloader->download($url);
-
         } catch (Exception $e) {
-
             throw new CouldNotRetrieveRemoteFileException(
                 "Could not retrieve file from '{$url}'",
                 $e->getcode(),
@@ -335,5 +333,4 @@ class StorableFileFactory implements StorableFileFactoryInterface
         return substr(md5(microtime()), 0, 16)
              . ($extension ? '.' . $extension : '');
     }
-
 }

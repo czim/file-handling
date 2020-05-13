@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Storage\File;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
@@ -11,7 +12,6 @@ use Czim\FileHandling\Contracts\Storage\StoredFileInterface;
  */
 class DecoratorStoredFile implements StoredFileInterface
 {
-
     /**
      * @var StorableFileInterface
      */
@@ -138,5 +138,4 @@ class DecoratorStoredFile implements StoredFileInterface
     {
         return $this->file->isUploaded();
     }
-
 }

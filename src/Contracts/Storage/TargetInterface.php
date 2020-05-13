@@ -1,9 +1,9 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Storage;
 
 interface TargetInterface
 {
-
     /**
      * Returns the (relative) target path for the original file.
      *
@@ -17,6 +17,5 @@ interface TargetInterface
      * @param string $variant
      * @return string
      */
-
     public function variant(string $variant): string;
 }

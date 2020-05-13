@@ -1,11 +1,11 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Storage;
 
 use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 
 interface StorableFileInterface
 {
-
     /**
      * Returns raw content of the file.
      *
@@ -68,6 +68,5 @@ interface StorableFileInterface
      *
      * @return bool
      */
-
     public function isUploaded(): bool;
 }

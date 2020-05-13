@@ -1,11 +1,11 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Support;
 
 use SplFileInfo;
 
 interface ImageResizerInterface
 {
-
     /**
      * Resize an image using given options.
      *
@@ -13,6 +13,5 @@ interface ImageResizerInterface
      * @param array       $options
      * @return bool
      */
-
     public function resize(SplFileInfo $file, array $options): bool;
 }

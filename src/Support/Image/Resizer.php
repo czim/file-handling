@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Support\Image;
 
 use Czim\FileHandling\Contracts\Support\ImageResizerInterface;
@@ -11,13 +12,10 @@ use InvalidArgumentException;
 use SplFileInfo;
 
 /**
- * Class Resizer
- *
  * This is based on (a slight rewrite of) the Codesleeve Stapler resizer.
  */
 class Resizer implements ImageResizerInterface
 {
-
     /**
      * @var ImagineInterface
      */
@@ -48,7 +46,6 @@ class Resizer implements ImageResizerInterface
 
         // Custom resize (that still expects imagine to be used)
         if ($method == 'resizeCustom') {
-
             $callable = $options['dimensions'];
 
             $this
@@ -89,7 +86,6 @@ class Resizer implements ImageResizerInterface
      * perform any necessary image resizing for a given style.
      *
      * @param array $options
-     *
      * @return array
      */
     protected function parseOptionDimensions(array $options): array
@@ -361,5 +357,4 @@ class Resizer implements ImageResizerInterface
     {
         return array_key_exists($key, $array);
     }
-
 }

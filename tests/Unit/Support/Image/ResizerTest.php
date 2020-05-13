@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Support\Image;
 
 use Czim\FileHandling\Support\Image\Resizer;

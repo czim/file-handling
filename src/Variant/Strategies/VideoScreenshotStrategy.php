@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Variant\Strategies;
 
 use FFMpeg\FFMpeg;
@@ -7,7 +8,6 @@ use FFMpeg\FFProbe;
 
 class VideoScreenshotStrategy extends AbstractVideoStrategy
 {
-
     /**
      * Performs manipulation of the file.
      *
@@ -30,7 +30,6 @@ class VideoScreenshotStrategy extends AbstractVideoStrategy
         // Determine second at which to extract screenshot
         if (null !== ($percentage = $this->getPercentageConfigValue())) {
             // Percentage of full duration
-
             $ffprobe = FFProbe::create([
                 'ffprobe.binaries' => $this->getFfprobeBinaryPath(),
             ]);
@@ -38,9 +37,7 @@ class VideoScreenshotStrategy extends AbstractVideoStrategy
             $duration = (float) $ffprobe->format($path)->get('duration');
 
             $seconds = $percentage / 100 * $duration;
-
         } elseif (null === ($seconds = $this->getSecondsConfigValue())) {
-
             $seconds = 0;
         }
 
@@ -93,5 +90,4 @@ class VideoScreenshotStrategy extends AbstractVideoStrategy
         return '/usr/bin/ffprobe';
         // @codeCoverageIgnoreEnd
     }
-
 }

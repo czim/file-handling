@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Storage\File;
 
 use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
@@ -107,7 +108,6 @@ class ProcessableFileTest extends TestCase
     function it_deletes_its_file()
     {
         // We cannot mock this with vfs, since the getRealPath() method on SplFileInfo is used.
-
         $deletablePath = $this->getDeletableLocalPath();
 
         copy($this->getExampleLocalPath(), $deletablePath);
@@ -128,7 +128,6 @@ class ProcessableFileTest extends TestCase
     function it_throws_an_exception_attempting_to_delete_a_nonexistent_path()
     {
         // We cannot mock this with vfs, since the getRealPath() method on SplFileInfo is used.
-
         $deletablePath = $this->getDeletableLocalPath();
 
         copy($this->getExampleLocalPath(), $deletablePath);
@@ -156,5 +155,4 @@ class ProcessableFileTest extends TestCase
     {
         return realpath(dirname(__DIR__) . '/../../../') . 'deletable.txt';
     }
-
 }

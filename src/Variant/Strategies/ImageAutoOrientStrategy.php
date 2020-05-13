@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Variant\Strategies;
 
 use Czim\FileHandling\Support\Image\OrientationFixer;
@@ -6,7 +7,6 @@ use SplFileInfo;
 
 class ImageAutoOrientStrategy extends AbstractImageStrategy
 {
-
     /**
      * @var OrientationFixer
      */
@@ -61,14 +61,13 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
             return false;
         }
 
-        return  empty($this->file->extension())
-            ||  $this->doesFileExtensionSupportExif($this->file->extension());
+        return empty($this->file->extension())
+            || $this->doesFileExtensionSupportExif($this->file->extension());
     }
 
     protected function doesFileExtensionSupportExif(string $extension): bool
     {
         return in_array(strtolower($extension), [
-
             // Standard formats
             'jpg',
             'jpeg',
@@ -104,5 +103,4 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
             'rwz',
         ]);
     }
-
 }

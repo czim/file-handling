@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Storage\File;
 
 use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
@@ -8,7 +9,6 @@ use UnexpectedValueException;
 
 class SplFileInfoStorableFile extends AbstractStorableFile
 {
-
     /**
      * @var SplFileInfo
      */
@@ -72,9 +72,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
     {
         try {
             $success = unlink($this->path());
-
         } catch (\Exception $e) {
-
             throw new StorableFileCouldNotBeDeletedException(
                 "Failed to unlink '{$this->path()}'",
                 $e->getCode(),
@@ -96,5 +94,4 @@ class SplFileInfoStorableFile extends AbstractStorableFile
     {
         return $this->file->getRealPath();
     }
-
 }

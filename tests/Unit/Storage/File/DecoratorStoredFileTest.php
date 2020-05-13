@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Storage\File;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
@@ -59,5 +60,4 @@ class DecoratorStoredFileTest extends TestCase
     {
         return Mockery::mock(StorableFileInterface::class);
     }
-
 }
