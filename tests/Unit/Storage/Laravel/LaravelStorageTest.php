@@ -86,6 +86,37 @@ class LaravelStorageTest extends TestCase
         $files = $this->getMockLaravelFilesystem();
         $files->shouldReceive('put')->never();
         $files->shouldReceive('writeStream')->once()->with('relative/path/test.txt', $stream)->andReturn(true);
+        $files->shouldReceive('exists')->with('relative/path/test.txt')->andReturn(false);
+
+        $file = $this->getMockStorableFile();
+        $file->shouldReceive('name')->andReturn('test.txt');
+        $file->shouldReceive('openStream')->once()->andReturn($stream);
+        $file->shouldReceive('closeStream')->once()->with($stream);
+        $file->shouldReceive('content')->never();
+
+        $storage = new LaravelStorage($files, true, 'http://testing');
+
+        $stored = $storage->store($file, 'relative/path/test.txt');
+
+        fclose($stream);
+
+        static::assertInstanceOf(StoredFileInterface::class, $stored);
+        static::assertEquals('test.txt', $stored->name());
+        static::assertEquals('http://testing/relative/path/test.txt', $stored->url());
+    }
+
+    /**
+     * @test
+     */
+    function it_stores_a_file_with_streaming_overwriting_existing_file()
+    {
+        $stream = fopen(realpath(__DIR__ . '/../../../resources/test.txt'), 'r');
+
+        $files = $this->getMockLaravelFilesystem();
+        $files->shouldReceive('put')->never();
+        $files->shouldReceive('writeStream')->once()->with('relative/path/test.txt', $stream)->andReturn(true);
+        $files->shouldReceive('exists')->with('relative/path/test.txt')->andReturn(true);
+        $files->shouldReceive('delete')->once()->with('relative/path/test.txt')->andReturn(true);
 
         $file = $this->getMockStorableFile();
         $file->shouldReceive('name')->andReturn('test.txt');

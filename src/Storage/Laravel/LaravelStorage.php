@@ -102,20 +102,41 @@ class LaravelStorage implements StorageInterface
         $stream = $file->openStream();
 
         if ($stream !== null) {
-            if ( ! $this->filesystem->writeStream($path, $stream)) {
-                throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}' (stream)");
-            }
-            $file->closeStream($stream);
+            $this->writeFileAsStream($file, $path, $stream);
         } else {
-            if ( ! $this->filesystem->put($path, $file->content())) {
-                throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}'");
-            }
+            $this->writeFileDirectly($file, $path);
         }
 
         $stored = new DecoratorStoredFile($file);
         $stored->setUrl($this->prefixBaseUrl($path));
 
         return $stored;
+    }
+
+    protected function writeFileAsStream(StorableFileInterface $file, string $path, $resource): void
+    {
+        // In order to have the same overwriting behavior as put, any existing file must be deleted first.
+        if ($this->filesystem->exists($path)) {
+            if ( ! $this->filesystem->delete($path)) {
+                throw new FileStorageException(
+                    'Failed to delete existing file in preparation of writing stream, '
+                    . "'{$file->name()}' to '{$path}'"
+                );
+            }
+        }
+
+        if ( ! $this->filesystem->writeStream($path, $resource)) {
+            throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}' (stream)");
+        }
+
+        $file->closeStream($resource);
+    }
+
+    protected function writeFileDirectly(StorableFileInterface $file, string $path): void
+    {
+        if ( ! $this->filesystem->put($path, $file->content())) {
+            throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}'");
+        }
     }
 
     /**
