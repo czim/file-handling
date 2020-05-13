@@ -81,13 +81,13 @@ class ResizerTest extends TestCase
     {
         $source = $this->makeSourceFile();
 
-        $originalSize      = new Box(600, 400);
-        $expectedResize    = new Box(520, 347);
+        $originalSize   = new Box(600, 400);
+        $expectedResize = new Box(519, 346);
 
         $image = $this->getMockImage($originalSize, $expectedResize);
         $imageProcessor = $this->getMockImageProcessor($image);
 
-        $options = $this->buildMockOptions('520x360');
+        $options = $this->buildMockOptions('519x360');
 
         $resizer = new Resizer($imageProcessor);
 
