@@ -4,10 +4,16 @@ namespace Czim\FileHandling\Variant\Strategies;
 
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
+use Imagine\Image\Point;
 use RuntimeException;
 
 class ImageWatermarkStrategy extends AbstractImageStrategy
 {
+    public const POSITION_TOP_LEFT     = 'top-left';
+    public const POSITION_TOP_RIGHT    = 'top-right';
+    public const POSITION_BOTTOM_LEFT  = 'bottom-left';
+    public const POSITION_BOTTOM_RIGHT = 'bottom-right';
+    public const POSITION_CENTER       = 'center';
 
     /**
      * @var ImagineInterface
@@ -44,34 +50,34 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
 
         // Place the image in the correct position
         switch ($this->getWatermarkPosition()) {
-            case 'top-left':
-                $position = new \Imagine\Image\Point(0, 0);
+            case static::POSITION_TOP_LEFT:
+                $position = new Point(0, 0);
                 break;
 
-            case 'top-right':
-                $position = new \Imagine\Image\Point(
+            case static::POSITION_TOP_RIGHT:
+                $position = new Point(
                     $imageSize->getWidth() - $watermarkSize->getWidth(),
                     0
                 );
                 break;
 
-            case 'bottom-left':
-                $position = new \Imagine\Image\Point(
+            case static::POSITION_BOTTOM_LEFT:
+                $position = new Point(
                     0,
                     $imageSize->getHeight() - $watermarkSize->getHeight()
                 );
                 break;
 
-            case 'center';
-                $position = new \Imagine\Image\Point(
+            case static::POSITION_CENTER;
+                $position = new Point(
                     ((int) round($imageSize->getWidth() / 2)) - ((int) round($watermarkSize->getWidth() / 2)),
                     ((int) round($imageSize->getHeight() / 2)) - ((int) round($watermarkSize->getHeight() / 2))
                 );
                 break;
 
-            case 'bottom-right':
+            case static::POSITION_BOTTOM_RIGHT:
             default:
-                $position = new \Imagine\Image\Point(
+                $position = new Point(
                     $imageSize->getWidth() - $watermarkSize->getWidth(),
                     $imageSize->getHeight() - $watermarkSize->getHeight()
                 );
