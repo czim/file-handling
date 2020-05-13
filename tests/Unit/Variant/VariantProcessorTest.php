@@ -33,22 +33,6 @@ class VariantProcessorTest extends TestCase
     /**
      * @test
      */
-    function it_sets_a_config()
-    {
-        $strategyFactory = $this->getMockStrategyFactory();
-
-        $processor = new VariantProcessor($this->getMockFileFactory(), $strategyFactory);
-
-        $strategyFactory->shouldReceive('setConfig')->once()->with(['test' => true])->andReturnSelf();
-
-        static::assertSame($processor, $processor->setConfig([
-            VariantProcessor::CONFIG_VARIANT_FACTORY => ['test' => true],
-        ]));
-    }
-
-    /**
-     * @test
-     */
     function it_processes_a_variant()
     {
         $fileFactory     = $this->getMockFileFactory();
@@ -264,7 +248,7 @@ class VariantProcessorTest extends TestCase
             $mock->shouldReceive('apply')->once()
                 ->with(Mockery::type(ProcessableFileInterface::class))
                 ->andReturnUsing(function ($file) use ($successful) {
-                    return $successful ? $file : false;
+                    return $successful ? $file : null;
                 });
         } else {
             $mock->shouldReceive('apply')->once()

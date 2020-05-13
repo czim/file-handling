@@ -28,7 +28,7 @@ class SplFileInfoStorableFileTest extends TestCase
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 
-        static::assertSame($file, $file->setData($fileInfo));
+        $file->setData($fileInfo);
 
         static::assertEquals(file_get_contents($fileInfo->getRealPath()), $file->content());
     }
@@ -68,7 +68,7 @@ class SplFileInfoStorableFileTest extends TestCase
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 
-        static::assertSame($file, $file->setData($fileInfo));
+        $file->setData($fileInfo);
 
         static::assertEquals($fileInfo->getSize(), $file->size());
     }
@@ -82,7 +82,7 @@ class SplFileInfoStorableFileTest extends TestCase
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 
-        static::assertSame($file, $file->setData($fileInfo));
+        $file->setData($fileInfo);
 
         static::assertEquals($fileInfo->getRealPath(), $file->path());
     }

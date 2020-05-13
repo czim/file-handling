@@ -130,12 +130,12 @@ class RawStorableFileTest extends TestCase
     {
         $file = new RawStorableFile;
 
-        static::assertSame($file, $file->setData('testing content'));
+        $file->setData('testing content');
 
         static::assertEquals('testing content', $file->content());
 
         // And it can be overwritten
-        static::assertSame($file, $file->setData('new content'));
+        $file->setData('new content');
 
         static::assertEquals('new content', $file->content());
     }

@@ -42,28 +42,6 @@ class TargetTest extends TestCase
 
         static::assertEquals('tmp/alternative/different.txt', $target->variant('alternative'));
     }
-    
-    /**
-     * @test
-     */
-    function it_takes_variant_filenames()
-    {
-        $target = new Target('tmp/testing/original/file.txt');
-
-        static::assertSame($target, $target->setVariantFilenames(['test' => 'name']));
-        static::assertSame($target, $target->setVariantFilename('test', 'name'));
-    }
-
-    /**
-     * @test
-     */
-    function it_takes_variant_extensions()
-    {
-        $target = new Target('tmp/testing/original/file.txt');
-
-        static::assertSame($target, $target->setVariantExtensions(['test' => 'tst']));
-        static::assertSame($target, $target->setVariantExtension('test', 'tst'));
-    }
 
     /**
      * @test

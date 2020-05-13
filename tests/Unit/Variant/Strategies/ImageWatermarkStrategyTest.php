@@ -233,7 +233,7 @@ class ImageWatermarkStrategyTest extends TestCase
         $strategy = new ImageWatermarkStrategy($imagine);
         $strategy->setOptions([]);
 
-        static::assertFalse($strategy->apply($file));
+        static::assertNull($strategy->apply($file));
     }
 
     /**

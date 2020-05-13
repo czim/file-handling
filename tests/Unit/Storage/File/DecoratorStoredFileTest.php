@@ -48,7 +48,8 @@ class DecoratorStoredFileTest extends TestCase
 
         $file = new DecoratorStoredFile($mock);
 
-        static::assertSame($file, $file->setUrl('http://test/url'));
+        $file->setUrl('http://test/url');
+
         static::assertEquals('http://test/url', $file->url());
     }
 
