@@ -2,7 +2,7 @@
 
 ## 2.*
 
-### [2.0.0] - 2020-05-13
+### [2.0.1] - 2020-05-13
 
 All code updated to make use of PHP 7.1+ typehinting and return types.
 This is quite the breaking change as all of the interfaces.
@@ -82,6 +82,8 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `PathHelperInterface` and its implementation entirely.
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
+
+[2.0.1]: https://github.com/czim/file-handling/compare/1.3.1...2.0.1
 
 [1.3.1]: https://github.com/czim/file-handling/compare/1.2.1...1.3.1
 [1.2.1]: https://github.com/czim/file-handling/compare/1.2.0...1.2.1
