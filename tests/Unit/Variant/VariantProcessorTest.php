@@ -1,6 +1,6 @@
 <?php
-namespace Czim\FileHandling\Test\Unit\Support\Content;
 
+namespace Czim\FileHandling\Test\Unit\Variant;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;
 use Czim\FileHandling\Contracts\Storage\StorableFileFactoryInterface;
