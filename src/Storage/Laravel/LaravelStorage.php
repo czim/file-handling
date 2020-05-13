@@ -99,8 +99,17 @@ class LaravelStorage implements StorageInterface
      */
     public function store(StorableFileInterface $file, string $path): StoredFileInterface
     {
-        if ( ! $this->filesystem->put($path, $file->content())) {
-            throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}'");
+        $stream = $file->openStream();
+
+        if ($stream !== null) {
+            if ( ! $this->filesystem->writeStream($path, $stream)) {
+                throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}' (stream)");
+            }
+            $file->closeStream($stream);
+        } else {
+            if ( ! $this->filesystem->put($path, $file->content())) {
+                throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}'");
+            }
         }
 
         $stored = new DecoratorStoredFile($file);
