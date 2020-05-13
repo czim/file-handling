@@ -8,10 +8,10 @@ use Czim\FileHandling\Enums\ContentTypes;
 
 class UploadedContentInterpreter implements ContentInterpreterInterface
 {
-    const FULL_DATA_THRESHOLD = 2048;
-    const DATAURI_REGEX      = '#^data:[-\w]+/[-\w\+\.]+;base64#';
-    const DATAURI_TEST_CHUNK = 100;
+    protected const FULL_DATA_THRESHOLD = 2048;
 
+    protected const DATAURI_REGEX      = '#^data:[-\w]+/[-\w\+\.]+;base64#';
+    protected const DATAURI_TEST_CHUNK = 100;
 
     /**
      * Returns which type the given content is deemed to be.

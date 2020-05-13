@@ -13,7 +13,7 @@ use Czim\FileHandling\Test\TestCase;
  */
 class UploadedContentInterpreterTest extends TestCase
 {
-    const XML_TEST_FILE = 'tests/resources/test.xml';
+    protected const XML_TEST_FILE = 'tests/resources/test.xml';
 
     /**
      * @test

@@ -20,8 +20,8 @@ use Exception;
  */
 class VariantProcessor implements VariantProcessorInterface
 {
-    const CONFIG_VARIANT_FACTORY = 'factory';
-    const CONFIG_FORCE_APPLY     = 'force-apply';
+    public const CONFIG_VARIANT_FACTORY = 'factory';
+    public const CONFIG_FORCE_APPLY     = 'force-apply';
 
     /**
      * @var StorableFileFactoryInterface

@@ -14,7 +14,7 @@ use RuntimeException;
  */
 class VariantStrategyFactory implements VariantStrategyFactoryInterface
 {
-    const CONFIG_ALIASES = 'aliases';
+    public const CONFIG_ALIASES = 'aliases';
 
     /**
      * @var ContainerInterface

@@ -17,7 +17,7 @@ use UnexpectedValueException;
  */
 class SplFileInfoStorableFileTest extends TestCase
 {
-    const XML_TEST_FILE = 'tests/resources/test.xml';
+    protected const XML_TEST_FILE = 'tests/resources/test.xml';
 
     /**
      * @test

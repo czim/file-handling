@@ -10,7 +10,7 @@ use Mockery;
 
 class VideoScreenshotStrategyTest extends TestCase
 {
-    const MOVIE_TEST_FILE = 'tests/resources/video.mov';
+    protected const MOVIE_TEST_FILE = 'tests/resources/video.mov';
 
     public function setUp(): void
     {

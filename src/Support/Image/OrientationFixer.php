@@ -14,14 +14,14 @@ use SplFileInfo;
  */
 class OrientationFixer
 {
-    const ORIENTATION_TOPLEFT     = 1;
-    const ORIENTATION_TOPRIGHT    = 2;
-    const ORIENTATION_BOTTOMRIGHT = 3;
-    const ORIENTATION_BOTTOMLEFT  = 4;
-    const ORIENTATION_LEFTTOP     = 5;
-    const ORIENTATION_RIGHTTOP    = 6;
-    const ORIENTATION_RIGHTBOTTOM = 7;
-    const ORIENTATION_LEFTBOTTOM  = 8;
+    public const ORIENTATION_TOPLEFT     = 1;
+    public const ORIENTATION_TOPRIGHT    = 2;
+    public const ORIENTATION_BOTTOMRIGHT = 3;
+    public const ORIENTATION_BOTTOMLEFT  = 4;
+    public const ORIENTATION_LEFTTOP     = 5;
+    public const ORIENTATION_RIGHTTOP    = 6;
+    public const ORIENTATION_RIGHTBOTTOM = 7;
+    public const ORIENTATION_LEFTBOTTOM  = 8;
 
     /**
      * Whether to silently ignore exceptions.

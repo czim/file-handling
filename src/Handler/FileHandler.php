@@ -16,14 +16,14 @@ class FileHandler implements FileHandlerInterface
      *
      * @var string
      */
-    const ORIGINAL = 'original';
+    public const ORIGINAL = 'original';
 
     /**
      * The configuration key for the variant definitions.
      *
      * @var string
      */
-    const CONFIG_VARIANTS = 'variants';
+    public const CONFIG_VARIANTS = 'variants';
 
 
     /**

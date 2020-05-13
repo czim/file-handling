@@ -6,7 +6,7 @@ use MyCLabs\Enum\Enum;
 
 class ContentTypes extends Enum
 {
-    const URI     = 'uri';
-    const DATAURI = 'datauri';
-    const RAW     = 'raw';
+    public const URI     = 'uri';
+    public const DATAURI = 'datauri';
+    public const RAW     = 'raw';
 }

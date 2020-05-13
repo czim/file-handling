@@ -16,7 +16,7 @@ use SplFileInfo;
 
 class ResizerTest extends TestCase
 {
-    const IMAGE_COPY_PATH = __DIR__ . '/../../../resources/tmp.gif';
+    protected const IMAGE_COPY_PATH = __DIR__ . '/../../../resources/tmp.gif';
 
 
     public function setUp(): void

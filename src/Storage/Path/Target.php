@@ -6,7 +6,7 @@ use Czim\FileHandling\Contracts\Storage\TargetSetupInterface;
 
 class Target implements TargetInterface, TargetSetupInterface
 {
-    const VARIANT_PLACEHOLDER = ':variant';
+    protected const VARIANT_PLACEHOLDER = ':variant';
 
 
     /**

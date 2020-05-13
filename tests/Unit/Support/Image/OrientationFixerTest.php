@@ -11,9 +11,9 @@ use SplFileInfo;
 
 class OrientationFixerTest extends TestCase
 {
-    const ROTATED_IMAGE_PATH   = __DIR__ . '/../../../resources/rotated-?.jpg';
-    const UNROTATED_IMAGE_PATH = __DIR__ . '/../../../resources/unrotated.jpg';
-    const IMAGE_COPY_PATH      = __DIR__ . '/../../../resources/tmp.jpg';
+    protected const ROTATED_IMAGE_PATH   = __DIR__ . '/../../../resources/rotated-?.jpg';
+    protected const UNROTATED_IMAGE_PATH = __DIR__ . '/../../../resources/unrotated.jpg';
+    protected const IMAGE_COPY_PATH      = __DIR__ . '/../../../resources/tmp.jpg';
 
     public function setUp(): void
     {
