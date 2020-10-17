@@ -96,14 +96,15 @@ class Resizer implements ImageResizerInterface
             return [null, null, 'custom'];
         }
 
-        if (strpos($sourceDimensions, 'x') === false) {
+        $dimensions = explode('x', $sourceDimensions);
+
+        if (count($dimensions) === 1 || $dimensions[1] === '') {
             // Width given, height automagically selected to preserve aspect ratio (landscape).
             $width = $sourceDimensions;
 
             return [$width, null, 'landscape'];
         }
 
-        $dimensions = explode('x', $sourceDimensions);
         $width  = $dimensions[0];
         $height = $dimensions[1];
 
