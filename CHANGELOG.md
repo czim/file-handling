@@ -2,6 +2,10 @@
 
 ## 2.*
 
+### [2.0.2] - 2020-10-17
+
+Fixed an issue where `<width>x` (without a height value) would cause resizing to be interpreted as portrait rather than landscape erroneously.
+
 ### [2.0.1] - 2020-05-13
 
 All code updated to make use of PHP 7.1+ typehinting and return types.
@@ -83,6 +87,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[2.0.2]: https://github.com/czim/file-handling/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/czim/file-handling/compare/1.3.1...2.0.1
 
 [1.3.1]: https://github.com/czim/file-handling/compare/1.2.1...1.3.1
