@@ -100,7 +100,7 @@ class Resizer implements ImageResizerInterface
 
         if (count($dimensions) === 1 || $dimensions[1] === '') {
             // Width given, height automagically selected to preserve aspect ratio (landscape).
-            $width = $sourceDimensions;
+            $width = $dimensions[0];
 
             return [$width, null, 'landscape'];
         }
