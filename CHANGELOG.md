@@ -2,7 +2,7 @@
 
 ## 2.*
 
-### [2.0.2] - 2020-10-17
+### [2.0.3] - 2020-10-20
 
 Fixed an issue where `<width>x` (without a height value) would cause resizing to be interpreted as portrait rather than landscape erroneously.
 
@@ -87,6 +87,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[2.0.3]: https://github.com/czim/file-handling/compare/2.0.2...2.0.3
 [2.0.2]: https://github.com/czim/file-handling/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/czim/file-handling/compare/1.3.1...2.0.1
 
