@@ -2,6 +2,10 @@
 
 ## 2.*
 
+### [2.1.1] - 2022-03-27
+
+Added support for dependencies of Laravel 9. This fixes the support for Paperclip.
+
 ### [2.0.3] - 2020-10-20
 
 Fixed an issue where `<width>x` (without a height value) would cause resizing to be interpreted as portrait rather than landscape erroneously.
@@ -9,7 +13,7 @@ Fixed an issue where `<width>x` (without a height value) would cause resizing to
 ### [2.0.1] - 2020-05-13
 
 All code updated to make use of PHP 7.1+ typehinting and return types.
-This is quite the breaking change as all of the interfaces.
+This is quite the breaking change as all the interfaces changed.
 Now requires PHP 7.1+.
 
 Added the `openStream()` and `closeStream()` methods to the StorableFileInterface.
@@ -87,6 +91,7 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[2.1.1]: https://github.com/czim/file-handling/compare/2.0.3...2.1.1
 [2.0.3]: https://github.com/czim/file-handling/compare/2.0.2...2.0.3
 [2.0.2]: https://github.com/czim/file-handling/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/czim/file-handling/compare/1.3.1...2.0.1
