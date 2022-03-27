@@ -50,7 +50,7 @@ class LaravelContainerDecorator implements ContainerInterface
     /**
      * {@inheritdoc}
      */
-    public function has($id)
+    public function has($id) : bool
     {
         if ($this->hasIsCached($id)) {
             return $this->hasFromCache($id);
