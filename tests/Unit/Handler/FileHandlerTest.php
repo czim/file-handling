@@ -270,6 +270,46 @@ class FileHandlerTest extends TestCase
         static::assertTrue($handler->deleteVariant($target, 'tiny'));
     }
 
+    /**
+     * @test
+     */
+    function it_handles_filenames_with_invalid_charachters()
+    {
+        $storage     = $this->getMockStorage();
+        $processor   = $this->getMockVariantProcessor();
+        $target      = $this->getMockTarget();
+        $invalidPath = 'test/target/path/original/space another space testëïóöü€é.mp4';
+        $cleanPath   = 'test/target/path/original/space+another+space+test%C3%AB%C3%AF%C3%B3%C3%B6%C3%BC%E2%82%AC%C3%A9.mp4';
+
+        $target->shouldReceive(FileHandler::ORIGINAL)
+            ->once()
+            ->andReturn($invalidPath);
+
+        $storage->shouldReceive('url')
+            ->with($invalidPath)
+            ->andReturn('http://test.com/' . $invalidPath);
+
+        $handler = new FileHandler($storage, $processor);
+
+        $urls = $handler->variantUrlsForTarget($target, [FileHandler::ORIGINAL]);
+
+        static::assertEquals('http://test.com/' . $cleanPath, $urls[FileHandler::ORIGINAL]);
+
+        $target->shouldReceive(FileHandler::ORIGINAL)
+            ->once()
+            ->andReturn($cleanPath);
+
+        $storage->shouldReceive('url')
+            ->with($cleanPath)
+            ->andReturn('http://test.com/' . $cleanPath);
+
+        $handler = new FileHandler($storage, $processor);
+
+        $urls = $handler->variantUrlsForTarget($target, [FileHandler::ORIGINAL]);
+
+        static::assertEquals('http://test.com/' . $cleanPath, $urls[FileHandler::ORIGINAL]);
+    }
+
 
     /**
      * @return Mockery\Mock|Mockery\MockInterface|StorageInterface

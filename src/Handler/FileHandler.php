@@ -115,7 +115,7 @@ class FileHandler implements FileHandlerInterface
     public function variantUrlsForTarget(TargetInterface $target, array $variants = []): array
     {
         $urls = [
-            static::ORIGINAL => $this->storage->url($target->original()),
+            static::ORIGINAL => $this->sanitizeUrl($this->storage->url($target->original())),
         ];
 
         if (in_array(static::ORIGINAL, $variants)) {
@@ -123,10 +123,35 @@ class FileHandler implements FileHandlerInterface
         }
 
         foreach ($variants as $variant) {
-            $urls[ $variant ] = $this->storage->url($target->variant($variant));
+            $urls[ $variant ] = $this->sanitizeUrl($this->storage->url($target->variant($variant)));
         }
 
         return $urls;
+    }
+
+    /**
+     * Removes invalid characters from the filename in the url.
+     *
+     * @param string $url the url coming from the storage
+     * @return bool
+     */
+    protected function sanitizeUrl(string $url): string
+    {
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            return $url;
+        }
+
+        $parts = explode('/', $url);
+
+        if (empty($parts)) {
+            return $url;
+        }
+
+        $filename = array_pop($parts);
+
+        $parts []= urlencode($filename);
+
+        return implode('/', $parts);
     }
 
     /**
