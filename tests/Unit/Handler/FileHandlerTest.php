@@ -273,7 +273,7 @@ class FileHandlerTest extends TestCase
     /**
      * @test
      */
-    function it_handles_filenames_with_invalid_charachters()
+    function it_handles_filenames_with_invalid_characters()
     {
         $storage     = $this->getMockStorage();
         $processor   = $this->getMockVariantProcessor();

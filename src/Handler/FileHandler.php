@@ -130,10 +130,10 @@ class FileHandler implements FileHandlerInterface
     }
 
     /**
-     * Removes invalid characters from the filename in the url.
+     * URL-encodes invalid characters from the filename in the url.
      *
-     * @param string $url the url coming from the storage
-     * @return bool
+     * @param string $url
+     * @return string
      */
     protected function sanitizeUrl(string $url): string
     {
@@ -149,7 +149,7 @@ class FileHandler implements FileHandlerInterface
 
         $filename = array_pop($parts);
 
-        $parts []= urlencode($filename);
+        $parts[] = urlencode($filename);
 
         return implode('/', $parts);
     }
