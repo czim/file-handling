@@ -106,7 +106,7 @@ class UrlDownloaderTest extends TestCase
             ->with('http://www.something.com/file', $tmpPath)
             ->andReturn('tmp/local');
 
-        $helper->shouldReceive('guessExtensionForPath')->andThrow(Exception::class, 'Failed to guess');
+        $helper->shouldReceive('guessExtensionForPath')->andThrow(new Exception('Failed to guess'));
 
         $downloader->download('http://www.something.com/file');
     }

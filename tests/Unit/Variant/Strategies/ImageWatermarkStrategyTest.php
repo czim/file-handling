@@ -247,7 +247,7 @@ class ImageWatermarkStrategyTest extends TestCase
         $image   = $this->getMockImage();
 
         $imagine->shouldReceive('open')->once()->with('tmp/test.jpg')->andReturn($image);
-        $imagine->shouldReceive('open')->once()->with('tmp/mark.png')->andThrow(ErrorException::class);
+        $imagine->shouldReceive('open')->once()->with('tmp/mark.png')->andThrow(new ErrorException());
 
         $image->shouldReceive('paste')->never();
         $image->shouldReceive('save')->never();

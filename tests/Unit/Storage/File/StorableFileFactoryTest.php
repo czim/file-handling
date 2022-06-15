@@ -153,7 +153,7 @@ class StorableFileFactoryTest extends TestCase
 
         $downloader->shouldReceive('download')
             ->with('http://test.com/test.xml')
-            ->andThrow(ErrorException::class, 'testing');
+            ->andThrow(new ErrorException('testing'));
 
         $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $downloader);
 
@@ -183,7 +183,7 @@ class StorableFileFactoryTest extends TestCase
         $file = $factory->makeFromDataUri(new RawContent($rawData));
 
         static::assertInstanceOf(SplFileInfoStorableFile::class, $file);
-        static::assertRegExp('#[a-z0-9]{16}\.gif#', $file->name());
+        static::assertMatchesRegularExpression('#[a-z0-9]{16}\.gif#', $file->name());
         static::assertEquals(37, $file->size());
         static::assertEquals('application/xml', $file->mimeType());
     }
