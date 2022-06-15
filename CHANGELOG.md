@@ -1,4 +1,5 @@
 # Changelog
+Fixed issue where `variantUrlsForTarget()` returns invalid urls
 
 ## 2.*
 
