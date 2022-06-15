@@ -8,8 +8,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 /**
- * Class SimpleContainer
- *
  * Very simple container implementation.
  * If you're using a framework, use its container solution instead.
  */
@@ -60,7 +58,7 @@ class SimpleContainer implements ContainerInterface
      * @throws ContainerExceptionInterface Error while retrieving the entry.
      * @return mixed Entry.
      */
-    public function get($id)
+    public function get(string $id)
     {
         if ( ! $this->has($id)) {
             throw new NotFoundException("Failed to instantiate {$id}");
@@ -85,7 +83,7 @@ class SimpleContainer implements ContainerInterface
      * @param string $id Identifier of the entry to look for.
      * @return bool
      */
-    public function has($id)
+    public function has(string $id): bool
     {
         return array_key_exists($id, $this->bindings);
     }
