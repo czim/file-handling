@@ -102,8 +102,8 @@ class MimeTypeHelper implements MimeTypeHelperInterface
      */
     public static function getMimeTypeExtensionGuesserInstance()
     {
-        if ( ! static::$mimeTypeExtensionGuesser && class_exists(MimeTypeExtensionGuesser::class)) {
-            static::$mimeTypeExtensionGuesser = new MimeTypeExtensionGuesser;
+        if (! static::$mimeTypeExtensionGuesser && class_exists(MimeTypeExtensionGuesser::class)) {
+            static::$mimeTypeExtensionGuesser = new MimeTypeExtensionGuesser();
         }
 
         return static::$mimeTypeExtensionGuesser;

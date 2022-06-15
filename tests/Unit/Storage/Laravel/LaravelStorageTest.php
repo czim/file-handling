@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Storage\Laravel;
 
 use Czim\FileHandling\Contracts\Storage\StorableFileInterface;
@@ -167,7 +168,6 @@ class LaravelStorageTest extends TestCase
 
         static::assertTrue($storage->delete('relative/path'));
     }
-
 
 
     /**

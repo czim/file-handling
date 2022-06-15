@@ -50,7 +50,7 @@ class LaravelContainerDecorator implements ContainerInterface
     /**
      * {@inheritdoc}
      */
-    public function has($id) : bool
+    public function has($id): bool
     {
         if ($this->hasIsCached($id)) {
             return $this->hasFromCache($id);
@@ -69,12 +69,12 @@ class LaravelContainerDecorator implements ContainerInterface
 
     private function hasFromCache($id)
     {
-        return $this->cacheForHas[$id];
+        return $this->cacheForHas[ $id ];
     }
 
     private function cacheHas($id, $has)
     {
-        $this->cacheForHas[$id] = (bool) $has;
+        $this->cacheForHas[ $id ] = (bool) $has;
     }
 
     private function isInstantiable($id)

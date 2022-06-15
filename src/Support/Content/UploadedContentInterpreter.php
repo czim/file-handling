@@ -23,7 +23,8 @@ class UploadedContentInterpreter implements ContentInterpreterInterface
     public function interpret(RawContentInterface $content): string
     {
         // Treat any string longer than 2048 characters as full data
-        if (    $content->size() <= static::FULL_DATA_THRESHOLD
+        if (
+            $content->size() <= static::FULL_DATA_THRESHOLD
             && filter_var($content->content(), FILTER_VALIDATE_URL)
         ) {
             return ContentTypes::URI;

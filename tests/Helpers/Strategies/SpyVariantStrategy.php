@@ -38,13 +38,13 @@ class SpyVariantStrategy implements VariantStrategyInterface
      */
     public function apply(ProcessableFileInterface $file): ?ProcessableFileInterface
     {
-        if ( ! $this->shouldApply) {
-            throw new VariantStrategyShouldNotBeAppliedException;
+        if (! $this->shouldApply) {
+            throw new VariantStrategyShouldNotBeAppliedException();
         }
 
         $this->applied = true;
 
-        if ( ! $this->applySuccessfully) {
+        if (! $this->applySuccessfully) {
             return null;
         }
 

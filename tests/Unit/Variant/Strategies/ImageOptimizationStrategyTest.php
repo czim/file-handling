@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Variant\Strategies;
 
 use Czim\FileHandling\Contracts\Storage\ProcessableFileInterface;

@@ -283,8 +283,9 @@ class ImageWatermarkStrategyTest extends TestCase
     protected function getMockImage()
     {
         /** @var ImageInterface|Mockery\Mock|Mockery\MockInterface $mock */
-        $mock =  Mockery::mock(ImageInterface::class);
+        $mock = Mockery::mock(ImageInterface::class);
         $mock->shouldReceive('getSize')->once()->andReturn($this->getMockSize(600, 400));
+
         return $mock;
     }
 
@@ -296,6 +297,7 @@ class ImageWatermarkStrategyTest extends TestCase
         /** @var ImageInterface|Mockery\Mock|Mockery\MockInterface $mock */
         $mock = Mockery::mock(ImageInterface::class);
         $mock->shouldReceive('getSize')->once()->andReturn($this->getMockSize(100, 100));
+
         return $mock;
     }
 
@@ -310,18 +312,19 @@ class ImageWatermarkStrategyTest extends TestCase
         $mock = Mockery::mock(BoxInterface::class);
         $mock->shouldReceive('getWidth')->andReturn($width);
         $mock->shouldReceive('getHeight')->andReturn($height);
+
         return $mock;
     }
 
     /**
      * @param mixed $position
-     * @param int $x
-     * @param int $y
+     * @param int   $x
+     * @param int   $y
      * @return bool
      */
     protected function comparePosition($position, int $x, int $y): bool
     {
-        if ( ! ($position instanceof PointInterface)) {
+        if (! ($position instanceof PointInterface)) {
             return $position;
         }
 

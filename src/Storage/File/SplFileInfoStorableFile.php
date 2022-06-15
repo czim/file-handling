@@ -23,7 +23,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
      */
     public function setData($data): void
     {
-        if ( ! ($data instanceof SplFileInfo)) {
+        if (! ($data instanceof SplFileInfo)) {
             throw new UnexpectedValueException('Expected SplFileInfo instance');
         }
 
@@ -37,7 +37,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
      */
     protected function setDerivedFileProperties(): void
     {
-        if ( ! $this->file || ! file_exists($this->file->getRealPath())) {
+        if (! $this->file || ! file_exists($this->file->getRealPath())) {
             throw new RuntimeException("Local file not found at '{$this->file->getPath()}'");
         }
 
@@ -115,7 +115,7 @@ class SplFileInfoStorableFile extends AbstractStorableFile
             );
         }
 
-        if ( ! $success) {
+        if (! $success) {
             // @codeCoverageIgnoreStart
             throw new StorableFileCouldNotBeDeletedException("Failed to unlink '{$this->path()}'");
             // @codeCoverageIgnoreEnd

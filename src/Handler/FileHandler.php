@@ -45,8 +45,8 @@ class FileHandler implements FileHandlerInterface
         StorageInterface $storage,
         VariantProcessorInterface $processor
     ) {
-        $this->storage    = $storage;
-        $this->processor  = $processor;
+        $this->storage   = $storage;
+        $this->processor = $processor;
     }
 
 
@@ -54,8 +54,8 @@ class FileHandler implements FileHandlerInterface
      * Processes and stores a storable file.
      *
      * @param StorableFileInterface $source
-     * @param TargetInterface $target
-     * @param array $options
+     * @param TargetInterface       $target
+     * @param array                 $options
      * @return ProcessResultInterface
      */
     public function process(StorableFileInterface $source, TargetInterface $target, array $options = []): ProcessResultInterface
@@ -100,7 +100,7 @@ class FileHandler implements FileHandlerInterface
         $stored = $this->storage->store($storableVariant, $target->variant($variant));
 
         return new ProcessResult(
-            [ $variant => $stored ],
+            [$variant => $stored],
             $this->processor->getTemporaryFiles()
         );
     }
@@ -119,7 +119,7 @@ class FileHandler implements FileHandlerInterface
         ];
 
         if (in_array(static::ORIGINAL, $variants)) {
-            $variants = array_diff($variants, [ static::ORIGINAL ]);
+            $variants = array_diff($variants, [static::ORIGINAL]);
         }
 
         foreach ($variants as $variant) {
@@ -165,12 +165,12 @@ class FileHandler implements FileHandlerInterface
     {
         $success = true;
 
-        if ( ! in_array(static::ORIGINAL, $variants)) {
+        if (! in_array(static::ORIGINAL, $variants)) {
             $variants[] = static::ORIGINAL;
         }
 
         foreach ($variants as $variant) {
-            if ( ! $this->deleteVariant($target, $variant)) {
+            if (! $this->deleteVariant($target, $variant)) {
                 $success = false;
             }
         }
@@ -194,7 +194,7 @@ class FileHandler implements FileHandlerInterface
         }
 
         // If the file does not exist, consider 'deletion' a success
-        if ( ! $this->storage->exists($path)) {
+        if (! $this->storage->exists($path)) {
             return true;
         }
 

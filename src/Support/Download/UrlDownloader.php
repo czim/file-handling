@@ -157,7 +157,7 @@ class UrlDownloader implements UrlDownloaderInterface
         }
 
         // @codeCoverageIgnoreStart
-        if ( ! $success) {
+        if (! $success) {
             throw new CouldNotRetrieveRemoteFileException("Failed to rename '{$path}' to '{$newName}'");
         }
         // @codeCoverageIgnoreEnd

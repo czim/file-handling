@@ -45,7 +45,7 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
      */
     protected function setDerivedFileProperties(): void
     {
-        if ( ! $this->file || ! file_exists($this->file->getRealPath())) {
+        if (! $this->file || ! file_exists($this->file->getRealPath())) {
             throw new RuntimeException("Local file not found at {$this->file->getPath()}");
         }
 
@@ -123,7 +123,7 @@ class ProcessableFile extends AbstractStorableFile implements ProcessableFileInt
             );
         }
 
-        if ( ! $success) {
+        if (! $success) {
             // @codeCoverageIgnoreStart
             throw new StorableFileCouldNotBeDeletedException("Failed to unlink '{$this->path()}'");
             // @codeCoverageIgnoreEnd

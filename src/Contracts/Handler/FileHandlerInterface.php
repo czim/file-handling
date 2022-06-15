@@ -11,8 +11,8 @@ interface FileHandlerInterface
      * Processes and stores a storable file.
      *
      * @param StorableFileInterface $source
-     * @param TargetInterface $target
-     * @param array $options
+     * @param TargetInterface       $target
+     * @param array                 $options
      * @return ProcessResultInterface
      */
     public function process(StorableFileInterface $source, TargetInterface $target, array $options = []): ProcessResultInterface;

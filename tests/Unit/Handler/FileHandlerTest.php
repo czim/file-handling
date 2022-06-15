@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Handler;
 
 use Czim\FileHandling\Contracts\Handler\ProcessResultInterface;
@@ -134,8 +135,8 @@ class FileHandlerTest extends TestCase
         $processor = $this->getMockVariantProcessor();
         $target    = $this->getMockTarget();
 
-        $file           = $this->getMockStorableFile();
-        $storedMock     = $this->getMockStoredFile();
+        $file       = $this->getMockStorableFile();
+        $storedMock = $this->getMockStoredFile();
 
         $tinyVariantConfig = [
             'resize' => ['dimensions' => '10x10'],

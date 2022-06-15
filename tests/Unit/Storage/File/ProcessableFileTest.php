@@ -18,7 +18,7 @@ class ProcessableFileTest extends TestCase
      */
     function it_can_set_and_retrieve_content_data()
     {
-        $file = new ProcessableFile;
+        $file = new ProcessableFile();
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 
@@ -32,7 +32,7 @@ class ProcessableFileTest extends TestCase
      */
     function it_can_set_data_as_a_path_string()
     {
-        $file = new ProcessableFile;
+        $file = new ProcessableFile();
 
         $path = $this->getExampleLocalPath();
 
@@ -48,7 +48,7 @@ class ProcessableFileTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $file = new ProcessableFile;
+        $file = new ProcessableFile();
 
         $fileInfo = new SplFileInfo('/no/file/exists/here');
 
@@ -60,7 +60,7 @@ class ProcessableFileTest extends TestCase
      */
     function it_returns_content_size_when_set()
     {
-        $file = new ProcessableFile;
+        $file = new ProcessableFile();
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 
@@ -74,7 +74,7 @@ class ProcessableFileTest extends TestCase
      */
     function it_returns_the_path()
     {
-        $file = new ProcessableFile;
+        $file = new ProcessableFile();
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 

@@ -19,7 +19,7 @@ class RawStorableFileTest extends TestCase
      */
     function it_can_set_and_retrieve_the_mime_type()
     {
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
 
         $file->setMimeType('type');
 
@@ -31,7 +31,7 @@ class RawStorableFileTest extends TestCase
      */
     function it_can_set_and_retrieve_the_name()
     {
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
 
         $file->setName('test.txt');
 
@@ -43,7 +43,7 @@ class RawStorableFileTest extends TestCase
      */
     function it_can_be_marked_as_uploaded()
     {
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
 
         static::assertFalse($file->isUploaded());
 
@@ -61,7 +61,7 @@ class RawStorableFileTest extends TestCase
      */
     function it_returns_the_extension_for_its_name()
     {
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
 
         static::assertNull($file->extension(), 'Should return null without a name set');
 
@@ -75,7 +75,7 @@ class RawStorableFileTest extends TestCase
      */
     function it_returns_content_size_as_null_by_default()
     {
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
 
         static::assertNull($file->size());
     }
@@ -85,7 +85,7 @@ class RawStorableFileTest extends TestCase
      */
     function it_returns_null_for_path()
     {
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
 
         static::assertNull($file->path());
     }
@@ -149,7 +149,7 @@ class RawStorableFileTest extends TestCase
      */
     function it_can_set_and_retrieve_content_data()
     {
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
 
         $file->setData('testing content');
 
@@ -168,7 +168,7 @@ class RawStorableFileTest extends TestCase
     {
         $this->expectException(UnexpectedValueException::class);
 
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
 
         $file->setData(['not', 'a string']);
     }
@@ -178,7 +178,7 @@ class RawStorableFileTest extends TestCase
      */
     function it_returns_content_size_when_set()
     {
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
 
         $file->setData('testing content');
 

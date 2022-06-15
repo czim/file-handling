@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Support\Container;
 
 use Czim\FileHandling\Exceptions\Container\NotFoundException;
@@ -13,7 +14,7 @@ class SimpleContainerTest extends TestCase
      */
     function it_returns_whether_a_binding_is_set()
     {
-        $container = new SimpleContainer;
+        $container = new SimpleContainer();
 
         $container->registerInstance('test', 'is set');
 
@@ -26,7 +27,7 @@ class SimpleContainerTest extends TestCase
      */
     function it_returns_registerd_binding()
     {
-        $container = new SimpleContainer;
+        $container = new SimpleContainer();
 
         $container->registerInstance('test', 'is set');
 
@@ -38,9 +39,11 @@ class SimpleContainerTest extends TestCase
      */
     function it_returns_registered_binding_callable()
     {
-        $container = new SimpleContainer;
+        $container = new SimpleContainer();
 
-        $container->registerCallable('test', function () { return 'is set'; });
+        $container->registerCallable('test', function () {
+            return 'is set';
+        });
 
         static::assertEquals('is set', $container->get('test'));
     }
@@ -52,7 +55,7 @@ class SimpleContainerTest extends TestCase
     {
         $this->expectException(NotFoundException::class);
 
-        $container = new SimpleContainer;
+        $container = new SimpleContainer();
 
         $container->get('test');
     }

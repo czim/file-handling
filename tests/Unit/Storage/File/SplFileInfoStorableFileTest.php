@@ -24,7 +24,7 @@ class SplFileInfoStorableFileTest extends TestCase
      */
     function it_can_set_and_retrieve_content_data()
     {
-        $file = new SplFileInfoStorableFile;
+        $file = new SplFileInfoStorableFile();
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 
@@ -40,7 +40,7 @@ class SplFileInfoStorableFileTest extends TestCase
     {
         $this->expectException(UnexpectedValueException::class);
 
-        $file = new SplFileInfoStorableFile;
+        $file = new SplFileInfoStorableFile();
 
         $file->setData('not a fileinfo instance');
     }
@@ -52,7 +52,7 @@ class SplFileInfoStorableFileTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $file = new SplFileInfoStorableFile;
+        $file = new SplFileInfoStorableFile();
 
         $fileInfo = new SplFileInfo('/no/file/exists/here');
 
@@ -64,7 +64,7 @@ class SplFileInfoStorableFileTest extends TestCase
      */
     function it_returns_content_size_when_set()
     {
-        $file = new SplFileInfoStorableFile;
+        $file = new SplFileInfoStorableFile();
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 
@@ -78,7 +78,7 @@ class SplFileInfoStorableFileTest extends TestCase
      */
     function it_returns_the_path()
     {
-        $file = new SplFileInfoStorableFile;
+        $file = new SplFileInfoStorableFile();
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 
@@ -92,7 +92,7 @@ class SplFileInfoStorableFileTest extends TestCase
      */
     function it_opens_a_stream_for_reading()
     {
-        $file = new SplFileInfoStorableFile;
+        $file = new SplFileInfoStorableFile();
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 
@@ -111,7 +111,7 @@ class SplFileInfoStorableFileTest extends TestCase
      */
     function it_closes_an_open_stream()
     {
-        $file = new SplFileInfoStorableFile;
+        $file = new SplFileInfoStorableFile();
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 
@@ -130,7 +130,7 @@ class SplFileInfoStorableFileTest extends TestCase
      */
     function it_silently_ignores_null_when_closing_a_stream()
     {
-        $file = new SplFileInfoStorableFile;
+        $file = new SplFileInfoStorableFile();
 
         $fileInfo = new SplFileInfo($this->getExampleLocalPath());
 

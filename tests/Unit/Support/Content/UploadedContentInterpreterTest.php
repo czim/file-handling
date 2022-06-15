@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Support\Content;
 
 use Czim\FileHandling\Enums\ContentTypes;
@@ -20,7 +21,7 @@ class UploadedContentInterpreterTest extends TestCase
      */
     function it_returns_uri_for_uri_content()
     {
-        $interpreter = new UploadedContentInterpreter;
+        $interpreter = new UploadedContentInterpreter();
 
         static::assertEquals(
             ContentTypes::URI,
@@ -33,7 +34,7 @@ class UploadedContentInterpreterTest extends TestCase
      */
     function it_returns_datauri_for_datauri_content()
     {
-        $interpreter = new UploadedContentInterpreter;
+        $interpreter = new UploadedContentInterpreter();
 
         static::assertEquals(
             ContentTypes::DATAURI,
@@ -46,7 +47,7 @@ class UploadedContentInterpreterTest extends TestCase
      */
     function it_returns_raw_for_non_url_non_datauri_content()
     {
-        $interpreter = new UploadedContentInterpreter;
+        $interpreter = new UploadedContentInterpreter();
 
         static::assertEquals(
             ContentTypes::RAW,

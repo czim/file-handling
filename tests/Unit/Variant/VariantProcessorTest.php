@@ -54,7 +54,7 @@ class VariantProcessorTest extends TestCase
         $mockStrategy = $this->makeMockVariantStrategy();
         $strategyFactory->shouldReceive('make')->with('test-strategy')->once()->andReturn($mockStrategy);
 
-        $variant = $processor->process($source, 'variant', [ 'test-strategy' => ['test' => 'a'] ]);
+        $variant = $processor->process($source, 'variant', ['test-strategy' => ['test' => 'a']]);
 
         static::assertInstanceOf(ProcessableFileInterface::class, $variant);
         static::assertEquals('text/plain', $variant->mimeType());
@@ -86,7 +86,7 @@ class VariantProcessorTest extends TestCase
         $mockStrategy = $this->makeMockVariantStrategy(false);
         $strategyFactory->shouldReceive('make')->with('test-strategy')->once()->andReturn($mockStrategy);
 
-        $processor->process($source, 'variant', [ 'test-strategy' => ['test' => 'a'] ]);
+        $processor->process($source, 'variant', ['test-strategy' => ['test' => 'a']]);
     }
 
     /**
@@ -100,7 +100,7 @@ class VariantProcessorTest extends TestCase
         $strategyFactory = $this->getMockStrategyFactory();
 
         $processor = new VariantProcessor($fileFactory, $strategyFactory);
-        $processor->setConfig([ VariantProcessor::CONFIG_FORCE_APPLY => true ]);
+        $processor->setConfig([VariantProcessor::CONFIG_FORCE_APPLY => true]);
 
         // Prepare mock source file
         vfsStream::newFile('file')->at($this->vfsRoot)->setContent('dummy contents');
@@ -116,7 +116,7 @@ class VariantProcessorTest extends TestCase
         $mockStrategy = $this->makeMockVariantStrategy(true, false);
         $strategyFactory->shouldReceive('make')->with('test-strategy')->once()->andReturn($mockStrategy);
 
-        $processor->process($source, 'variant', [ 'test-strategy' => ['test' => 'a'] ]);
+        $processor->process($source, 'variant', ['test-strategy' => ['test' => 'a']]);
     }
 
     /**
@@ -143,7 +143,7 @@ class VariantProcessorTest extends TestCase
         $mockStrategy = $this->makeMockVariantStrategy(true, false);
         $strategyFactory->shouldReceive('make')->with('test-strategy')->once()->andReturn($mockStrategy);
 
-        $variant = $processor->process($source, 'variant', [ 'test-strategy' => ['test' => 'a'] ]);
+        $variant = $processor->process($source, 'variant', ['test-strategy' => ['test' => 'a']]);
 
         static::assertInstanceOf(ProcessableFileInterface::class, $variant);
         static::assertEquals('text/plain', $variant->mimeType());
@@ -176,7 +176,7 @@ class VariantProcessorTest extends TestCase
 
         static::assertCount(0, $processor->getTemporaryFiles());
 
-        $processor->process($source, 'variant', [ 'test-strategy' => ['test' => 'a'] ]);
+        $processor->process($source, 'variant', ['test-strategy' => ['test' => 'a']]);
 
         static::assertCount(1, $processor->getTemporaryFiles());
         static::assertInstanceOf(StorableFileInterface::class, $processor->getTemporaryFiles()[0]);
@@ -253,7 +253,7 @@ class VariantProcessorTest extends TestCase
         } else {
             $mock->shouldReceive('apply')->once()
                 ->with(Mockery::type(ProcessableFileInterface::class))
-                ->andThrow(new VariantStrategyShouldNotBeAppliedException);
+                ->andThrow(new VariantStrategyShouldNotBeAppliedException());
         }
 
 

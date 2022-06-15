@@ -33,8 +33,8 @@ abstract class AbstractVariantStrategy implements VariantStrategyInterface
     {
         $this->file = $file;
 
-        if ( ! $this->shouldBeApplied()) {
-            throw new VariantStrategyShouldNotBeAppliedException;
+        if (! $this->shouldBeApplied()) {
+            throw new VariantStrategyShouldNotBeAppliedException();
         }
 
         $result = $this->perform();

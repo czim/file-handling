@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Support\Download;
 
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
@@ -32,9 +33,9 @@ class UrlDownloaderTest extends TestCase
     {
         /** @var UrlDownloader|Mockery\MockInterface|Mockery\Mock $downloader */
         $downloader = Mockery::mock(
-                UrlDownloader::class . '[downloadToTempLocalPath,makeLocalTemporaryPath]',
-                [ $this->getMockHelper() ]
-            )
+            UrlDownloader::class . '[downloadToTempLocalPath,makeLocalTemporaryPath]',
+            [$this->getMockHelper()]
+        )
             ->shouldAllowMockingProtectedMethods();
 
         $downloader->shouldReceive('makeLocalTemporaryPath')->andReturn('tmp/test.txt');
@@ -57,9 +58,9 @@ class UrlDownloaderTest extends TestCase
 
         /** @var UrlDownloader|Mockery\MockInterface|Mockery\Mock $downloader */
         $downloader = Mockery::mock(
-                UrlDownloader::class . '[downloadToTempLocalPath,makeLocalTemporaryPath]',
-                [ $helper ]
-            )
+            UrlDownloader::class . '[downloadToTempLocalPath,makeLocalTemporaryPath]',
+            [$helper]
+        )
             ->shouldAllowMockingProtectedMethods();
 
         // Prepare file mocking
@@ -91,7 +92,7 @@ class UrlDownloaderTest extends TestCase
         /** @var UrlDownloader|Mockery\MockInterface|Mockery\Mock $downloader */
         $downloader = Mockery::mock(
             UrlDownloader::class . '[downloadToTempLocalPath,makeLocalTemporaryPath]',
-            [ $helper ]
+            [$helper]
         )
             ->shouldAllowMockingProtectedMethods();
 

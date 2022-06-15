@@ -19,7 +19,7 @@ class RawStorableFile extends AbstractStorableFile
      */
     public function setData($data): void
     {
-        if ( ! is_string($data)) {
+        if (! is_string($data)) {
             throw new UnexpectedValueException('Expected string with file content');
         }
 

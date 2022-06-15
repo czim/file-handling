@@ -78,7 +78,7 @@ class LaravelStorage implements StorageInterface
      */
     public function get(string $path): StoredFileInterface
     {
-        $raw = new RawStorableFile;
+        $raw = new RawStorableFile();
 
         $raw->setName(pathinfo($path, PATHINFO_BASENAME));
         $raw->setData($this->filesystem->get($path));
@@ -117,7 +117,7 @@ class LaravelStorage implements StorageInterface
     {
         // In order to have the same overwriting behavior as put, any existing file must be deleted first.
         if ($this->filesystem->exists($path)) {
-            if ( ! $this->filesystem->delete($path)) {
+            if (! $this->filesystem->delete($path)) {
                 throw new FileStorageException(
                     'Failed to delete existing file in preparation of writing stream, '
                     . "'{$file->name()}' to '{$path}'"
@@ -125,7 +125,7 @@ class LaravelStorage implements StorageInterface
             }
         }
 
-        if ( ! $this->filesystem->writeStream($path, $resource)) {
+        if (! $this->filesystem->writeStream($path, $resource)) {
             throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}' (stream)");
         }
 
@@ -134,7 +134,7 @@ class LaravelStorage implements StorageInterface
 
     protected function writeFileDirectly(StorableFileInterface $file, string $path): void
     {
-        if ( ! $this->filesystem->put($path, $file->content())) {
+        if (! $this->filesystem->put($path, $file->content())) {
             throw new FileStorageException("Failed to store '{$file->name()}' to '{$path}'");
         }
     }

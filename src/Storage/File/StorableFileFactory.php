@@ -100,7 +100,7 @@ class StorableFileFactory implements StorableFileFactoryInterface
             $data = new RawContent($data);
         }
 
-        if ( ! ($data instanceof RawContentInterface)) {
+        if (! ($data instanceof RawContentInterface)) {
             throw new UnexpectedValueException('Could not interpret given data, string value expected');
         }
 
@@ -117,7 +117,7 @@ class StorableFileFactory implements StorableFileFactoryInterface
      */
     public function makeFromFileInfo(SplFileInfo $data, ?string $name = null, ?string $mimeType = null): StorableFileInterface
     {
-        $file = new SplFileInfoStorableFile;
+        $file = new SplFileInfoStorableFile();
         $file->setData($data);
 
         if (null !== $mimeType) {
@@ -200,7 +200,7 @@ class StorableFileFactory implements StorableFileFactoryInterface
 
         $resource = @fopen($data, 'r');
 
-        if ( ! $resource) {
+        if (! $resource) {
             throw new CouldNotReadDataException('Invalid data URI');
         }
 
@@ -245,7 +245,7 @@ class StorableFileFactory implements StorableFileFactoryInterface
      */
     public function makeFromRawData($data, ?string $name = null, ?string $mimeType = null): StorableFileInterface
     {
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
 
         if ($data instanceof RawContentInterface) {
             $data = $data->content();
@@ -331,6 +331,6 @@ class StorableFileFactory implements StorableFileFactoryInterface
     protected function makeRandomName(string $extension): string
     {
         return substr(md5(microtime()), 0, 16)
-             . ($extension ? '.' . $extension : '');
+            . ($extension ? '.' . $extension : '');
     }
 }

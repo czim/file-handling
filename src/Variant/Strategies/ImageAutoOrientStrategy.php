@@ -45,7 +45,7 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
      */
     protected function isQuietModeDisabled(): bool
     {
-        if ( ! array_key_exists('quiet', $this->options)) {
+        if (! array_key_exists('quiet', $this->options)) {
             return false;
         }
 
@@ -57,7 +57,7 @@ class ImageAutoOrientStrategy extends AbstractImageStrategy
      */
     protected function shouldBeApplied(): bool
     {
-        if ( ! parent::shouldBeApplied()) {
+        if (! parent::shouldBeApplied()) {
             return false;
         }
 

@@ -52,7 +52,7 @@ class Optimizer
     protected function arrayGet(array $array, $key, $default = null)
     {
         // @codeCoverageIgnoreStart
-        if ( ! array_key_exists($key, $array)) {
+        if (! array_key_exists($key, $array)) {
             return $default;
         }
         // @codeCoverageIgnoreEnd

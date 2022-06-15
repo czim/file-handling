@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Storage\Path;
 
 use Czim\FileHandling\Contracts\Storage\TargetInterface;
@@ -161,8 +162,8 @@ class Target implements TargetInterface, TargetSetupInterface
         array_pop($segments);
 
         return implode(DIRECTORY_SEPARATOR, $segments)
-             . DIRECTORY_SEPARATOR
-             . $replacement;
+            . DIRECTORY_SEPARATOR
+            . $replacement;
     }
 
     /**
@@ -173,9 +174,9 @@ class Target implements TargetInterface, TargetSetupInterface
     protected function replaceExtension(string $path, string $extension): string
     {
         return pathinfo($path, PATHINFO_DIRNAME)
-             . DIRECTORY_SEPARATOR
-             . pathinfo($path, PATHINFO_FILENAME)
-             . ($extension ? '.' . $extension : null);
+            . DIRECTORY_SEPARATOR
+            . pathinfo($path, PATHINFO_FILENAME)
+            . ($extension ? '.' . $extension : null);
     }
 
     /**

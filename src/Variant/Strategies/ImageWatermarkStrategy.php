@@ -39,7 +39,7 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
     {
         $image = $this->imagine->open($this->file->path());
 
-        if ( ! ($watermark = $this->getWatermarkImage())) {
+        if (! ($watermark = $this->getWatermarkImage())) {
             return false;
         }
 
@@ -94,7 +94,7 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
         // Get image to embed as watermark
         $watermarkPath = $this->getWatermarkImagePath();
 
-        if ( ! $watermarkPath) {
+        if (! $watermarkPath) {
             return null;
         }
 

@@ -99,7 +99,7 @@ class OrientationFixer
     public function fixImage(string $path, ImageInterface $image): ImageInterface
     {
         // @codeCoverageIgnoreStart
-        if ( ! function_exists('exif_read_data')) {
+        if (! function_exists('exif_read_data')) {
             return $image;
         }
         // @codeCoverageIgnoreEnd
@@ -121,7 +121,7 @@ class OrientationFixer
             $exif = exif_read_data($path);
         }
 
-        if ( ! isset($exif['Orientation']) || $exif['Orientation'] == static::ORIENTATION_TOPLEFT) {
+        if (! isset($exif['Orientation']) || $exif['Orientation'] == static::ORIENTATION_TOPLEFT) {
             return $image;
         }
 

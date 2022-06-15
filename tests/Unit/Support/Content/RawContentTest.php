@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Support\Content;
 
 use Czim\FileHandling\Support\Content\RawContent;

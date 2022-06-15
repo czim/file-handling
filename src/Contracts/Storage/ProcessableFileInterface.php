@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Contracts\Storage;
 
 interface ProcessableFileInterface extends StorableFileInterface, DataSettableInterface

@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Support\Content;
 
 use Czim\FileHandling\Test\Helpers\Strategies\SpyVariantStrategy;
@@ -33,7 +34,7 @@ class VariantStrategyFactoryTest extends TestCase
      */
     function it_makes_a_strategy_by_classname()
     {
-        $this->bindings[SpyVariantStrategy::class] = new SpyVariantStrategy;
+        $this->bindings[ SpyVariantStrategy::class ] = new SpyVariantStrategy();
 
         $factory = new VariantStrategyFactory($this->getMockContainer());
 
@@ -49,7 +50,7 @@ class VariantStrategyFactoryTest extends TestCase
      */
     function it_makes_a_strategy_by_alias()
     {
-        $this->bindings[SpyVariantStrategy::class] = new SpyVariantStrategy;
+        $this->bindings[ SpyVariantStrategy::class ] = new SpyVariantStrategy();
 
         $factory = new VariantStrategyFactory($this->getMockContainer());
 
@@ -83,7 +84,7 @@ class VariantStrategyFactoryTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $this->bindings[VariantStrategyFactoryTest::class] = new VariantStrategyFactoryTest;
+        $this->bindings[ VariantStrategyFactoryTest::class ] = new VariantStrategyFactoryTest();
 
         $factory = new VariantStrategyFactory($this->getMockContainer());
 

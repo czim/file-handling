@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Storage\File;
 
 use Czim\FileHandling\Contracts\Support\ContentInterpreterInterface;
@@ -39,7 +40,7 @@ class StorableFileFactoryTest extends TestCase
     {
         $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
 
-        $file = new RawStorableFile;
+        $file = new RawStorableFile();
         $file->setData('random content');
         $file->setMimeType('text/plain');
         $file->setName('test.txt');

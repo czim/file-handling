@@ -1,4 +1,5 @@
 <?php
+
 namespace Czim\FileHandling\Test\Unit\Support\Image;
 
 use Czim\FileHandling\Support\Image\OrientationFixer;
@@ -33,7 +34,7 @@ class OrientationFixerTest extends TestCase
      */
     function it_reorients_a_rotated_image_instance_at_orientation_2()
     {
-        $fixer = new OrientationFixer(new Imagine);
+        $fixer = new OrientationFixer(new Imagine());
 
         $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_TOPRIGHT);
 
@@ -51,7 +52,7 @@ class OrientationFixerTest extends TestCase
      */
     function it_reorients_a_rotated_image_instance_at_orientation_3()
     {
-        $fixer = new OrientationFixer(new Imagine);
+        $fixer = new OrientationFixer(new Imagine());
 
         $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_BOTTOMRIGHT);
 
@@ -69,7 +70,7 @@ class OrientationFixerTest extends TestCase
      */
     function it_reorients_a_rotated_image_instance_at_orientation_4()
     {
-        $fixer = new OrientationFixer(new Imagine);
+        $fixer = new OrientationFixer(new Imagine());
 
         $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_BOTTOMLEFT);
 
@@ -87,7 +88,7 @@ class OrientationFixerTest extends TestCase
      */
     function it_reorients_a_rotated_image_instance_at_orientation_5()
     {
-        $fixer = new OrientationFixer(new Imagine);
+        $fixer = new OrientationFixer(new Imagine());
 
         $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_LEFTTOP);
 
@@ -105,7 +106,7 @@ class OrientationFixerTest extends TestCase
      */
     function it_reorients_a_rotated_image_instance_at_orientation_6()
     {
-        $fixer = new OrientationFixer(new Imagine);
+        $fixer = new OrientationFixer(new Imagine());
 
         $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_RIGHTTOP);
 
@@ -123,7 +124,7 @@ class OrientationFixerTest extends TestCase
      */
     function it_reorients_a_rotated_image_instance_at_orientation_7()
     {
-        $fixer = new OrientationFixer(new Imagine);
+        $fixer = new OrientationFixer(new Imagine());
 
         $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_RIGHTBOTTOM);
 
@@ -141,7 +142,7 @@ class OrientationFixerTest extends TestCase
      */
     function it_reorients_a_rotated_image_instance_at_orientation_8()
     {
-        $fixer = new OrientationFixer(new Imagine);
+        $fixer = new OrientationFixer(new Imagine());
 
         $source = $this->makeSourceFile(OrientationFixer::ORIENTATION_LEFTBOTTOM);
 
@@ -159,7 +160,7 @@ class OrientationFixerTest extends TestCase
      */
     function it_does_not_reorient_an_image_instance_that_is_not_rotated()
     {
-        $fixer = new OrientationFixer(new Imagine);
+        $fixer = new OrientationFixer(new Imagine());
 
         $source = $this->makeSourceFile(false);
 
@@ -189,7 +190,7 @@ class OrientationFixerTest extends TestCase
      */
     function it_enables_and_disables_quiet_mode()
     {
-        $fixer = new OrientationFixer(new Imagine);
+        $fixer = new OrientationFixer(new Imagine());
 
         static::assertTrue($fixer->isQuiet());
 
@@ -212,7 +213,7 @@ class OrientationFixerTest extends TestCase
      */
     protected function makeSourceFile($rotated = OrientationFixer::ORIENTATION_RIGHTTOP): SplFileInfo
     {
-        if ( ! $rotated) {
+        if (! $rotated) {
             $original = realpath(static::UNROTATED_IMAGE_PATH);
         } else {
             $original = realpath(str_replace('?', $rotated, static::ROTATED_IMAGE_PATH));

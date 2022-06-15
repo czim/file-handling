@@ -148,7 +148,7 @@ class VariantProcessor implements VariantProcessorInterface
      */
     protected function shouldThrowExceptionForUnappliedStrategy(): bool
     {
-        if ( ! array_key_exists(static::CONFIG_FORCE_APPLY, $this->config)) {
+        if (! array_key_exists(static::CONFIG_FORCE_APPLY, $this->config)) {
             return false;
         }
 
@@ -175,12 +175,12 @@ class VariantProcessor implements VariantProcessorInterface
         }
 
         // @codeCoverageIgnoreStart
-        if ( ! $success) {
+        if (! $success) {
             throw new CouldNotProcessDataException("Failed to make variant copy to '{$path}'");
         }
         // @codeCoverageIgnoreEnd
 
-        $file = new ProcessableFile;
+        $file = new ProcessableFile();
 
         $file->setName($source->name());
         $file->setMimeType($source->mimeType());
@@ -194,7 +194,7 @@ class VariantProcessor implements VariantProcessorInterface
     protected function makeLocalTemporaryPath(?string $extension = null): string
     {
         return sys_get_temp_dir() . '/' . uniqid('filehandling-variant-')
-             . ($extension ? ".{$extension}" : null);
+            . ($extension ? ".{$extension}" : null);
     }
 
     protected function rememberTemporaryFile(StorableFileInterface $file): void

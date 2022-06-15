@@ -40,7 +40,7 @@ class Resizer implements ImageResizerInterface
     {
         $filePath = $file->getRealPath();
 
-        list($width, $height, $option) = $this->parseOptionDimensions($options);
+        [$width, $height, $option] = $this->parseOptionDimensions($options);
 
         $method = 'resize' . ucfirst($option);
 
@@ -58,7 +58,7 @@ class Resizer implements ImageResizerInterface
         $image = $this->imagine->open($file->getRealPath());
 
         $this->$method($image, $width, $height)
-           ->save($filePath, $this->getConvertOptions($options));
+            ->save($filePath, $this->getConvertOptions($options));
 
         return true;
     }
@@ -153,8 +153,8 @@ class Resizer implements ImageResizerInterface
      */
     protected function resizeAuto(ImageInterface $image, string $width, string $height): ImageInterface
     {
-        $size = $image->getSize();
-        $originalWidth = $size->getWidth();
+        $size           = $image->getSize();
+        $originalWidth  = $size->getWidth();
         $originalHeight = $size->getHeight();
 
         if ($originalHeight < $originalWidth) {
@@ -244,7 +244,7 @@ class Resizer implements ImageResizerInterface
      */
     protected function resizeCrop(ImageInterface $image, string $width, string $height): ImageInterface
     {
-        list($optimalWidth, $optimalHeight) = $this->getOptimalCrop($image->getSize(), $width, $height);
+        [$optimalWidth, $optimalHeight] = $this->getOptimalCrop($image->getSize(), $width, $height);
 
         // Find center - this will be used for the crop
         $centerX = ($optimalWidth / 2) - ($width / 2);
@@ -332,7 +332,7 @@ class Resizer implements ImageResizerInterface
         $optimalHeight = round($size->getHeight() / $optimalRatio, 2);
         $optimalWidth  = round($size->getWidth() / $optimalRatio, 2);
 
-        return [ $optimalWidth, $optimalHeight ];
+        return [$optimalWidth, $optimalHeight];
     }
 
     /**
@@ -346,7 +346,7 @@ class Resizer implements ImageResizerInterface
     protected function arrGet(array $array, string $key, $default = null)
     {
         // @codeCoverageIgnoreStart
-        if ( ! $this->arrHas($array, $key)) {
+        if (! $this->arrHas($array, $key)) {
             return $default;
         }
         // @codeCoverageIgnoreEnd

@@ -62,7 +62,7 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
             $this->resolveStrategyClassName($strategy)
         );
 
-        if ( ! ($instance instanceof VariantStrategyInterface)) {
+        if (! ($instance instanceof VariantStrategyInterface)) {
             throw new RuntimeException("Variant strategy created for '{$strategy}' is of incorrect type");
         }
 
@@ -83,7 +83,7 @@ class VariantStrategyFactory implements VariantStrategyFactoryInterface
             $strategyClass = $strategy;
         }
 
-        if ( ! $this->container->has($strategyClass)) {
+        if (! $this->container->has($strategyClass)) {
             throw new RuntimeException("Cannot resolve variant strategy '{$strategy}'");
         }
 

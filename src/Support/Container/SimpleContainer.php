@@ -60,7 +60,7 @@ class SimpleContainer implements ContainerInterface
      */
     public function get(string $id)
     {
-        if ( ! $this->has($id)) {
+        if (! $this->has($id)) {
             throw new NotFoundException("Failed to instantiate {$id}");
         }
 
