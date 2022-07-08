@@ -149,7 +149,7 @@ class FileHandler implements FileHandlerInterface
 
         $filename = array_pop($parts);
 
-        $parts[] = urlencode($filename);
+        $parts[] = rawurlencode($filename);
 
         return implode('/', $parts);
     }
