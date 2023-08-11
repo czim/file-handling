@@ -36,6 +36,10 @@ For locally stored files, you can get a `resource` object this way, just as you 
 
 ## 1.*
 
+### [1.3.2] - 2023-08-11
+
+Fixed an issue that broke error handling due to a mistyped exception method.
+
 ### [1.3.1] - 2020-03-19
 
 Added support for Symfony 5 (and so Laravel 7).
