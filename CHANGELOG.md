@@ -3,6 +3,14 @@ Fixed issue where `variantUrlsForTarget()` returns invalid urls
 
 ## 2.*
 
+### [2.1.4] - 2023-08-11
+
+Fixed an issue that broke error handling due to a mistyped exception method.
+
+### [2.1.3] - 2022-08-07
+
+Fixed + vs %20 for spaces in encoded filenames.
+
 ### [2.1.2] - 2022-06-15
 
 Fixed an issue concerning invalid characters in filename-generated URLs (by TSVitor).
