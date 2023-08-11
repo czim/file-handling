@@ -4,6 +4,7 @@
 
 ### [1.3.2] - 2023-08-11
 
+Fixed an issue that broke error handling due to a mistyped exception method.
 
 ### [1.3.1] - 2020-03-19
 
