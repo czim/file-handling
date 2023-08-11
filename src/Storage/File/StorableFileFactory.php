@@ -172,7 +172,7 @@ class StorableFileFactory implements StorableFileFactoryInterface
 
             throw new CouldNotRetrieveRemoteFileException(
                 "Could not retrieve file from '{$url}'",
-                $e->getcode(),
+                $e->getCode(),
                 $e
             );
         }

@@ -2,6 +2,9 @@
 
 ## 1.*
 
+### [1.3.2] - 2023-08-11
+
+
 ### [1.3.1] - 2020-03-19
 
 Added support for Symfony 5 (and so Laravel 7).
