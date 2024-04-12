@@ -8,7 +8,7 @@
         "imagine/imagine": "^1.2",
         "myclabs/php-enum": "^1.4",
         "psr/container": "^1.0|^2.0",
-        "symfony/http-foundation": "^3.0|^4.0|^5.0|^6.0",
+        "symfony/http-foundation": "^3.0|^4.0|^5.0|^6.0|^7.0",
         "ext-curl": "*"
     },
     "require-dev": {
