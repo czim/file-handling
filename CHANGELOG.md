@@ -3,6 +3,10 @@ Fixed issue where `variantUrlsForTarget()` returns invalid urls
 
 ## 2.*
 
+### [2.1.5] - 2024-04-13
+
+Fixed Symfony http-foundation support issue.
+
 ### [2.1.4] - 2023-08-11
 
 Fixed an issue that broke error handling due to a mistyped exception method.
@@ -108,6 +112,9 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[2.1.5]: https://github.com/czim/file-handling/compare/2.1.4...2.1.5
+[2.1.4]: https://github.com/czim/file-handling/compare/2.1.3...2.1.4
+[2.1.3]: https://github.com/czim/file-handling/compare/2.1.2...2.1.3
 [2.1.2]: https://github.com/czim/file-handling/compare/2.1.1...2.1.2
 [2.1.1]: https://github.com/czim/file-handling/compare/2.0.3...2.1.1
 [2.0.3]: https://github.com/czim/file-handling/compare/2.0.2...2.0.3
