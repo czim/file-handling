@@ -2,6 +2,10 @@
 
 ## 1.*
 
+### [1.4.0] - 2024-09-10
+
+Only accept `http(s)` and `ftp` as valid URL protocols for uploaded content interpreter.
+
 ### [1.3.2] - 2023-08-11
 
 Fixed an issue that broke error handling due to a mistyped exception method.
