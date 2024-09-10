@@ -8,14 +8,11 @@ use SplFileInfo;
 class ImageOptimizationStrategy extends AbstractImageStrategy
 {
     /**
-     * @var imageOptimizer
+     * @var Optimizer
      */
-    protected $imageOptimizer;
+    protected $optimizer;
 
 
-    /**
-     * @param Optimizer $optimizer
-     */
     public function __construct(Optimizer $optimizer)
     {
         $this->optimizer = $optimizer;
