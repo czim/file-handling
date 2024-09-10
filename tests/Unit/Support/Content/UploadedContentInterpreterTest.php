@@ -55,6 +55,29 @@ class UploadedContentInterpreterTest extends TestCase
         );
     }
 
+    /**
+     * @test
+     */
+    function it_returns_raw_for_disallowed_uri_content()
+    {
+        $interpreter = new UploadedContentInterpreter();
+
+        static::assertEquals(
+            ContentTypes::RAW,
+            $interpreter->interpret(new RawContent('file://local/file'))
+        );
+
+        static::assertEquals(
+            ContentTypes::RAW,
+            $interpreter->interpret(new RawContent('wss://somewhere:777'))
+        );
+
+        static::assertEquals(
+            ContentTypes::RAW,
+            $interpreter->interpret(new RawContent('://without/protocol'))
+        );
+    }
+
 
     protected function getExampleDataUri(): string
     {
