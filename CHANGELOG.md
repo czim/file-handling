@@ -3,6 +3,10 @@ Fixed issue where `variantUrlsForTarget()` returns invalid urls
 
 ## 2.*
 
+### [2.2.0] - 2024-09-10
+
+Only accept `http(s)` and `ftp` as valid URL protocols for uploaded content interpreter.
+
 ### [2.1.5] - 2024-04-13
 
 Fixed Symfony http-foundation support issue.
