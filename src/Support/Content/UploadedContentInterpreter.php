@@ -25,6 +25,7 @@ class UploadedContentInterpreter implements ContentInterpreterInterface
         // Treat any string longer than 2048 characters as full data
         if (    $content->size() <= static::FULL_DATA_THRESHOLD
             && filter_var($content->content(), FILTER_VALIDATE_URL)
+            && $this->isUrlWithAllowedProtocol($content->content())
         ) {
             return ContentTypes::URI;
         }
@@ -36,5 +37,34 @@ class UploadedContentInterpreter implements ContentInterpreterInterface
 
         return ContentTypes::RAW;
     }
-    
+
+    /**
+     * @param string $url
+     * @return bool
+     */
+    protected function isUrlWithAllowedProtocol(string $url)
+    {
+        foreach ($this->getAllowedUrlProtocols() as $protocol) {
+            if (strpos($url, $protocol . '://') === 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Do not allow 'file' here, unless you are *very* certain you know what you're doing.
+     * Otherwise attacks are possible where secrets may be exposed because local files may be 'downloaded'.
+     *
+     * @return array<int, string>
+     */
+    protected function getAllowedUrlProtocols()
+    {
+        return [
+            'http',
+            'https',
+            'ftp',
+        ];
+    }
 }
