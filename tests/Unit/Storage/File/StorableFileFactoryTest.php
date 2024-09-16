@@ -5,10 +5,12 @@ namespace Czim\FileHandling\Test\Unit\Storage\File;
 use Czim\FileHandling\Contracts\Support\ContentInterpreterInterface;
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
 use Czim\FileHandling\Contracts\Support\RawContentInterface;
+use Czim\FileHandling\Contracts\Support\UriValidatorInterface;
 use Czim\FileHandling\Contracts\Support\UrlDownloaderInterface;
 use Czim\FileHandling\Enums\ContentTypes;
 use Czim\FileHandling\Exceptions\CouldNotReadDataException;
 use Czim\FileHandling\Exceptions\CouldNotRetrieveRemoteFileException;
+use Czim\FileHandling\Exceptions\UriNotAllowedOnRetrieveRemoteFileException;
 use Czim\FileHandling\Storage\File\RawStorableFile;
 use Czim\FileHandling\Storage\File\SplFileInfoStorableFile;
 use Czim\FileHandling\Storage\File\StorableFileFactory;
@@ -36,9 +38,14 @@ class StorableFileFactoryTest extends TestCase
     /**
      * @test
      */
-    function it_returns_a_storable_file_intance_as_is()
+    function it_returns_a_storable_file_instance_as_is()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $this->getMockUriValidator()
+        );
 
         $file = new RawStorableFile();
         $file->setData('random content');
@@ -55,7 +62,12 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_instance_from_an_uploaded_file_instance()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $this->getMockUriValidator()
+        );
 
         $testPath = realpath(__DIR__ . '/../../../resources/test.txt');
 
@@ -74,7 +86,12 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_instance_from_spl_file_info()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $this->getMockUriValidator()
+        );
 
         $info = new SplFileInfo($this->getExampleLocalPath());
 
@@ -91,7 +108,12 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_instance_with_custom_name_and_mimetype()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $this->getMockUriValidator()
+        );
 
         $info = new SplFileInfo($this->getExampleLocalPath());
 
@@ -107,7 +129,12 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_instance_from_local_path()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $this->getMockUriValidator()
+        );
 
         $path = realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
 
@@ -122,17 +149,45 @@ class StorableFileFactoryTest extends TestCase
     /**
      * @test
      */
+    function it_blocks_loading_from_any_url_given_validator_response()
+    {
+        $validator = $this->getMockUriValidator();
+
+        $validator->expects('isValid')->with('http://test.com/test.xml?page=23')->andReturn(false);
+
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $validator
+        );
+
+        $this->expectException(UriNotAllowedOnRetrieveRemoteFileException::class);
+        $factory->makeFromUrl('http://test.com/test.xml?page=23');
+    }
+
+    /**
+     * @test
+     */
     function it_makes_a_storable_file_instance_from_a_url()
     {
         $downloader = $this->getMockDownloader();
+        $validator  = $this->getMockUriValidator();
 
         $path = realpath(dirname(__DIR__) . '/../../../' . static::XML_TEST_FILE);
+
+        $validator->expects('isValid')->with('http://test.com/test.xml?page=23')->andReturn(true);
 
         $downloader->shouldReceive('download')
             ->with('http://test.com/test.xml?page=23')
             ->andReturn($path);
 
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $downloader);
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $downloader,
+            $validator
+        );
 
         $file = $factory->makeFromUrl('http://test.com/test.xml?page=23');
 
@@ -150,12 +205,20 @@ class StorableFileFactoryTest extends TestCase
         $this->expectException(CouldNotRetrieveRemoteFileException::class);
 
         $downloader = $this->getMockDownloader();
+        $validator  = $this->getMockUriValidator();
+
+        $validator->expects('isValid')->andReturn(true);
 
         $downloader->shouldReceive('download')
             ->with('http://test.com/test.xml')
             ->andThrow(new ErrorException('testing'));
 
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $downloader);
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $downloader,
+            $validator
+        );
 
         $factory->makeFromUrl('http://test.com/test.xml');
     }
@@ -168,7 +231,12 @@ class StorableFileFactoryTest extends TestCase
         $mimeTypeHelper = $this->getMockMimeTypeHelper();
         $mimeTypeHelper->shouldReceive('guessExtensionForMimeType')->with('image/gif')->andReturn('gif');
 
-        $factory = new StorableFileFactory($mimeTypeHelper, $this->getMockInterpreter(), $this->getMockDownloader());
+        $factory = new StorableFileFactory(
+            $mimeTypeHelper,
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $this->getMockUriValidator()
+        );
 
         $rawData = $this->getExampleDataUri();
 
@@ -193,7 +261,12 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_makes_a_storable_file_instance_from_raw_data()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $this->getMockUriValidator()
+        );
 
         $rawData = $this->getExampleRawData();
 
@@ -221,6 +294,7 @@ class StorableFileFactoryTest extends TestCase
         $mimeGuesser = $this->getMockMimeTypeHelper();
         $interpreter = $this->getMockInterpreter();
         $downloader  = $this->getMockDownloader();
+        $validator   = $this->getMockUriValidator();
 
         // Data URI expectation
         $interpreter->shouldReceive('interpret')
@@ -243,6 +317,8 @@ class StorableFileFactoryTest extends TestCase
             }))
             ->andReturn(ContentTypes::RAW);
 
+        $validator->shouldReceive('isValid')->andReturn(true);
+
         // Expectations for download logic
         $downloader->shouldReceive('download')
             ->with('http://yourfilehere.com')
@@ -252,7 +328,7 @@ class StorableFileFactoryTest extends TestCase
         $mimeGuesser->shouldReceive('guessExtensionForMimeType')->with('application/xml')->andReturn('xml');
 
 
-        $factory = new StorableFileFactory($mimeGuesser, $interpreter, $downloader);
+        $factory = new StorableFileFactory($mimeGuesser, $interpreter, $downloader, $validator);
 
         $file = $factory->makeFromAny(new SplFileInfo($this->getExampleLocalPath()));
         static::assertInstanceOf(SplFileInfoStorableFile::class, $file);
@@ -272,7 +348,12 @@ class StorableFileFactoryTest extends TestCase
      */
     function it_marks_a_file_uploaded_with_fluent_syntax()
     {
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $this->getMockUriValidator()
+        );
 
         $info = new SplFileInfo($this->getExampleLocalPath());
 
@@ -293,7 +374,12 @@ class StorableFileFactoryTest extends TestCase
     {
         $this->expectException(UnexpectedValueException::class);
 
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $this->getMockUriValidator()
+        );
 
         $factory->makeFromAny(['not', 'a string']);
     }
@@ -305,7 +391,12 @@ class StorableFileFactoryTest extends TestCase
     {
         $this->expectException(CouldNotReadDataException::class);
 
-        $factory = new StorableFileFactory($this->getMockMimeTypeHelper(), $this->getMockInterpreter(), $this->getMockDownloader());
+        $factory = new StorableFileFactory(
+            $this->getMockMimeTypeHelper(),
+            $this->getMockInterpreter(),
+            $this->getMockDownloader(),
+            $this->getMockUriValidator()
+        );
 
         $factory->makeFromDataUri('_data://invalid/mimetype,base32brokencontent', 'name.txt');
     }
@@ -339,6 +430,14 @@ class StorableFileFactoryTest extends TestCase
     protected function getMockDownloader()
     {
         return Mockery::mock(UrlDownloaderInterface::class);
+    }
+
+    /**
+     * @return Mockery\Mock|Mockery\MockInterface|UriValidatorInterface
+     */
+    protected function getMockUriValidator()
+    {
+        return Mockery::mock(UriValidatorInterface::class);
     }
 
     protected function getExampleLocalPath(): string

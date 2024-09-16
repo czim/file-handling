@@ -26,7 +26,6 @@ class UploadedContentInterpreter implements ContentInterpreterInterface
         if (
             $content->size() <= static::FULL_DATA_THRESHOLD
             && filter_var($content->content(), FILTER_VALIDATE_URL)
-            && $this->isUrlWithAllowedProtocol($content->content())
         ) {
             return ContentTypes::URI;
         }
@@ -39,31 +38,5 @@ class UploadedContentInterpreter implements ContentInterpreterInterface
         }
 
         return ContentTypes::RAW;
-    }
-
-    protected function isUrlWithAllowedProtocol(string $url): bool
-    {
-        foreach ($this->getAllowedUrlProtocols() as $protocol) {
-            if (strpos($url, $protocol . '://') === 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Do not allow 'file' here, unless you are *very* certain you know what you're doing.
-     * Otherwise attacks are possible where secrets may be exposed because local files may be 'downloaded'.
-     *
-     * @return array<int, string>
-     */
-    protected function getAllowedUrlProtocols(): array
-    {
-        return [
-            'http',
-            'https',
-            'ftp',
-        ];
     }
 }
