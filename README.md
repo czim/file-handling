@@ -200,11 +200,16 @@ In general, it is always a good idea to consider the order in which strategies a
 
 You may also opt to combine multiple strategies into one strategy class, if efficiency is important. You may use this approach to prevent opening/saving the same file more than once.
 
+### Handling URI content 
+
+In previous versions, this package automatically retrieved content from raw string content with URIs to local or remote files.
+This has now been disabled by default to minimize security risks.
+
+For more information on this change, see [SECURITY](SECURITY.md) for more information.
  
 ## Configuration
 
 Configuration of file handling is set by injecting an associative array with a tree structure into the FileHandler.
-
 
 
 ## Contributing
