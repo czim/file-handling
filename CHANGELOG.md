@@ -3,6 +3,10 @@ Fixed issue where `variantUrlsForTarget()` returns invalid urls
 
 ## 2.*
 
+### [2.3.0] - 2024-09-16
+
+Don't accept any URI as downloadable content for raw string data by default.
+
 ### [2.2.1] - 2024-09-10
 
 Only accept `http(s)` and `ftp` as valid URL protocols for uploaded content interpreter.
@@ -44,6 +48,15 @@ For locally stored files, you can get a `resource` object this way, just as you 
 
 
 ## 1.*
+
+### [1.5.0] - 2024-09-16
+
+Don't accept any URI as downloadable content for raw string data by default.
+
+### [1.4.0] - 2024-09-10
+
+Only accept `http(s)` and `ftp` as valid URL protocols for uploaded content interpreter.
+Fixed an issue with a dynamic property in the ImageOptimizerStrategy.
 
 ### [1.3.2] - 2023-08-11
 
@@ -117,6 +130,8 @@ Please take care when updating, this will likely affect any code relying on this
 - Removed `variantUrlsForStoredFile` and `variantUrlsForBasePath` from the `FileHandler`.
 - Updated `StorageInterface` and `LaravelStorage` to expect a *full* path, including the filename, rather than only a directory.
 
+[2.3.0]: https://github.com/czim/file-handling/compare/2.2.1...2.3.0
+[2.2.1]: https://github.com/czim/file-handling/compare/2.1.5...2.2.1
 [2.1.5]: https://github.com/czim/file-handling/compare/2.1.4...2.1.5
 [2.1.4]: https://github.com/czim/file-handling/compare/2.1.3...2.1.4
 [2.1.3]: https://github.com/czim/file-handling/compare/2.1.2...2.1.3
@@ -126,6 +141,8 @@ Please take care when updating, this will likely affect any code relying on this
 [2.0.2]: https://github.com/czim/file-handling/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/czim/file-handling/compare/1.3.1...2.0.1
 
+[1.5.0]: https://github.com/czim/file-handling/compare/1.4.0...1.5.0
+[1.4.0]: https://github.com/czim/file-handling/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/czim/file-handling/compare/1.2.1...1.3.1
 [1.2.1]: https://github.com/czim/file-handling/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/czim/file-handling/compare/1.1.5...1.2.0
