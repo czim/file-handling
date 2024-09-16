@@ -7,10 +7,12 @@ use Czim\FileHandling\Contracts\Storage\UploadedMarkableInterface;
 use Czim\FileHandling\Contracts\Support\ContentInterpreterInterface;
 use Czim\FileHandling\Contracts\Support\MimeTypeHelperInterface;
 use Czim\FileHandling\Contracts\Support\RawContentInterface;
+use Czim\FileHandling\Contracts\Support\UriValidatorInterface;
 use Czim\FileHandling\Contracts\Support\UrlDownloaderInterface;
 use Czim\FileHandling\Enums\ContentTypes;
 use Czim\FileHandling\Exceptions\CouldNotReadDataException;
 use Czim\FileHandling\Exceptions\CouldNotRetrieveRemoteFileException;
+use Czim\FileHandling\Exceptions\UriNotAllowedOnRetrieveRemoteFileException;
 use Czim\FileHandling\Support\Content\RawContent;
 use Exception;
 use SplFileInfo;
@@ -35,24 +37,26 @@ class StorableFileFactory implements StorableFileFactoryInterface
     protected $downloader;
 
     /**
+     * @var UriValidatorInterface
+     */
+    protected $uriValidator;
+
+    /**
      * @var bool
      */
     protected $markNextUploaded = false;
 
 
-    /**
-     * @param MimeTypeHelperInterface     $mimeTypeHelper
-     * @param ContentInterpreterInterface $contentInterpreter
-     * @param UrlDownloaderInterface      $downloader
-     */
     public function __construct(
         MimeTypeHelperInterface $mimeTypeHelper,
         ContentInterpreterInterface $contentInterpreter,
-        UrlDownloaderInterface $downloader
+        UrlDownloaderInterface $downloader,
+        UriValidatorInterface $uriValidator
     ) {
         $this->mimeTypeHelper = $mimeTypeHelper;
         $this->interpreter    = $contentInterpreter;
         $this->downloader     = $downloader;
+        $this->uriValidator   = $uriValidator;
     }
 
     /**
@@ -165,6 +169,12 @@ class StorableFileFactory implements StorableFileFactoryInterface
      */
     public function makeFromUrl($url, $name = null, $mimeType = null)
     {
+        if (! $this->uriValidator->isValid($url)) {
+            throw new UriNotAllowedOnRetrieveRemoteFileException(
+                "Not allowed to retrieve file from '{$url}'"
+            );
+        }
+
         try {
             $localPath = $this->downloader->download($url);
 
@@ -283,18 +293,17 @@ class StorableFileFactory implements StorableFileFactoryInterface
      */
     protected function interpretFromRawContent(RawContentInterface $data, $name, $mimeType)
     {
-        switch ($this->interpreter->interpret($data)) {
+        $type = $this->interpreter->interpret($data);
 
-            case ContentTypes::URI:
-                return $this->makeFromUrl($data->content(), $name, $mimeType);
-
-            case ContentTypes::DATAURI:
-                return $this->makeFromDataUri($data, $name, $mimeType);
-
-            case ContentTypes::RAW:
-            default:
-                return $this->makeFromRawData($data, $name, $mimeType);
+        if ($type === ContentTypes::URI && $this->uriValidator->isValid($data->content())) {
+            return $this->makeFromUrl($data->content(), $name, $mimeType);
         }
+
+        if ($type === ContentTypes::DATAURI) {
+            return $this->makeFromDataUri($data, $name, $mimeType);
+        }
+
+        return $this->makeFromRawData($data, $name, $mimeType);
     }
 
     /**

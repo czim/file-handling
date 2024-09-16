@@ -33,7 +33,13 @@ Here's an example of how to set up variant processing in general:
     $helper      = new \Czim\FileHandling\Support\Content\MimeTypeHelper;
     $interpreter = new \Czim\FileHandling\Support\Content\UploadedContentInterpreter;
     $downloader  = new \Czim\FileHandling\Support\Download\UrlDownloader($helper);
-    $factory     = new \Czim\FileHandling\Storage\File\StorableFileFactory($helper, $interpreter, $downloader);
+    $validator   = new \Czim\FileHandling\Support\Download\UriValidator();
+    $factory     = new \Czim\FileHandling\Storage\File\StorableFileFactory(
+        $helper,
+        $interpreter,
+        $downloader,
+        $validator
+    );
 
     $file = $factory->makeFromLocalPath($sourcePath);
 
