@@ -98,6 +98,10 @@ class StorableFileFactory implements StorableFileFactoryInterface
             return $this->makeFromFileInfo($data, $name, $mimeType);
         }
 
+        // Convert data to string to be so it can be interpreted.
+        if (! is_string($data)){
+            $data = serialize($data);
+        }
 
         // Fallback: expect raw or string data, and attempt to interpret it.
         if (is_string($data)) {
