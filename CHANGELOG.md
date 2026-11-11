@@ -3,7 +3,7 @@ Fixed issue where `variantUrlsForTarget()` returns invalid urls
 
 ## 2.*
 
-### [2.3.1] - unreleased
+### [2.3.1] - 2026-11-11
 
 `UrlDownloader` verifies TLS certificates and host names (before, `CURLOPT_SSL_VERIFYPEER` was disabled).
 Downloads from hosts with self-signed or otherwise invalid certificates, where no usable CA bundle is available will now fail with `CouldNotRetrieveRemoteFileException`.
