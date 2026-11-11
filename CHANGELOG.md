@@ -2,6 +2,13 @@
 
 ## 1.*
 
+### [1.5.1] - unreleased
+
+`UrlDownloader` verifies TLS certificates and host names (before, `CURLOPT_SSL_VERIFYPEER` was disabled).
+Downloads from hosts with self-signed or otherwise invalid certificates, where no usable CA bundle is available will now fail with `CouldNotRetrieveRemoteFileException`.
+cURL options can be adjusted by overriding `UrlDownloader::getCurlOptions()` in a subclass.
+Reported by [Iefken](https://github.com/iefken).
+
 ### [1.4.0] - 2024-09-10
 
 Only accept `http(s)` and `ftp` as valid URL protocols for uploaded content interpreter.
