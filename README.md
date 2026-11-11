@@ -213,6 +213,69 @@ This has now been disabled by default to minimize security risks.
 
 For more information on this change, see [SECURITY](SECURITY.md) for more information.
 
+
+### Customizing cURL options for downloads
+
+When remote URIs are allowed, files are downloaded by the `UrlDownloader`.  Since version `2.3.1`, TLS certificates and host names are verified by default. This may cause `CouldNotRetrieveRemoteFileException` in new behaviour.
+
+It is recommended to fix a missing CA bundle by configuring it in PHP (the `curl.cainfo` or `openssl.cafile` ini setting). As a last resort, you can extend the downloader and override `getCurlOptions()`:
+
+```php
+<?php
+namespace App\Support;
+
+use Czim\FileHandling\Support\Download\UrlDownloader;
+
+class CustomUrlDownloader extends UrlDownloader
+{
+    protected function getCurlOptions(): array
+    {
+        // Use array_replace(), not array_merge() to prevent renumbering curl constants.
+        return array_replace(parent::getCurlOptions(), [
+            // Example overrides for curl options:
+            CURLOPT_CAINFO  => '/path/to/ca-bundle.pem',
+            CURLOPT_TIMEOUT => 30,
+        ]);
+    }
+}
+```
+
+To revert to (insecure) pre `2.3.1` behaviour, you can set `CURLOPT_SSL_VERIFYPEER` on `false` or `CURLOPT_SSL_VERIFYHOST` to `0`. It's of course not recommended to do so.
+
+#### No framework
+
+Pass the subclass to the `StorableFileFactory` instead of `UrlDownloader`:
+
+```php
+<?php
+    $downloader = new \App\Support\CustomUrlDownloader(
+        new \Czim\FileHandling\Support\Content\MimeTypeHelper
+    );
+```
+
+#### In Laravel / [czim/laravel-paperclip](https://github.com/czim/laravel-paperclip)
+
+Paperclip binds `UrlDownloaderInterface` to `UrlDownloader` as a singleton in its service provider.
+Rebind it to your subclass in the `register()` method of a custom service provider:
+
+```php
+<?php
+namespace App\Providers;
+
+use App\Support\CustomUrlDownloader;
+use Czim\FileHandling\Contracts\Support\UrlDownloaderInterface;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->app->singleton(UrlDownloaderInterface::class, CustomUrlDownloader::class);
+    }
+}
+```
+
+
 ## Configuration
 
 Configuration of file handling is set by injecting an associative array with a tree structure into the FileHandler.
