@@ -1,0 +1,38 @@
+parameters:
+    level: 5
+    paths:
+        - src
+        - tests
+    ignoreErrors:
+        # safeguard is fine
+        -
+            path: src/Handler/FileHandler.php
+            identifier: empty.variable
+        # unknown class, but only to be used in Laravel context:
+        -
+            path: src/Support/Content/MimeTypeHelper.php
+            identifiers:
+                - class.notFound
+                - function.notFound
+        -
+            path: src/Support/Content/MimeTypeHelper.php
+            message: '#does not accept Symfony\\Component\\HttpFoundation\\File\\MimeType\\MimeTypeExtensionGuesser#'
+        # optional class, only to be used with spatie optimizer
+        -
+            path: src/Support/Image/Optimizer.php
+            identifier: class.notFound
+        # deliberately does not exist for testing
+        -
+            path: tests/Unit/Variant/VariantStrategyFactoryTest.php
+            message: '#Class Czim\\FileHandling\\Test\\Unit\\Support\\Content\\DoesNotExist not found#'
+
+        # ignore some safeguards that may be unnecessary
+        -
+            paths:
+                - src/Storage/File/ProcessableFile.php
+                - src/Storage/File/SplFileInfoStorableFile.php
+            identifier: booleanNot.alwaysFalse
+        -
+            paths:
+                - src/Support/Content/RawContent.php
+            identifier: identical.alwaysFalse
