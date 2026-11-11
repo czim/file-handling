@@ -230,8 +230,8 @@ class Resizer implements ImageResizerInterface
         [$optimalWidth, $optimalHeight] = $this->getOptimalCrop($image->getSize(), $width, $height);
 
         // Find center - this will be used for the crop
-        $centerX = ($optimalWidth / 2) - ($width / 2);
-        $centerY = ($optimalHeight / 2) - ($height / 2);
+        $centerX = (int) round(($optimalWidth / 2) - ((int) $width / 2));
+        $centerY = (int) round(($optimalHeight / 2) - ((int) $height / 2));
 
         return $image
             ->resize(new Box($optimalWidth, $optimalHeight))
@@ -267,7 +267,7 @@ class Resizer implements ImageResizerInterface
         $box   = $image->getSize();
         $ratio = $box->getWidth() / $box->getHeight();
 
-        return (int) $newHeight * $ratio;
+        return (int) ($newHeight * $ratio);
     }
 
     /**
@@ -280,7 +280,7 @@ class Resizer implements ImageResizerInterface
         $box   = $image->getSize();
         $ratio = $box->getHeight() / $box->getWidth();
 
-        return (int) $newWidth * $ratio;
+        return (int) ($newWidth * $ratio);
     }
 
     /**
