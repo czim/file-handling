@@ -71,7 +71,7 @@ Here's an example of how to set up variant processing in general:
             ],
         ],
     ]);
-``` 
+```
 
 For Laravel, you could use the following framework specific storage implementation:
 
@@ -83,24 +83,24 @@ For Laravel, you could use the following framework specific storage implementati
         true,
         url('testing')
     );
-   
+
     // If you're using a Laravel version that does not have a PSR-11 compliant container yet:
     $container = new \Czim\FileHandling\Support\Container\LaravelContainerDecorator(app());
-    
+
     app()->bind(\Imagine\Image\ImagineInterface::class, \Imagine\Gd\Imagine::class);
 ```
 
 It is recommended of course to use the dependency container / IoC solution of your framework to simplify the above approach.
 
 
-### Custom Container 
+### Custom Container
 
 If you don't have a feasible PSR-11 container available, you can use a very simple implementation provided with this package.
 
 ```php
 <?php
     $container = new \Czim\FileHandling\Support\Container\SimpleContainer;
-    
+
     $container->registerInstance(
         \Czim\FileHandling\Variant\Strategies\ImageResizeStrategy::class,
         new \Czim\FileHandling\Variant\Strategies\ImageResizeStrategy(
@@ -123,7 +123,7 @@ If you don't have a feasible PSR-11 container available, you can use a very simp
 Files can be stored using customizable storage implementations.
 
 A very simple adapter/decorator for the Laravel storage is provided.
-For any other framework/setup you will (for now) have to write your own implementation of the `\Czim\FileHandling\Contracts\Storage\StorageInterface`.  
+For any other framework/setup you will (for now) have to write your own implementation of the `\Czim\FileHandling\Contracts\Storage\StorageInterface`.
 
 
 ### Variants
@@ -147,27 +147,27 @@ Included strategies for image manipulation:
 
 - `ImageAutoOrientStrategy`: Re-orients rotated or flipped images.
 
-- `ImageResizeStrategy`: Resizes (and crops) images.  
+- `ImageResizeStrategy`: Resizes (and crops) images.
     (Uses Stapler's options & approach to resizes.)
 
-- `ImageWatermarkStrategy`: Pastes a watermark onto an image.  
-    In any corner or the center.  
-    Options:  
-    `position` (string): `top-left`, `top-right`, `center`, `bottom-left`, `bottom-right`.  
-    `watermark` (string): full path to the watermark image.  
-    The watermark should be a PNG (transparent) image for best results. 
+- `ImageWatermarkStrategy`: Pastes a watermark onto an image.
+    In any corner or the center.
+    Options:
+    `position` (string): `top-left`, `top-right`, `center`, `bottom-left`, `bottom-right`.
+    `watermark` (string): full path to the watermark image.
+    The watermark should be a PNG (transparent) image for best results.
 
 - `ImageOptimizationStrategy` Optimizes images to decreate their file size.
 
     This strategy requires installation of [spatie/image-optimizer](https://github.com/spatie/image-optimizer).
-    
+
     In order for it to work, you'll need to install a few image optimizers as well:
     - `jpegoptim`
     - `optipng`
     - `pngquant`
     - `svgo`
     - `gifsicle`
-   
+
     Installation example for Ubuntu:
 
     ```bash
@@ -187,15 +187,15 @@ Included strategies for image manipulation:
 
 Included strategies for video manipulation:
 
-- `VideoScreenshotStrategy`: Extracts a video frame for a preview.  
-    (Requires `ffmpeg`/`ffprobe`).  
-    Options:  
-    `seconds` (int): the second of video runtime to take the shot at.  
+- `VideoScreenshotStrategy`: Extracts a video frame for a preview.
+    (Requires `ffmpeg`/`ffprobe`).
+    Options:
+    `seconds` (int): the second of video runtime to take the shot at.
     `percentage` (int): the percentage of video runtime to take the shot at (overruled by `seconds`).
     `ffmpeg` (string): path to ffmpeg binary (if not `/usr/bin/ffmpeg`).
-    `ffprobe` (string): path to ffprobe binary (if not `/usr/bin/ffprobe`).  
+    `ffprobe` (string): path to ffprobe binary (if not `/usr/bin/ffprobe`).
 
- 
+
 ### Variant Gotcha
 
 When using the resize strategy while working with potentially EXIF-rotated images, keep in mind that portrait/landscape width/height only resizes may run into trouble unless they are auto-oriented first.
@@ -206,13 +206,13 @@ In general, it is always a good idea to consider the order in which strategies a
 
 You may also opt to combine multiple strategies into one strategy class, if efficiency is important. You may use this approach to prevent opening/saving the same file more than once.
 
-### Handling URI content 
+### Handling URI content
 
 In previous versions, this package automatically retrieved content from raw string content with URIs to local or remote files.
 This has now been disabled by default to minimize security risks.
 
 For more information on this change, see [SECURITY](SECURITY.md) for more information.
- 
+
 ## Configuration
 
 Configuration of file handling is set by injecting an associative array with a tree structure into the FileHandler.
