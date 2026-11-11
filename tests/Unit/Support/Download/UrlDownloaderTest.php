@@ -9,6 +9,7 @@ use Exception;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use ReflectionMethod;
 
 class UrlDownloaderTest extends TestCase
 {
@@ -108,6 +109,22 @@ class UrlDownloaderTest extends TestCase
         $helper->shouldReceive('guessExtensionForPath')->andThrow(Exception::class, 'Failed to guess');
 
         $downloader->download('http://www.something.com/file');
+    }
+
+    /**
+     * @test
+     */
+    function it_verifies_tls_certificates_when_downloading()
+    {
+        $downloader = new UrlDownloader($this->getMockHelper());
+
+        $method = new ReflectionMethod($downloader, 'getCurlOptions');
+        $method->setAccessible(true);
+
+        $options = $method->invoke($downloader);
+
+        static::assertTrue($options[CURLOPT_SSL_VERIFYPEER]);
+        static::assertSame(2, $options[CURLOPT_SSL_VERIFYHOST]);
     }
 
 
