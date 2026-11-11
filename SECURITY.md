@@ -1,6 +1,31 @@
+# Security
+
+## Reporting a Vulnerability
+
+Please do not report security vulnerabilities through public GitHub issues, discussions or pull requests.
+
+Instead, report them privately through GitHub:
+[Report a vulnerability](https://github.com/czim/file-handling/security/advisories/new).
+
+Please include:
+
+- the affected version(s),
+- a description of the issue and its impact,
+- steps to reproduce, or a proof of concept,
+- a suggested fix, if you have one.
+
+You will receive a response as soon as possible. Once a fix is released, the vulnerability will be disclosed
+through a GitHub Security Advisory, and a CVE will be requested where applicable. Reporters are credited unless they
+prefer otherwise.
+
+
 # Security Risks
 
-If you used the `czim/file-handling` package before version `1.5.0` and `2.3.0`, the following security risks were present.
+If you used the `czim/file-handling` package before version `1.5.1` (for `1.*`) or `2.3.1` (for `2.*`), one or more of the following security risks were present:
+
+- Before `1.5.0` and `2.3.0`: [Local Data Exposure](#local-data-exposure) and [Remote Data Access](#remote-data-access).
+- Before `1.5.1` and `2.3.1`: TLS certificates were not verified when downloading remote files, allowing anyone on the network path to replace the downloaded content.
+  See [Customizing cURL options for downloads](README.md#customizing-curl-options-for-downloads) for the new behaviour and how to adjust it.
 
 
 ## Local Data Exposure
