@@ -68,10 +68,7 @@ class UrlDownloader implements UrlDownloaderInterface
 
         try {
             $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt_array($ch, $this->getCurlOptions());
             $rawFile = curl_exec($ch);
 
             if ($rawFile === false) {
@@ -104,6 +101,22 @@ class UrlDownloader implements UrlDownloaderInterface
                 $e
             );
         }
+    }
+
+    /**
+     * Returns the cURL options used to download a file.
+     *
+     * @return array<int, mixed>
+     */
+    protected function getCurlOptions(): array
+    {
+        return [
+            CURLOPT_HEADER         => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2,
+        ];
     }
 
     /**
