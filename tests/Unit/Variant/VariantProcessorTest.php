@@ -230,9 +230,9 @@ class VariantProcessorTest extends TestCase
     }
 
     /**
-     * @param bool  $successful
-     * @param bool  $shouldApply
-     * @param array $options
+     * @param bool                 $successful
+     * @param bool                 $shouldApply
+     * @param array<string, mixed> $options
      * @return VariantStrategyInterface|Mockery\MockInterface
      */
     protected function makeMockVariantStrategy(

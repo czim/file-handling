@@ -75,9 +75,6 @@ class StorableFileFactory implements StorableFileFactoryInterface
      * Makes a storable file instance from an unknown source type.
      *
      * @param mixed       $data
-     * @param string|null $name
-     * @param string|null $mimeType
-     * @return StorableFileInterface
      * @throws CouldNotReadDataException
      * @throws CouldNotRetrieveRemoteFileException
      */
@@ -113,11 +110,6 @@ class StorableFileFactory implements StorableFileFactoryInterface
 
     /**
      * Makes a storable file instance from an SplFileInfo instance.
-     *
-     * @param SplFileInfo $data
-     * @param string|null $name
-     * @param string|null $mimeType
-     * @return StorableFileInterface
      */
     public function makeFromFileInfo(SplFileInfo $data, ?string $name = null, ?string $mimeType = null): StorableFileInterface
     {
@@ -136,20 +128,13 @@ class StorableFileFactory implements StorableFileFactoryInterface
             $name = pathinfo($data->getRealPath(), PATHINFO_BASENAME);
         }
 
-        if (null !== $name) {
-            $file->setName($name);
-        }
+        $file->setName($name);
 
         return $this->getReturnPreparedFile($file);
     }
 
     /**
      * Makes a normalized storable file instance from a local file path.
-     *
-     * @param string      $path
-     * @param string|null $name
-     * @param string|null $mimeType
-     * @return StorableFileInterface
      */
     public function makeFromLocalPath(string $path, ?string $name = null, ?string $mimeType = null): StorableFileInterface
     {
@@ -161,10 +146,6 @@ class StorableFileFactory implements StorableFileFactoryInterface
     /**
      * Makes a normalized storable file instance from a URI.
      *
-     * @param string      $url
-     * @param string|null $name
-     * @param string|null $mimeType
-     * @return StorableFileInterface
      * @throws CouldNotRetrieveRemoteFileException
      */
     public function makeFromUrl(string $url, ?string $name = null, ?string $mimeType = null): StorableFileInterface
@@ -197,9 +178,6 @@ class StorableFileFactory implements StorableFileFactoryInterface
      * Makes a normalized storable file instance from a data URI.
      *
      * @param string|RawContentInterface $data
-     * @param string|null                $name
-     * @param string|null                $mimeType
-     * @return StorableFileInterface
      * @throws CouldNotReadDataException
      */
     public function makeFromDataUri($data, ?string $name = null, ?string $mimeType = null): StorableFileInterface
@@ -249,9 +227,6 @@ class StorableFileFactory implements StorableFileFactoryInterface
      * Makes a normalized storable file instance from raw content data.
      *
      * @param string|RawContentInterface $data
-     * @param string|null                $name
-     * @param string|null                $mimeType
-     * @return StorableFileInterface
      */
     public function makeFromRawData($data, ?string $name = null, ?string $mimeType = null): StorableFileInterface
     {
@@ -282,10 +257,6 @@ class StorableFileFactory implements StorableFileFactoryInterface
     /**
      * Interprets given raw content as a storable file.
      *
-     * @param RawContentInterface $data
-     * @param string|null         $name
-     * @param string|null         $mimeType
-     * @return StorableFileInterface
      * @throws CouldNotReadDataException
      * @throws CouldNotRetrieveRemoteFileException
      */
@@ -304,10 +275,6 @@ class StorableFileFactory implements StorableFileFactoryInterface
         return $this->makeFromRawData($data, $name, $mimeType);
     }
 
-    /**
-     * @param StorableFileInterface|UploadedMarkableInterface $file
-     * @return StorableFileInterface
-     */
     protected function getReturnPreparedFile(StorableFileInterface $file): StorableFileInterface
     {
         if ($this->markNextUploaded && $file instanceof UploadedMarkableInterface) {
@@ -318,10 +285,6 @@ class StorableFileFactory implements StorableFileFactoryInterface
         return $file;
     }
 
-    /**
-     * @param string $url
-     * @return string
-     */
     protected function getBaseNameFromUrl(string $url): string
     {
         if (false !== strpos($url, '?')) {
@@ -333,9 +296,6 @@ class StorableFileFactory implements StorableFileFactoryInterface
 
     /**
      * Returns random name for a file.
-     *
-     * @param string $extension
-     * @return string
      */
     protected function makeRandomName(string $extension): string
     {

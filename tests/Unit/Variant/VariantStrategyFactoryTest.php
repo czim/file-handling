@@ -15,7 +15,7 @@ class VariantStrategyFactoryTest extends TestCase
     /**
      * Bindings for mock container.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $bindings = [];
 

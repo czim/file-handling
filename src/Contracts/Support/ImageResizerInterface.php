@@ -9,9 +9,7 @@ interface ImageResizerInterface
     /**
      * Resize an image using given options.
      *
-     * @param SplFileInfo $file
-     * @param array       $options
-     * @return bool
+     * @param array<string, mixed> $options
      */
     public function resize(SplFileInfo $file, array $options): bool;
 }

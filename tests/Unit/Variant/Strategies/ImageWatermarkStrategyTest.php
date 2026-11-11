@@ -273,7 +273,6 @@ class ImageWatermarkStrategyTest extends TestCase
      */
     protected function getMockImagine()
     {
-        /** @var ImagineInterface|Mockery\Mock|Mockery\MockInterface $mock */
         return Mockery::mock(ImagineInterface::class);
     }
 

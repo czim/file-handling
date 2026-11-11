@@ -38,11 +38,6 @@ class RawContent implements RawContentInterface
         return strlen($this->content);
     }
 
-    /**
-     * @param int $start
-     * @param int $length
-     * @return string|null
-     */
     public function chunk(int $start = 0, int $length = 512): ?string
     {
         $chunk = substr($this->content, $start, max(1, $length));

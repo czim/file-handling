@@ -120,7 +120,6 @@ class UrlDownloaderTest extends TestCase
         $downloader = new UrlDownloader($this->getMockHelper());
 
         $method = new ReflectionMethod($downloader, 'getCurlOptions');
-        $method->setAccessible(true);
 
         $options = $method->invoke($downloader);
 

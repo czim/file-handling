@@ -37,10 +37,6 @@ class FileHandler implements FileHandlerInterface
     protected $processor;
 
 
-    /**
-     * @param StorageInterface          $storage
-     * @param VariantProcessorInterface $processor
-     */
     public function __construct(
         StorageInterface $storage,
         VariantProcessorInterface $processor
@@ -50,14 +46,6 @@ class FileHandler implements FileHandlerInterface
     }
 
 
-    /**
-     * Processes and stores a storable file.
-     *
-     * @param StorableFileInterface $source
-     * @param TargetInterface       $target
-     * @param array                 $options
-     * @return ProcessResultInterface
-     */
     public function process(StorableFileInterface $source, TargetInterface $target, array $options = []): ProcessResultInterface
     {
         $stored = [
@@ -82,16 +70,7 @@ class FileHandler implements FileHandlerInterface
         return new ProcessResult($stored, $temporary);
     }
 
-    /**
-     * Processes and stores a single variant for a storable file.
-     *
-     * @param StorableFileInterface $source
-     * @param TargetInterface       $target
-     * @param string                $variant
-     * @param array                 $options
-     * @return ProcessResultInterface
-     */
-    public function processVariant(StorableFileInterface $source, TargetInterface $target, $variant, array $options = []): ProcessResultInterface
+    public function processVariant(StorableFileInterface $source, TargetInterface $target, string $variant, array $options = []): ProcessResultInterface
     {
         $this->processor->clearTemporaryFiles();
 
@@ -105,13 +84,6 @@ class FileHandler implements FileHandlerInterface
         );
     }
 
-    /**
-     * Returns the URLs keyed by the variant keys requested.
-     *
-     * @param TargetInterface $target
-     * @param string[]        $variants     keys for variants to include
-     * @return string[]
-     */
     public function variantUrlsForTarget(TargetInterface $target, array $variants = []): array
     {
         $urls = [
@@ -129,11 +101,42 @@ class FileHandler implements FileHandlerInterface
         return $urls;
     }
 
+    public function delete(TargetInterface $target, array $variants = []): bool
+    {
+        $success = true;
+
+        if (! in_array(static::ORIGINAL, $variants)) {
+            $variants[] = static::ORIGINAL;
+        }
+
+        foreach ($variants as $variant) {
+            if (! $this->deleteVariant($target, $variant)) {
+                $success = false;
+            }
+        }
+
+        return $success;
+    }
+
+    public function deleteVariant(TargetInterface $target, string $variant): bool
+    {
+        if ($variant == static::ORIGINAL) {
+            $path = $target->original();
+        } else {
+            $path = $target->variant($variant);
+        }
+
+        // If the file does not exist, consider 'deletion' a success
+        if (! $this->storage->exists($path)) {
+            return true;
+        }
+
+        return $this->storage->delete($path);
+    }
+
+
     /**
      * URL-encodes invalid characters from the filename in the url.
-     *
-     * @param string $url
-     * @return string
      */
     protected function sanitizeUrl(string $url): string
     {
@@ -152,52 +155,5 @@ class FileHandler implements FileHandlerInterface
         $parts[] = rawurlencode($filename);
 
         return implode('/', $parts);
-    }
-
-    /**
-     * Deletes a file and all indicated variants.
-     *
-     * @param TargetInterface $target
-     * @param string[]        $variants     variant keys
-     * @return bool
-     */
-    public function delete(TargetInterface $target, array $variants = []): bool
-    {
-        $success = true;
-
-        if (! in_array(static::ORIGINAL, $variants)) {
-            $variants[] = static::ORIGINAL;
-        }
-
-        foreach ($variants as $variant) {
-            if (! $this->deleteVariant($target, $variant)) {
-                $success = false;
-            }
-        }
-
-        return $success;
-    }
-
-    /**
-     * Deletes a single variant.
-     *
-     * @param TargetInterface $target       may be a full file path, or a base path
-     * @param string          $variant      'original' refers to the original file
-     * @return bool
-     */
-    public function deleteVariant(TargetInterface $target, string $variant): bool
-    {
-        if ($variant == static::ORIGINAL) {
-            $path = $target->original();
-        } else {
-            $path = $target->variant($variant);
-        }
-
-        // If the file does not exist, consider 'deletion' a success
-        if (! $this->storage->exists($path)) {
-            return true;
-        }
-
-        return $this->storage->delete($path);
     }
 }

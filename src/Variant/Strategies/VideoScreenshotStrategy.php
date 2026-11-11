@@ -5,13 +5,12 @@ namespace Czim\FileHandling\Variant\Strategies;
 use FFMpeg\FFMpeg;
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\FFProbe;
+use FFMpeg\Media\Video;
 
 class VideoScreenshotStrategy extends AbstractVideoStrategy
 {
     /**
      * Performs manipulation of the file.
-     *
-     * @return bool|null
      */
     protected function perform(): ?bool
     {
@@ -25,6 +24,7 @@ class VideoScreenshotStrategy extends AbstractVideoStrategy
             'ffprobe.binaries' => $this->getFfprobeBinaryPath(),
         ]);
 
+        /** @var Video $video */
         $video = $ffmpeg->open($path);
 
         // Determine second at which to extract screenshot

@@ -209,14 +209,13 @@ class OrientationFixerTest extends TestCase
 
     /**
      * @param int|false $rotated
-     * @return SplFileInfo
      */
     protected function makeSourceFile($rotated = OrientationFixer::ORIENTATION_RIGHTTOP): SplFileInfo
     {
         if (! $rotated) {
             $original = realpath(static::UNROTATED_IMAGE_PATH);
         } else {
-            $original = realpath(str_replace('?', $rotated, static::ROTATED_IMAGE_PATH));
+            $original = realpath(str_replace('?', (string) $rotated, static::ROTATED_IMAGE_PATH));
         }
         $copy = static::IMAGE_COPY_PATH;
 
@@ -227,7 +226,6 @@ class OrientationFixerTest extends TestCase
 
     /**
      * @param int|false $expectsChange
-     * @param bool      $expectsSave
      * @return ImageInterface|Mockery\MockInterface
      */
     protected function getMockImage($expectsChange = OrientationFixer::ORIENTATION_RIGHTTOP, bool $expectsSave = false)

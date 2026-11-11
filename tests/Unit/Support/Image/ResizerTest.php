@@ -222,8 +222,8 @@ class ResizerTest extends TestCase
         $source = $this->makeSourceFile();
 
         $originalSize      = new Box(1000, 653);
-        $expectedResize    = new Box(440, 287.32);
-        $expectedCropPoint = new Point(0, 21.66);
+        $expectedResize    = new Box(440, 287);
+        $expectedCropPoint = new Point(0, 22);
         $expectedCropBox   = new Box(440, 244);
 
         $image          = $this->getMockImage($originalSize, $expectedResize, $expectedCropPoint, $expectedCropBox);
@@ -277,17 +277,13 @@ class ResizerTest extends TestCase
     }
 
     /**
-     * @param BoxInterface   $originalSize
-     * @param BoxInterface   $expectedResize
-     * @param PointInterface $expectedCropPoint
-     * @param BoxInterface   $expectedCropBox
      * @return Mockery\MockInterface|ImageInterface
      */
     protected function getMockImage(
         BoxInterface $originalSize,
         BoxInterface $expectedResize,
-        PointInterface $expectedCropPoint = null,
-        BoxInterface $expectedCropBox = null
+        ?PointInterface $expectedCropPoint = null,
+        ?BoxInterface $expectedCropBox = null
     ) {
         /** @var ImageInterface|Mockery\Mock|Mockery\MockInterface $image */
         $image = Mockery::mock(ImageInterface::class);
@@ -314,9 +310,7 @@ class ResizerTest extends TestCase
         $image->shouldReceive('resize')->once()->with(Mockery::on($resizeComparison))->andReturn($image);
 
         if (null !== $expectedCropPoint) {
-
             $cropBoxComparison = function ($cropBox) use ($expectedCropBox) {
-
                 if (! ($cropBox instanceof BoxInterface)) {
                     return false;
                 }

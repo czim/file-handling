@@ -4,6 +4,9 @@ namespace Czim\FileHandling\Enums;
 
 use MyCLabs\Enum\Enum;
 
+/**
+ * @extends Enum<string>
+ */
 class ContentTypes extends Enum
 {
     public const URI     = 'uri';

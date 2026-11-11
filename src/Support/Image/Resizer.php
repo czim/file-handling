@@ -21,9 +21,6 @@ class Resizer implements ImageResizerInterface
      */
     protected $imagine;
 
-    /**
-     * @param ImagineInterface $imagine
-     */
     public function __construct(ImagineInterface $imagine)
     {
         $this->imagine = $imagine;
@@ -32,9 +29,7 @@ class Resizer implements ImageResizerInterface
     /**
      * Resize an image using given options.
      *
-     * @param SplFileInfo $file
-     * @param array       $options
-     * @return bool
+     * @param array<string, mixed> $options
      */
     public function resize(SplFileInfo $file, array $options): bool
     {
@@ -67,8 +62,8 @@ class Resizer implements ImageResizerInterface
     /**
      * Returns the convert options for image manipulation.
      *
-     * @param array $options
-     * @return array
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
      */
     protected function getConvertOptions(array $options): array
     {
@@ -85,8 +80,8 @@ class Resizer implements ImageResizerInterface
      * Parse the given style dimensions to extract out the file processing options,
      * perform any necessary image resizing for a given style.
      *
-     * @param array $options
-     * @return array
+     * @param array<string, mixed> $options
+     * @return array{0: int|string|null, 1: int|string|null, 2: string}
      */
     protected function parseOptionDimensions(array $options): array
     {
@@ -146,10 +141,8 @@ class Resizer implements ImageResizerInterface
      * the new dimensions are both equal since at this point we'll have a square
      * image being resized to a square).
      *
-     * @param ImageInterface $image
-     * @param string         $width     new width
-     * @param string         $height    new height
-     * @return ImageInterface
+     * @param string $width  new width
+     * @param string $height new height
      */
     protected function resizeAuto(ImageInterface $image, string $width, string $height): ImageInterface
     {
@@ -179,10 +172,8 @@ class Resizer implements ImageResizerInterface
     /**
      * Resize an image as a landscape (width fixed).
      *
-     * @param ImageInterface $image
-     * @param string         $width     new width
-     * @param string|null    $height    new height
-     * @return ImageInterface
+     * @param string      $width  new width
+     * @param string|null $height new height
      */
     protected function resizeLandscape(ImageInterface $image, string $width, ?string $height): ImageInterface
     {
@@ -194,24 +185,20 @@ class Resizer implements ImageResizerInterface
         }
         // @codeCoverageIgnoreEnd
 
-        $optimalHeight = $this->getSizeByFixedWidth($image, $width);
+        $optimalHeight = $this->getSizeByFixedWidth($image, (int) $width);
 
         $dimensions = $image->getSize()
-            ->widen($width)
+            ->widen((int) $width)
             ->heighten($optimalHeight);
 
-        $image = $image->resize($dimensions);
-
-        return $image;
+        return $image->resize($dimensions);
     }
 
     /**
      * Resize an image as a portrait (height fixed).
      *
-     * @param ImageInterface $image
-     * @param string|null    $width     new width
-     * @param string         $height    new height
-     * @return ImageInterface
+     * @param string|null $width  new width
+     * @param string      $height new height
      */
     protected function resizePortrait(ImageInterface $image, ?string $width, string $height): ImageInterface
     {
@@ -223,24 +210,20 @@ class Resizer implements ImageResizerInterface
         }
         // @codeCoverageIgnoreEnd
 
-        $optimalWidth = $this->getSizeByFixedHeight($image, $height);
+        $optimalWidth = $this->getSizeByFixedHeight($image, (int) $height);
 
         $dimensions = $image->getSize()
-            ->heighten($height)
+            ->heighten((int) $height)
             ->widen($optimalWidth);
 
-        $image = $image->resize($dimensions);
-
-        return $image;
+        return $image->resize($dimensions);
     }
 
     /**
      * Resize an image and then center crop it
      *
-     * @param ImageInterface $image
-     * @param string         $width     new width
-     * @param string         $height    new height
-     * @return ImageInterface
+     * @param string $width  new width
+     * @param string $height new height
      */
     protected function resizeCrop(ImageInterface $image, string $width, string $height): ImageInterface
     {
@@ -250,29 +233,24 @@ class Resizer implements ImageResizerInterface
         $centerX = ($optimalWidth / 2) - ($width / 2);
         $centerY = ($optimalHeight / 2) - ($height / 2);
 
-        return $image->resize(new Box($optimalWidth, $optimalHeight))
-            ->crop(new Point($centerX, $centerY), new Box($width, $height));
+        return $image
+            ->resize(new Box($optimalWidth, $optimalHeight))
+            ->crop(new Point($centerX, $centerY), new Box((int) $width, (int) $height));
     }
 
     /**
      * Resize an image to an exact width and height.
      *
-     * @param ImageInterface $image
-     * @param string         $width     new width
-     * @param string         $height    new height
-     * @return ImageInterface
+     * @param string $width  new width
+     * @param string $height new height
      */
     protected function resizeExact(ImageInterface $image, string $width, string $height): ImageInterface
     {
-        return $image->resize(new Box($width, $height));
+        return $image->resize(new Box((int) $width, (int) $height));
     }
 
     /**
      * Resize an image using a user defined callback.
-     *
-     * @param SplFileInfo $file
-     * @param callable    $callable
-     * @return ImageInterface
      */
     protected function resizeCustom(SplFileInfo $file, callable $callable): ImageInterface
     {
@@ -282,9 +260,7 @@ class Resizer implements ImageResizerInterface
     /**
      * Returns the width based on the new image height.
      *
-     * @param ImageInterface $image
-     * @param int            $newHeight - The image's new height.
-     * @return int
+     * @param int $newHeight - The image's new height.
      */
     private function getSizeByFixedHeight(ImageInterface $image, int $newHeight): int
     {
@@ -297,9 +273,7 @@ class Resizer implements ImageResizerInterface
     /**
      * Returns the height based on the new image width.
      *
-     * @param ImageInterface $image
-     * @param int            $newWidth - The image's new width.
-     * @return int
+     * @param int $newWidth - The image's new width.
      */
     private function getSizeByFixedWidth(ImageInterface $image, int $newWidth): int
     {
@@ -316,21 +290,17 @@ class Resizer implements ImageResizerInterface
      * @param BoxInterface $size    current size.
      * @param string       $width   new width.
      * @param string       $height  new height.
-     * @return array
+     * @return array{0: int, 1: int}
      */
     protected function getOptimalCrop(BoxInterface $size, string $width, string $height): array
     {
-        $heightRatio = $size->getHeight() / $height;
-        $widthRatio  = $size->getWidth() / $width;
+        $heightRatio = $size->getHeight() / (int) $height;
+        $widthRatio  = $size->getWidth() / (int) $width;
 
-        if ($heightRatio < $widthRatio) {
-            $optimalRatio = $heightRatio;
-        } else {
-            $optimalRatio = $widthRatio;
-        }
+        $optimalRatio = min($heightRatio, $widthRatio);
 
-        $optimalHeight = round($size->getHeight() / $optimalRatio, 2);
-        $optimalWidth  = round($size->getWidth() / $optimalRatio, 2);
+        $optimalHeight = (int) round($size->getHeight() / $optimalRatio, 2);
+        $optimalWidth  = (int) round($size->getWidth() / $optimalRatio, 2);
 
         return [$optimalWidth, $optimalHeight];
     }
@@ -338,9 +308,8 @@ class Resizer implements ImageResizerInterface
     /**
      * Safely get array value from config array.
      *
-     * @param array      $array
-     * @param string     $key
-     * @param null|mixed $default
+     * @param array<string, mixed> $array
+     * @param null|mixed           $default
      * @return mixed|null
      */
     protected function arrGet(array $array, string $key, $default = null)
@@ -354,6 +323,9 @@ class Resizer implements ImageResizerInterface
         return $array[ $key ];
     }
 
+    /**
+     * @param array<string, mixed>  $array
+     */
     protected function arrHas(array $array, string $key): bool
     {
         return array_key_exists($key, $array);

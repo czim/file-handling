@@ -105,18 +105,13 @@ class OrientationFixer
         // @codeCoverageIgnoreEnd
 
         if ($this->quiet) {
-
             try {
                 $exif = @exif_read_data($path);
                 // @codeCoverageIgnoreStart
             } catch (ErrorException $e) {
-                if ($this->quiet) {
-                    return $image;
-                }
-                throw $e;
+                return $image;
                 // @codeCoverageIgnoreEnd
             }
-
         } else {
             $exif = exif_read_data($path);
         }

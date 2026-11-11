@@ -6,6 +6,7 @@ use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 use Czim\FileHandling\Storage\File\ProcessableFile;
 use Czim\FileHandling\Test\TestCase;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamFile;
 use RuntimeException;
 use SplFileInfo;
 
@@ -148,10 +149,10 @@ class ProcessableFileTest extends TestCase
         static::assertTrue($file->copy(vfsStream::url('tmp/copy.txt')));
 
         static::assertTrue($root->hasChild('copy.txt'));
-        static::assertEquals(
-            file_get_contents($this->getExampleLocalPath()),
-            $root->getChild('tmp/copy.txt')->getContent()
-        );
+
+        $vfsFile = $root->getChild('tmp/copy.txt');
+        static::assertInstanceOf(vfsStreamFile::class, $vfsFile);
+        static::assertEquals(file_get_contents($this->getExampleLocalPath()), $vfsFile->getContent());
     }
 
     /**

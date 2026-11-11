@@ -68,7 +68,7 @@ class ImageWatermarkStrategy extends AbstractImageStrategy
                 );
                 break;
 
-            case static::POSITION_CENTER;
+            case static::POSITION_CENTER:
                 $position = new Point(
                     ((int) round($imageSize->getWidth() / 2)) - ((int) round($watermarkSize->getWidth() / 2)),
                     ((int) round($imageSize->getHeight() / 2)) - ((int) round($watermarkSize->getHeight() / 2))

@@ -6,6 +6,7 @@ use Czim\FileHandling\Exceptions\StorableFileCouldNotBeDeletedException;
 use Czim\FileHandling\Storage\File\RawStorableFile;
 use Czim\FileHandling\Test\TestCase;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamFile;
 use UnexpectedValueException;
 
 class RawStorableFileTest extends TestCase
@@ -123,7 +124,10 @@ class RawStorableFileTest extends TestCase
 
         static::assertTrue($file->copy(vfsStream::url('tmp/copy.txt')));
         static::assertTrue($root->hasChild('copy.txt'));
-        static::assertEquals('contents to be copied', $root->getChild('tmp/copy.txt')->getContent());
+
+        $vfsFile = $root->getChild('tmp/copy.txt');
+        static::assertInstanceOf(vfsStreamFile::class, $vfsFile);
+        static::assertEquals('contents to be copied', $vfsFile->getContent());
     }
 
     /**

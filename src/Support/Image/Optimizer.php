@@ -2,20 +2,18 @@
 
 namespace Czim\FileHandling\Support\Image;
 
+use Spatie\ImageOptimizer\OptimizerChain;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 use SplFileInfo;
 
 class Optimizer
 {
     /**
-     * @var $optimizerChain
+     * @var OptimizerChain
      */
     protected $optimizerChain;
 
 
-    /**
-     * @param OptimizerChainFactory $optimizer
-     */
     public function __construct(OptimizerChainFactory $optimizerChain)
     {
         $this->optimizerChain = $optimizerChain::create();
@@ -25,9 +23,7 @@ class Optimizer
     /**
      * Optimize an image using given options.
      *
-     * @param SplFileInfo $file
-     * @param array       $options
-     * @return bool
+     * @param array<string, mixed> $options
      */
     public function optimize(SplFileInfo $file, array $options): bool
     {
@@ -44,9 +40,9 @@ class Optimizer
     /**
      * Safely get array value from config array.
      *
-     * @param array      $array
-     * @param string     $key
-     * @param null|mixed $default
+     * @param array<string, mixed> $array
+     * @param string               $key
+     * @param null|mixed          $default
      * @return mixed|null
      */
     protected function arrayGet(array $array, $key, $default = null)
